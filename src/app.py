@@ -5,6 +5,8 @@ from data.Findings import Findings
 from data.types import Response
 from data.helper import validate_json, get_content_list
 
+import api.ollama as ollama
+
 app = Flask(__name__)
 
 start_time = time.time()
@@ -12,9 +14,14 @@ start_time = time.time()
 
 @app.get('/')
 def health():
+    # check ollama health
+
     system_info = {
-        'status': 'UP',
-        'uptime': round(time.time() - start_time, 2)
+        'status': 'UP',  # pretty trivial since it did answer if you see this. Let's still include it for further use.
+        'uptime': round(time.time() - start_time, 2),
+        'external_modules': {
+            'ollama': "UP" if ollama.is_up() else "DOWN"
+        }
     }
     return system_info, 200
 

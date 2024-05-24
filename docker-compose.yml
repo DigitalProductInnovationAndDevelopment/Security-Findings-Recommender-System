@@ -8,9 +8,30 @@ services:
       - .:/app
     depends_on:
       - db
+    env_file:
+      - .env
   db:
     image: postgres:latest
     volumes:
       - ./db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: secure_password_for_r4a1
+  ollama:
+    container_name: ollama
+    build:
+      context: .
+      dockerfile: ./ollama/Dockerfile
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - '11435:11435'
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11435
+      - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
+      - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
+    pull_policy: always
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  ollama:

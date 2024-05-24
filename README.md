@@ -23,6 +23,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+### Environment
+Copy the `.env.example` file to `.env` and fill in the required values.
+
 ## Usage
 
 After starting the application, you can access the API at `http://localhost:8000`.
