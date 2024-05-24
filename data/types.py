@@ -56,6 +56,7 @@ schema = {
     "required": ["status", "message"]
 }
 
+
 @dataclass
 class Tag:
     action: str
@@ -63,6 +64,7 @@ class Tag:
     action_reason: str
     created_at: str
     valid_until: str
+
 
 @dataclass
 class Location:
@@ -73,40 +75,48 @@ class Location:
     first_found: str
     tags: List[Tag]
 
+
 @dataclass
 class Title:
     element: str
     source: str
+
 
 @dataclass
 class Description:
     element: str
     source: str
 
+
 @dataclass
 class Rating:
     element: str
     source: str
+
 
 @dataclass
 class CvssRating:
     element: str
     source: str
 
+
 @dataclass
 class Rule:
     element: str
     source: str
+
 
 @dataclass
 class CveId:
     element: str
     source: str
 
+
 @dataclass
 class Activity:
     element: str
     source: str
+
 
 @dataclass
 class Content:
@@ -136,13 +146,21 @@ class Content:
     prio_id: str
     element_tag: str
 
+
 @dataclass
 class Message:
     version: str
     utc_age: str
     content: List[Content]
 
+
 @dataclass
 class Response:
     status: str
     message: Message
+
+
+@dataclass
+class Finding:
+    content: Content
+    solutions: List[Dict[str, Any]] = field(default_factory=list)
