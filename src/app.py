@@ -1,7 +1,7 @@
 from flask import Flask, request
 import time
 
-import data.Findings as Findings
+from data.Findings import Findings
 from data.types import Response
 from data.helper import validate_json, get_content_list
 
@@ -36,7 +36,7 @@ def upload():
     # get the content list
     content_list = get_content_list(response)
 
-    findings = Findings.from_content_list(content_list)
+    findings = Findings(content_list)
 
     # start subprocess for processing the data
     # ...
