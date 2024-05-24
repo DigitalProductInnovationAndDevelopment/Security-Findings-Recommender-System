@@ -6,7 +6,7 @@ load_dotenv()  # take environment variables from .env. (This is only needed when
 
 
 def prompt(prompt: str) -> str:
-    ollama_url = os.getenv('OLLAMA_URL')
+    ollama_url = os.getenv('OLLAMA_URL') + '/api/generate'
     if not ollama_url:
         raise ValueError('OLLAMA_URL not set in environment variables')
 
@@ -21,8 +21,8 @@ def prompt(prompt: str) -> str:
 
 
 def is_up() -> bool:
-    res = prompt('Is anyone there?')
-    if res and len(res) > 0:
+    res = requests.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
+    if res.status_code ==200:
         return True
     else:
         return False

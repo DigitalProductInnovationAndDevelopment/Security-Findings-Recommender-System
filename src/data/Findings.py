@@ -1,6 +1,4 @@
-import pandas as pd
-
-from data.types import Content
+from src.data.types import Content
 
 
 class Findings:

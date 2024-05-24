@@ -2,7 +2,7 @@ import json
 import jsonschema
 from jsonschema import validate
 
-from data.types import schema, Response, Content
+from src.data.types import schema, Response, Content
 
 
 def validate_json(str: str) -> bool:

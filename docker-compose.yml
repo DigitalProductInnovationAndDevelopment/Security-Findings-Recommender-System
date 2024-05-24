@@ -9,6 +9,13 @@ services:
       - db
     env_file:
       - .env
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./src
+          target: /app/src
+        - action: rebuild
+          path: requirements.txt
   db:
     image: postgres:latest
     volumes:
@@ -28,7 +35,7 @@ services:
       - OLLAMA_HOST=0.0.0.0:11435
       - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
       - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
-#      - gpus=all
+      - gpus=all
     pull_policy: always
     tty: true
     restart: unless-stopped
