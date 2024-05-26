@@ -1,4 +1,4 @@
-from flask import Flask, request
+from fastapi import FastAPI, Request
 import time
 
 from src.data.Findings import Findings
@@ -7,7 +7,7 @@ from src.data.helper import validate_json, get_content_list
 
 import src.api.ollama as ollama
 
-app = Flask(__name__)
+app = FastAPI()
 
 start_time = time.time()
 
@@ -33,12 +33,12 @@ def health():
 
 
 @app.post('/upload')
-def upload():
+async def upload(request: Request):
     """
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
     """
-    json_data = request.get_json()
+    json_data = await request.json()
     # Check if the JSON data is valid
     if not validate_json(json_data):
         return 'Invalid JSON data', 400
@@ -77,4 +77,6 @@ def recommendations():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import uvicorn
+
+    uvicorn.run(app)
