@@ -1,4 +1,4 @@
-from flask import Flask, request
+from fastapi import FastAPI, Request
 import time
 
 from models.models import Finding,Recommendation as DBRecommendation
@@ -12,7 +12,7 @@ from db import Session
 
 import api.ollama as ollama
 
-app = Flask(__name__)
+app = FastAPI()
 
 start_time = time.time()
 
@@ -38,17 +38,15 @@ def health():
 
 
 @app.post('/upload')
-def upload():
+async def upload(request: Request):
     """
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
     """
-    if(request.mimetype != 'application/json'):
-        print(request.mimetype)
-        return 'Invalid mimetype', 400
     
     
-    json_data = request.get_json()
+    
+    json_data = request.json()
         # Check if the JSON data is valid
     # TODO: fix required properties for eg cvss_rating_list is not required
     # if not validate_json(json_data):
@@ -97,4 +95,6 @@ def recommendations():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import uvicorn
+
+    uvicorn.run(app)
