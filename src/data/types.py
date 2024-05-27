@@ -1,7 +1,6 @@
 from typing import List, Dict, Any, Union,Optional
 from typing import Any, Optional, Tuple
 
-import pydantic_core
 from typing_extensions import Annotated
 
 from pydantic import BaseModel
