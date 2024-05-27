@@ -5,24 +5,7 @@ from typing import Any, Optional, Tuple
 import pydantic_core
 from typing_extensions import Annotated
 
-from pydantic import BaseModel, ValidationError, WrapValidator
-
-def default_on_error(v, handler) -> Any:
-    """
-    Raise a PydanticUseDefault exception if the value is missing.
-
-    This is useful for avoiding errors from partial
-    JSON preventing successful validation.
-    """
-    try:
-        return handler(v)
-    except ValidationError as exc:
-        # there might be other types of errors resulting from partial JSON parsing
-        # that you allow here, feel free to customize as needed
-        if all(e['type'] == 'missing' for e in exc.errors()):
-            raise pydantic_core.PydanticUseDefault()
-        else:
-            raise
+from pydantic import BaseModel, ValidationError
 
 
 

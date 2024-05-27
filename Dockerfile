@@ -9,11 +9,9 @@ ADD . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
-# Install Gunicorn
-RUN /bin/bash -c "pip install gunicorn"
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
 # Run main.py when the container launches
-CMD ["/bin/bash", "-c", "cd src && gunicorn app:app -b 0.0.0.0:8000"]
+CMD ["/bin/bash", "-c", "cd src && uvicorn app:app --host 0.0.0.0 --port 8000"]

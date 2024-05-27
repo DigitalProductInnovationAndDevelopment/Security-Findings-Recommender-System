@@ -17,4 +17,4 @@ db-migrate-down-base:
 
 
 dev:
-	cd src &&  gunicorn app:app -b 0.0.0.0:8001 --reload
+	cd src &&  uvicorn app:app --host 0.0.0.0 --port 8001 --reload
