@@ -1,11 +1,10 @@
 from typing import List, Dict, Any, Union,Optional
-from dataclasses import dataclass, field
 from typing import Any, Optional, Tuple
 
 import pydantic_core
 from typing_extensions import Annotated
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 
 
 
@@ -66,7 +65,7 @@ schema = {
 }
 
 
-@dataclass
+
 class Tag(BaseModel):
     action: str
     user_mail: str
@@ -76,7 +75,7 @@ class Tag(BaseModel):
 
 
 
-@dataclass
+
 class Location(BaseModel):
     location: str
     amount: int
@@ -86,49 +85,49 @@ class Location(BaseModel):
     tags: List[Tag]
 
 
-@dataclass
+
 class Title(BaseModel):
     element: str
     source: str
 
 
-@dataclass
+
 class Description(BaseModel):
     element: str
     source: str
 
 
-@dataclass
+
 class Rating(BaseModel):
     element: str
     source: str
 
 
-@dataclass
+
 class CvssRating(BaseModel):
     element: str
     source: str
 
 
-@dataclass
+
 class Rule(BaseModel):
     element: str
     source: str
 
 
-@dataclass
+
 class CveId(BaseModel):
     element: List[str]
     source: str
 
 
-@dataclass
+
 class Activity(BaseModel):
     element: str
     source: str
 
 
-@dataclass
+
 class Content(BaseModel):
     doc_type: str
     criticality_tag: Union[List[Union[str, int]], Dict[str, Any]]
@@ -156,23 +155,23 @@ class Content(BaseModel):
     element_tag: str
 
 
-@dataclass
+
 class Message(BaseModel):
     version: str
     utc_age: str
     content: List[Content]
 
 
-@dataclass
+
 class Response(BaseModel):
     status: str
     message: Message
 
 
-@dataclass
+
 class Finding(BaseModel):
     content: Content
-    solutions: List[Dict[str, Any]] = field(default_factory=list)
+    solutions: List[Dict[str, Any]] = []
     
 
 class Recommendation(BaseModel):

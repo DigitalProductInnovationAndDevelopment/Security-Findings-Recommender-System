@@ -17,7 +17,7 @@ def get_db_url():
 
 
 
-engine = create_engine(get_db_url(),echo=True)
+engine = create_engine(get_db_url(),echo=os.getenv("DB_DEBUG", "false") == "true")
 
 
 Session = sessionmaker(engine)
