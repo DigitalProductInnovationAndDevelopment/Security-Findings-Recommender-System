@@ -103,3 +103,8 @@ Werkzeug==3.0.2
 zipp==3.18.1
 
 python-dotenv
+
+sqlmodel
+alembic
+psycopg
+psycopg-binary

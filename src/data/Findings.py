@@ -1,4 +1,4 @@
-from src.data.types import Content
+from data.types import Content
 
 
 class Findings:

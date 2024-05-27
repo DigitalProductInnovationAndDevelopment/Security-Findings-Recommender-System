@@ -1,5 +1,31 @@
-from typing import List, Dict, Any, Union
+from typing import List, Dict, Any, Union,Optional
 from dataclasses import dataclass, field
+from typing import Any, Optional, Tuple
+
+import pydantic_core
+from typing_extensions import Annotated
+
+from pydantic import BaseModel, ValidationError, WrapValidator
+
+def default_on_error(v, handler) -> Any:
+    """
+    Raise a PydanticUseDefault exception if the value is missing.
+
+    This is useful for avoiding errors from partial
+    JSON preventing successful validation.
+    """
+    try:
+        return handler(v)
+    except ValidationError as exc:
+        # there might be other types of errors resulting from partial JSON parsing
+        # that you allow here, feel free to customize as needed
+        if all(e['type'] == 'missing' for e in exc.errors()):
+            raise pydantic_core.PydanticUseDefault()
+        else:
+            raise
+
+
+
 
 schema = {
     "type": "object",
@@ -58,7 +84,7 @@ schema = {
 
 
 @dataclass
-class Tag:
+class Tag(BaseModel):
     action: str
     user_mail: str
     action_reason: str
@@ -66,8 +92,9 @@ class Tag:
     valid_until: str
 
 
+
 @dataclass
-class Location:
+class Location(BaseModel):
     location: str
     amount: int
     source: str
@@ -77,62 +104,61 @@ class Location:
 
 
 @dataclass
-class Title:
+class Title(BaseModel):
     element: str
     source: str
 
 
 @dataclass
-class Description:
+class Description(BaseModel):
     element: str
     source: str
 
 
 @dataclass
-class Rating:
+class Rating(BaseModel):
     element: str
     source: str
 
 
 @dataclass
-class CvssRating:
+class CvssRating(BaseModel):
     element: str
     source: str
 
 
 @dataclass
-class Rule:
+class Rule(BaseModel):
     element: str
     source: str
 
 
 @dataclass
-class CveId:
+class CveId(BaseModel):
+    element: List[str]
+    source: str
+
+
+@dataclass
+class Activity(BaseModel):
     element: str
     source: str
 
 
 @dataclass
-class Activity:
-    element: str
-    source: str
-
-
-@dataclass
-class Content:
+class Content(BaseModel):
     doc_type: str
     criticality_tag: Union[List[Union[str, int]], Dict[str, Any]]
     knowledge_type: str
     requirement_list: List[str]
     title_list: List[Title]
     location_list: List[Location]
-    description_list: List[Description]
-    internal_rating_list: List[Rating]
+    description_list:  Optional[List[Description]] =None
+    internal_rating_list: Optional[ List[Rating]] = None
     internal_ratingsource_list: List[Rating]
-    cvss_rating_list: List[CvssRating]
+    cvss_rating_list: Optional[ List[CvssRating]] = None
     rule_list: List[Rule]
-    cwe_id_list: List[Dict[str, Any]]
-    cve_id_list: List[CveId]
+    cwe_id_list: Optional[ List[CveId]] = None
     activity_list: List[Activity]
     first_found: str
     last_found: str
@@ -148,19 +174,24 @@ class Content:
 
 
 @dataclass
-class Message:
+class Message(BaseModel):
     version: str
     utc_age: str
     content: List[Content]
 
 
 @dataclass
-class Response:
+class Response(BaseModel):
     status: str
     message: Message
 
 
 @dataclass
-class Finding:
+class Finding(BaseModel):
     content: Content
     solutions: List[Dict[str, Any]] = field(default_factory=list)
+    
+
+class Recommendation(BaseModel):
+    recommendation: str
+    generic: bool

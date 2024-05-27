@@ -2,12 +2,12 @@ import json
 import jsonschema
 from jsonschema import validate
 
-from src.data.types import schema, Response, Content
+from data.types import schema, Response, Content
 
-
-def validate_json(str: str) -> bool:
+##TODO:maybe using pydantic should be enough
+def validate_json(data: any) -> bool:
     try:
-        json_data = json.loads(str)
+        json_data = data
         try:
             validate(instance=json_data, schema=schema)
             print("JSON data adheres to the schema.")
@@ -21,4 +21,4 @@ def validate_json(str: str) -> bool:
 
 
 def get_content_list(json_data: Response) -> list[Content]:
-    return json_data['message']['content']
+    return json_data.message.content
