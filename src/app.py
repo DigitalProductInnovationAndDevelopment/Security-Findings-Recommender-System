@@ -2,11 +2,11 @@ from fastapi import FastAPI, Request
 import time
 
 from models.models import Finding,Recommendation as DBRecommendation
-from data.Findings import Findings
+# from data.Findings import Findings
 
 from data.types import Response
 from data.types import Recommendation
-from data.helper import validate_json, get_content_list
+from data.helper import  get_content_list
 
 from db import Session
 
@@ -46,7 +46,7 @@ async def upload(request: Request):
     
     
     
-    json_data = request.json()
+    json_data = await request.json()
         # Check if the JSON data is valid
     # TODO: fix required properties for eg cvss_rating_list is not required
     # if not validate_json(json_data):
@@ -54,7 +54,7 @@ async def upload(request: Request):
 
     
     # Convert into Response object
-    response = Response.model_validate(json_data)
+    response = Response.validate(json_data)
 
 
     # get the content list
@@ -62,7 +62,7 @@ async def upload(request: Request):
 
     with Session() as s:
         for c in content_list:
-            find= Finding(finding=c.title_list[0].element,content=c.model_dump_json())
+            find= Finding(finding=c.title_list[0].element,content=c.json())
             s.add(find)
         s.commit()
     # start subprocess for processing the data
@@ -84,7 +84,7 @@ def recommendations():
         recs = s.query(DBRecommendation).all()
     
     
-    recommendations = [Recommendation(recommendation='aa',generic=True).model_dump() for r in recs]
+    recommendations = [Recommendation(recommendation='aa',generic=True) for r in recs]
     # get the recommendations
     
 
