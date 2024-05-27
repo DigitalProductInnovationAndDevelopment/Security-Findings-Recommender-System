@@ -19,26 +19,30 @@ services:
   db:
     image: postgres:latest
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: secure_password_for_r4a1
-  ollama:
-    container_name: ollama
-    build:
-      context: .
-      dockerfile: ./ollama/Dockerfile
-    volumes:
-      - ollama:/root/.ollama
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - '11435:11435'
-    environment:
-      - OLLAMA_HOST=0.0.0.0:11435
-      - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
-      - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
-      - gpus=all
-    pull_policy: always
-    tty: true
-    restart: unless-stopped
+      - "5432:5432"
+  # ollama:
+  #   container_name: ollama
+  #   build:
+  #     context: .
+  #     dockerfile: ./ollama/Dockerfile
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   ports:
+  #     - '11435:11435'
+  #   environment:
+  #     - OLLAMA_HOST=0.0.0.0:11435
+  #     - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
+  #     - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
+  #     - gpus=all
+  #   pull_policy: always
+  #   tty: true
+  #   restart: unless-stopped
 #    deploy:
 #      resources:
 #        reservations:
@@ -49,3 +53,4 @@ services:
 
 volumes:
   ollama:
+  db:

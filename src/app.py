@@ -1,11 +1,16 @@
 from flask import Flask, request
 import time
 
-from src.data.Findings import Findings
-from src.data.types import Response
-from src.data.helper import validate_json, get_content_list
+from models.models import Finding,Recommendation as DBRecommendation
+from data.Findings import Findings
 
-import src.api.ollama as ollama
+from data.types import Response
+from data.types import Recommendation
+from data.helper import validate_json, get_content_list
+
+from db import Session
+
+import api.ollama as ollama
 
 app = Flask(__name__)
 
@@ -38,19 +43,30 @@ def upload():
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
     """
+    if(request.mimetype != 'application/json'):
+        print(request.mimetype)
+        return 'Invalid mimetype', 400
+    
+    
     json_data = request.get_json()
-    # Check if the JSON data is valid
-    if not validate_json(json_data):
-        return 'Invalid JSON data', 400
+        # Check if the JSON data is valid
+    # TODO: fix required properties for eg cvss_rating_list is not required
+    # if not validate_json(json_data):
+    #     return 'Invalid JSON data', 400
 
+    
     # Convert into Response object
-    response = Response(**json_data)
+    response = Response.model_validate(json_data)
+
 
     # get the content list
     content_list = get_content_list(response)
 
-    findings = Findings(content_list)
-
+    with Session() as s:
+        for c in content_list:
+            find= Finding(finding=c.title_list[0].element,content=c.model_dump_json())
+            s.add(find)
+        s.commit()
     # start subprocess for processing the data
     # ...
 
@@ -66,9 +82,13 @@ def recommendations():
 
     # get the findings
     # ...
-
+    with Session() as s:
+        recs = s.query(DBRecommendation).all()
+    
+    
+    recommendations = [Recommendation(recommendation='aa',generic=True).model_dump() for r in recs]
     # get the recommendations
-    recommendations = None
+    
 
     if recommendations:
         return recommendations, 200
