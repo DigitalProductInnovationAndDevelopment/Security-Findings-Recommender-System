@@ -4,7 +4,7 @@ sqlmodel
 alembic
 psycopg
 psycopg-binary
-fastapi==0.68.1
+fastapi==0.109.1
 uvicorn==0.15.0
 python-dotenv==0.19.1
 jsonschema==4.22.0
