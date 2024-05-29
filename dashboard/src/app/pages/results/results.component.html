@@ -1,0 +1,23 @@
+<div class="content" *ngIf="selectedFile$ | async as selectedFile">
+  <div class="info-container">
+    <div class="info-container__selectedFile">
+      <h2>Recommendations</h2>
+      <div class="info-container__selectedFile__title" *ngIf="!!selectedFile">
+        <i class="bi bi-filetype-json info-container__selectedFile__title__icon"></i>
+        <span>{{ selectedFile?.name }}</span>
+      </div>
+    </div>
+    <div class="info-container__numberFindings">
+      <span>5</span>
+      <p>Vulnerabilities</p>
+      <i class="bi bi-shield-exclamation"></i>
+    </div>
+  </div>
+  
+  <div class="selectedFile" *ngIf="!!selectedFile">
+    
+    <div class="selectedFile__content">
+      <app-result-table></app-result-table>
+    </div>
+  </div>
+</div>

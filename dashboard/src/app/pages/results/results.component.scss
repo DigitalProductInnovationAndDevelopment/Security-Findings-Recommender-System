@@ -1,0 +1,64 @@
+.content {
+  padding-top: 50px;
+  width: 100%;
+  height: 100%;
+  padding-inline: 5%;
+  .info-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    &__selectedFile {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      &__title {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        color: var(--bgColorTertiary);
+        &__icon {
+          font-size: 2rem;
+        }
+      }
+    }
+
+    &__numberFindings {
+      background-color: var(--textColorSecondary);
+      height: 100px;
+      width: 150px;
+      border-radius: 15px 0px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      position: relative;
+      color: var(--bgColorPrimary);
+
+      span {
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        font-size: 3rem;
+      }
+      p {
+        position: absolute;
+        left: 15px;
+        bottom: 5px;
+      }
+      i {
+        font-size: 4rem;
+        position: absolute;
+        right: 15px;
+        top: 5px;
+        color: red;
+      }
+    }
+  }
+  .selectedFile {
+    color: var(--bgColorTertiary);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &__content {
+    }
+  }
+}
