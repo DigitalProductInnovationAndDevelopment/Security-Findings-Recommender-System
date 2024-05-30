@@ -6,12 +6,17 @@ import { ResultsComponent } from './pages/results/results.component';
 const routes: Routes = [
   {
     path: 'home',
-    component: OverviewComponent
+    component: OverviewComponent,
   },
   {
     path: 'results',
-    component: ResultsComponent
-  }
+    component: ResultsComponent,
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

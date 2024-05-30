@@ -3,4 +3,27 @@
     height: 70px;
     position: fixed;
     bottom: 0;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    padding-inline: 80px;
+    color: #ffffff;
+    p {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    ul {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+
+        li {
+            margin: 0 5px;
+            display: inline-block;
+        }
+        
+    }
 }
