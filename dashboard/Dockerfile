@@ -1,22 +1,14 @@
-# Stage 1: Build the Angular application
-FROM node:18 AS build
+# Build stage
+FROM node:18-alpine as build
 
 WORKDIR /app
-
-COPY package.json package-lock.json ./
+COPY dashboard/package*.json ./
 RUN npm install
-
-COPY . .
-
+COPY dashboard/. .
 RUN npm run build --prod
 
-# Stage 2: Serve the application with Nginx
+# Production stage
 FROM nginx:alpine
-
 COPY --from=build /app/dist/dashboard /usr/share/nginx/html
-
-# Expose port 80
 EXPOSE 80
-
-# Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
