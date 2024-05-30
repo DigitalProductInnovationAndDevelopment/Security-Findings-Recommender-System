@@ -1,43 +1,43 @@
 $header-height: 70px;
-$padding-inline: 80px;
+$padding-inline: 3%;
 
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 99;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: $padding-inline;
+  height: $header-height;
+
+  user-select: none;
+  color: var(--bgColorPrimary);
+
+  &__menu {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-inline: $padding-inline;
-    height: $header-height;
+    gap: 20px;
+    &__link {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      color: var(--bgColorSecondary);
+      &.active {
+        text-decoration: underline;
+      }
 
-    user-select: none;
-    color: var(--bgColorPrimary);
-
-    &__menu {
-        display: flex;
-        gap: 20px;
-        &__link {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            color: var(--bgColorSecondary);
-            &.active {
-                text-decoration:underline;
-            }
-
-            &__icon {
-                font-size: 2rem;
-                color: var(--bgColorSecondary)
-            }
-        }
+      &__icon {
+        font-size: 2rem;
+        color: var(--bgColorSecondary);
+      }
     }
+  }
 
-    &__title {
-        display: flex;
-    }
+  &__title {
+    display: flex;
+  }
 }
