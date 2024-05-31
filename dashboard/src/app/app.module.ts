@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsModule } from '@ngxs/store';
 import { AppRoutingModule } from './app-routing.module';
@@ -25,19 +26,20 @@ import { RecommendationsState } from './states/recommendations.state';
     OverviewComponent,
     ResultsComponent,
     FindingsInputComponent,
-    ResultTableComponent
+    ResultTableComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgxsModule.forRoot([RecommendationsState]),
     HttpClientModule,
-    MatTableModule, 
-    MatButtonModule, 
+    MatTableModule,
+    MatButtonModule,
     MatIconModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatPaginatorModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

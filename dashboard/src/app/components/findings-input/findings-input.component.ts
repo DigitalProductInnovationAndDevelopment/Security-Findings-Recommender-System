@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { take, tap } from 'rxjs';
 import { UploadFile } from 'src/app/states/recommendations.actions';
 
 @Component({
@@ -13,8 +14,19 @@ export class FindingsInputComponent {
   uploadFile(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.store.dispatch(new UploadFile({file: input.files[0]}));
-      this.router.navigate(['results'])
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        const jsonData = JSON.parse(reader.result as string);
+        this.store
+          .dispatch(new UploadFile({ file: jsonData }))
+          .pipe(
+            take(1),
+            tap(() => this.router.navigate(['results']))
+          )
+          .subscribe();
+      };
+      reader.readAsText(file);
     }
   }
 }

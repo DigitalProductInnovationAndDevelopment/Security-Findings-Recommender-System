@@ -7,10 +7,12 @@ import { RecommendationsState } from 'src/app/states/recommendations.state';
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
 })
 export class ResultsComponent implements OnInit {
-  @Select(RecommendationsState.selectedFile) selectedFile$!: Observable<File|null>;
+  @Select(RecommendationsState.selectedFile)
+  selectedFile$!: Observable<File | null>;
+  @Select(RecommendationsState.findings) findings$!: Observable<any | null>;
 
   constructor(private router: Router) {}
 
@@ -19,9 +21,11 @@ export class ResultsComponent implements OnInit {
   }
 
   private initSelectedFile(): void {
-    this.selectedFile$.pipe(
-      take(1),
-      tap(selectedFile => (!selectedFile && this.router.navigate(['home'])))
-    ).subscribe();
+    this.selectedFile$
+      .pipe(
+        take(1),
+        tap((selectedFile) => !selectedFile && this.router.navigate(['home']))
+      )
+      .subscribe();
   }
 }

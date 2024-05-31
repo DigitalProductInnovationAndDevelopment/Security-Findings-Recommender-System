@@ -3,6 +3,9 @@
   width: 100%;
   height: 100%;
   padding-inline: 3%;
+  @media only screen and (max-width: 1600px) {
+    padding-top: 0px;
+  }
   .info-container {
     display: flex;
     justify-content: space-between;
@@ -58,7 +61,6 @@
     flex-direction: column;
     gap: 20px;
 
-    &__content {
-    }
+    
   }
 }

@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="info-container__numberFindings">
-      <span>5</span>
+      <span *ngIf="findings$ | async as findings">{{ findings?.length}}</span>
       <p>Vulnerabilities</p>
       <i class="bi bi-shield-exclamation"></i>
     </div>
