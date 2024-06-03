@@ -9,6 +9,7 @@ $padding-inline: 3%;
   z-index: 99;
 
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding-inline: $padding-inline;
@@ -17,27 +18,34 @@ $padding-inline: 3%;
   user-select: none;
   color: var(--bgColorPrimary);
 
-  &__menu {
-    display: flex;
-    gap: 20px;
-    &__link {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      color: var(--bgColorSecondary);
-      &.active {
-        text-decoration: underline;
-      }
-
-      &__icon {
-        font-size: 2rem;
-        color: var(--bgColorSecondary);
-      }
-    }
-  }
-
   &__title {
     display: flex;
+    align-items: center;
+    gap: 20px;
+    &__logo {
+      height: 30px;
+    }
+  }
+}
+.menu {
+  display: flex;
+  gap: 20px;
+  color: black;
+  height: 70pxs;
+
+  &__link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: var(--bgColorSecondary);
+    &.active {
+      text-decoration: underline;
+    }
+
+    &__icon {
+      font-size: 2rem;
+      color: var(--bgColorSecondary);
+    }
   }
 }
