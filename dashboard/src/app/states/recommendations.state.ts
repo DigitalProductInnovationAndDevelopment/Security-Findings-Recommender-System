@@ -62,7 +62,8 @@ export class RecommendationsState {
     }));
 
     this.recommendationService
-      .uploadFindings(payload.data.message.content)
+      // .uploadFindings(payload.data.message.content)
+      .checkConnection()
       .pipe(
         catchError<void, Observable<never>>((error) => {
           context.patchState({ hasError: true });
