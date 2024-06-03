@@ -49,7 +49,7 @@ export class RecommendationsState {
   uploadFile(
     context: StateContext<RecommendationsStateModel>,
     { payload }: UploadFile
-  ): void {
+  ): Observable<void> {
     const findings = payload.data.message.content.map((finding: any) => ({
       findingTitle: finding.title_list[0].element,
       description:
@@ -61,24 +61,20 @@ export class RecommendationsState {
       lastFound: finding.last_found,
     }));
 
-    this.recommendationService
-      // .uploadFindings(payload.data.message.content)
-      .checkConnection()
-      .pipe(
-        catchError<void, Observable<never>>((error) => {
-          context.patchState({ hasError: true });
-          throw error;
-        }),
-        tap(() => {
-          void context.patchState({ findings, fileName: payload.fileName });
-        }),
-        finalize(() => void context.patchState({ isLoading: false }))
-      )
-      .subscribe();
-
-    // context.patchState({
-    //   findings,
-    //   fileName: payload.fileName,
-    // });
+    return (
+      this.recommendationService
+        // .uploadFindings(payload.data.message.content)
+        .checkConnection()
+        .pipe(
+          catchError<void, Observable<never>>((error) => {
+            context.patchState({ hasError: true });
+            throw error;
+          }),
+          tap(() => {
+            void context.patchState({ findings, fileName: payload.fileName });
+          }),
+          finalize(() => void context.patchState({ isLoading: false }))
+        )
+    );
   }
 }
