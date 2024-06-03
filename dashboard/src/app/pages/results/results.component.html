@@ -1,20 +1,20 @@
-<div class="content" *ngIf="selectedFile$ | async as selectedFile">
+<div class="content" *ngIf="findings$ | async as findings">
   <div class="info-container">
     <div class="info-container__selectedFile">
       <h2>Recommendations</h2>
-      <div class="info-container__selectedFile__title" *ngIf="!!selectedFile">
+      <div class="info-container__selectedFile__title" *ngIf="!!findings">
         <i class="bi bi-filetype-json info-container__selectedFile__title__icon"></i>
-        <span>{{ selectedFile?.name }}</span>
+        <span *ngIf="fileName$ | async as fileName">{{ fileName }}</span>
       </div>
     </div>
     <div class="info-container__numberFindings">
-      <span *ngIf="findings$ | async as findings">{{ findings?.length}}</span>
+      <span >{{ findings?.length}}</span>
       <p>Vulnerabilities</p>
       <i class="bi bi-shield-exclamation"></i>
     </div>
   </div>
   
-  <div class="selectedFile" *ngIf="!!selectedFile">
+  <div class="selectedFile" *ngIf="!!findings">
     
     <div class="selectedFile__content">
       <app-result-table></app-result-table>

@@ -19,7 +19,7 @@ export class FindingsInputComponent {
       reader.onload = () => {
         const jsonData = JSON.parse(reader.result as string);
         this.store
-          .dispatch(new UploadFile({ file: jsonData }))
+          .dispatch(new UploadFile({ data: jsonData, fileName: file.name }))
           .pipe(
             take(1),
             tap(() => this.router.navigate(['results']))

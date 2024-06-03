@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { catchError, finalize, Observable, tap } from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
 import { RecommendationsService } from '../services/recommendations.service';
 import { UploadFile } from './recommendations.actions';
@@ -7,8 +8,8 @@ import { UploadFile } from './recommendations.actions';
 export interface RecommendationsStateModel {
   isLoading: boolean;
   hasError: boolean;
-  selectedFile: any | null;
   findings: IFinding[];
+  fileName: string;
 }
 
 @State<RecommendationsStateModel>({
@@ -16,8 +17,8 @@ export interface RecommendationsStateModel {
   defaults: {
     isLoading: false,
     hasError: false,
-    selectedFile: null,
     findings: [],
+    fileName: '',
   },
 })
 @Injectable()
@@ -35,8 +36,8 @@ export class RecommendationsState {
   }
 
   @Selector()
-  static selectedFile(state: RecommendationsStateModel): File | null {
-    return state.selectedFile;
+  static fileName(state: RecommendationsStateModel): string {
+    return state.fileName;
   }
 
   @Selector()
@@ -49,10 +50,10 @@ export class RecommendationsState {
     context: StateContext<RecommendationsStateModel>,
     { payload }: UploadFile
   ): void {
-    const findings = payload.file.message.content.map((finding: any) => ({
+    const findings = payload.data.message.content.map((finding: any) => ({
       findingTitle: finding.title_list[0].element,
       description:
-        finding?.description_list && finding.description_list.length > 0
+        finding?.description_list && !!finding.description_list.length
           ? finding.description_list[0].element
           : null,
       priority: finding.priority,
@@ -60,9 +61,23 @@ export class RecommendationsState {
       lastFound: finding.last_found,
     }));
 
-    context.patchState({
-      selectedFile: payload.file,
-      findings,
-    });
+    this.recommendationService
+      .uploadFindings(payload.data.message.content)
+      .pipe(
+        catchError<void, Observable<never>>((error) => {
+          context.patchState({ hasError: true });
+          throw error;
+        }),
+        tap(() => {
+          void context.patchState({ findings, fileName: payload.fileName });
+        }),
+        finalize(() => void context.patchState({ isLoading: false }))
+      )
+      .subscribe();
+
+    // context.patchState({
+    //   findings,
+    //   fileName: payload.fileName,
+    // });
   }
 }

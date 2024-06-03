@@ -1,18 +1,29 @@
-from fastapi import FastAPI, Request
 import time
 
-from models.models import Finding,Recommendation as DBRecommendation
-# from data.Findings import Findings
-
-from data.types import Response
-from data.types import Recommendation
-from data.helper import  get_content_list
-
-from db import Session
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 import api.ollama as ollama
+from data.helper import get_content_list
+from data.types import Recommendation, Response
+from db import Session
+from models.models import Finding
+from models.models import Recommendation as DBRecommendation
+
+# from data.Findings import Findings
+
+
+
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 start_time = time.time()
 
