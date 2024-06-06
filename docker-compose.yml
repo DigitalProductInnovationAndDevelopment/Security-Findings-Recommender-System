@@ -50,7 +50,13 @@ services:
 #            - driver: nvidia
 #              count: 1
 #              capabilities: [gpu]
-
+  dashboard:
+    build:
+      context: .
+      dockerfile: ./dashboard/Dockerfile
+    ports:
+      - "3000:3000"
 volumes:
   ollama:
   db:
+  dashboard:

@@ -1,0 +1,57 @@
+table {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  overflow: hidden !important;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.element-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f6f8;
+  width: 100%;
+  padding-left: 10px;
+  &__row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    &__icon {
+      font-size: 2rem !important;
+      &.finding {
+        color: red;
+      }
+      &.recommendation {
+        color: green;
+      }
+    }
+  }
+}
+
+.element-description {
+  padding: 16px;
+}
+
+.element-description-attribution {
+  opacity: 0.5;
+}
