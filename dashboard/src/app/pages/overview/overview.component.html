@@ -1,3 +1,17 @@
 <div class="content">
-    <app-findings-input></app-findings-input>
+  <div class="content__container">
+    <!-- <h2>Get Recommendations</h2> -->
+    @if({fileName: fileName$ | async}; as streams) {
+    <div class="selectedFile" *ngIf="streams.fileName !== ''">
+      Current selected file:
+      <a routerLink="/results">
+        <i
+          class="bi bi-filetype-json info-container__selectedFile__title__icon"
+        ></i>
+        <span>{{ streams.fileName }}</span>
+      </a>
+    </div>
+    }
+  </div>
+  <app-findings-input></app-findings-input>
 </div>

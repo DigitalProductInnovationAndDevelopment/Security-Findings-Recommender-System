@@ -16,36 +16,13 @@ $padding-inline: 3%;
   height: $header-height;
 
   user-select: none;
-  color: var(--bgColorPrimary);
+  color: black;
+
+  &__logo {
+    height: 30px;
+  }
 
   &__title {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    &__logo {
-      height: 30px;
-    }
-  }
-}
-.menu {
-  display: flex;
-  gap: 20px;
-  color: black;
-  height: 70pxs;
-
-  &__link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    color: var(--bgColorSecondary);
-    &.active {
-      text-decoration: underline;
-    }
-
-    &__icon {
-      font-size: 2rem;
-      color: var(--bgColorSecondary);
-    }
+    color: #ffffff;
   }
 }
