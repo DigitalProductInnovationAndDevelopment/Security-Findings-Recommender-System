@@ -1,3 +1,20 @@
+.navigation {
+  display: flex;
+  gap: 10px;
+  padding-inline: 3%;
+  a {
+    text-decoration: none;
+    color: var(--bgColorTertiary);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  span {
+    color: var(--textColorTertiary);
+  }
+}
+
 .content {
   padding-top: 50px;
   width: 100%;

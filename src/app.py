@@ -13,8 +13,6 @@ from models.models import Recommendation as DBRecommendation
 # from data.Findings import Findings
 
 
-
-
 app = FastAPI()
 
 app.add_middleware(
@@ -54,26 +52,22 @@ async def upload(request: Request):
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
     """
-    
-    
-    
+
     json_data = await request.json()
-        # Check if the JSON data is valid
+    # Check if the JSON data is valid
     # TODO: fix required properties for eg cvss_rating_list is not required
     # if not validate_json(json_data):
     #     return 'Invalid JSON data', 400
 
-    
     # Convert into Response object
     response = Response.validate(json_data)
-
 
     # get the content list
     content_list = get_content_list(response)
 
     with Session() as s:
         for c in content_list:
-            find= Finding(finding=c.title_list[0].element,content=c.json())
+            find = Finding(finding=c.title_list[0].element, content=c.json())
             s.add(find)
         s.commit()
     # start subprocess for processing the data
@@ -93,11 +87,9 @@ def recommendations():
     # ...
     with Session() as s:
         recs = s.query(DBRecommendation).all()
-    
-    
-    recommendations = [Recommendation(recommendation='aa',generic=True) for r in recs]
+
+    recommendations = [Recommendation(recommendation='aa', generic=True) for r in recs]
     # get the recommendations
-    
 
     if recommendations:
         return recommendations, 200

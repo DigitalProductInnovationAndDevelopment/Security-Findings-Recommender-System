@@ -25,6 +25,7 @@ export class ResultsComponent implements OnInit {
       .pipe(
         take(1),
         tap((findings) => !findings.length && this.router.navigate(['home']))
+        // TODO Add getRecommendations request
       )
       .subscribe();
   }

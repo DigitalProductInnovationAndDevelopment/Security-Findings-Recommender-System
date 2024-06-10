@@ -63,7 +63,7 @@ export class RecommendationsState {
 
     return (
       this.recommendationService
-        // .uploadFindings(payload.data.message.content)
+        // .uploadFindings(payload.data)
         .checkConnection()
         .pipe(
           catchError<void, Observable<never>>((error) => {

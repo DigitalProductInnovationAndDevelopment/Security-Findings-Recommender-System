@@ -1,9 +1,27 @@
 
+.selectedFile {
+    display: flex;
+    gap: 10px;
+    a {
+        text-decoration: none;
+        color: var(--bgColorTertiary);
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+}
+
 .content {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     justify-content: center;
     align-items: center;
+    gap: 20px;
+
+    &__container {
+        width: 450px;
+    }
 
 }
