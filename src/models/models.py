@@ -1,4 +1,4 @@
-from base import Column, BaseModel
+from .base import Column, BaseModel
 
 from typing import List, Optional
 
