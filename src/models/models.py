@@ -1,14 +1,8 @@
 from .base import Column, BaseModel
 
 from typing import List, Optional
-
-from sqlalchemy import JSON, ForeignKey, Integer
-
-from sqlalchemy.orm import Mapped
-
-from sqlalchemy import String
-
-from sqlalchemy.orm import relationship
+from sqlalchemy import JSON, ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, relationship
 
 
 class Recommendation(BaseModel):
