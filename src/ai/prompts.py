@@ -25,9 +25,9 @@ LONG_RECOMMENDATION_TEMPLATE = (
     "- Links to relevant documentation or resources, if necessary.\n"
     "- Any potential caveats or considerations to keep in mind.\n\n"
     "Format your response as a JSON object with a single 'recommendation' field containing an array of strings. "
-    "Each string in the array should represent a step in the solution. "
+    "Each string in the array should represent a sensible step in the solution. "
     "The step text can be extensive and include MarkDown if appropriate."
-    "Iff a step-by-step solution is not possible or appropriate for this query, put your solution in the first and single array element.\n\n"
+    # "Iff a step-by-step solution is not possible or appropriate for this query, put your solution in the first and single array element.\n\n"
     "Example JSON format:\n"
     "{{\n"
     '  "recommendation": [\n'

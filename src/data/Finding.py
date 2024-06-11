@@ -9,6 +9,7 @@ class FindingKind(Enum):
     An enum to represent the kind of finding.
     """
     SYSTEM = auto()
+    PROGRAM = auto()
     USER = auto()
     CODE = auto()
     DEFAULT = auto()
@@ -23,7 +24,7 @@ class Finding:
                  cve_ids: List[str] = [],
                  severity: int = None,
                  priority: int = None,
-                 location_list: List[dict] = None,
+                 location_list: List[str] = None,
                  llm_service=None):
         """
         A class to represent a finding.
@@ -134,6 +135,8 @@ class Finding:
             result += f"<tr><td>Title</td><td>{', '.join(self.title)}</td></tr>"
             result += f"<tr><td>Source</td><td>{', '.join(self.source)}</td></tr>"
             result += f"<tr><td>Description</td><td>{', '.join(self.description)}</td></tr>"
+            if len(self.location_list) > 0:
+                result += f"<tr><td>Location List</td><td>{' & '.join(map(str, self.location_list))}</td></tr>"
             result += f"<tr><td>CWE IDs</td><td>{', '.join(self.cwe_ids)}</td></tr>"
             result += f"<tr><td>CVE IDs</td><td>{', '.join(self.cve_ids)}</td></tr>"
             result += f"<tr><td>Severity</td><td>{self.severity}</td></tr>"
@@ -147,7 +150,7 @@ class Finding:
             result += f"<p>Source: {', '.join(self.source)}</p>"
             result += f"<p>Description: {', '.join(self.description)}</p>"
             if len(self.location_list) > 0:
-                result += f"<p>Location List: {','.join(map(str, self.location_list))}</p>"
+                result += f"<p>Location List: {' & '.join(map(str, self.location_list))}</p>"
             result += f"<p>CWE IDs: {', '.join(self.cwe_ids)}</p>"
             result += f"<p>CVE IDs: {', '.join(self.cve_ids)}</p>"
             result += f"<p>Severity: {self.severity}</p>"
