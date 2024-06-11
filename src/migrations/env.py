@@ -20,7 +20,7 @@ fileConfig(config.config_file_name)
 # target_metadata = None
 
 from models.base import Base
-
+import models
 from models.models import *
 
 target_metadata =  Base.metadata
@@ -36,7 +36,7 @@ def get_url():
     # load env from file
 
     
-    from db import (get_db_url)
+    from my_db import (get_db_url)
     return get_db_url()
 
 

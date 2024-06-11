@@ -2,7 +2,7 @@ import json
 import jsonschema
 from jsonschema import validate
 
-from .db_types import schema, Response, Content
+from .types import schema, Response, Content
 
 ##TODO:maybe using pydantic should be enough
 def validate_json(data: any) -> bool:

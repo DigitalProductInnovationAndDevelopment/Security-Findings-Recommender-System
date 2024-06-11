@@ -8,7 +8,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - .env.docker
     develop:
       watch:
         - action: sync+restart
@@ -56,7 +56,26 @@ services:
       dockerfile: ./dashboard/Dockerfile
     ports:
       - "3000:3000"
+
+
+  # cve_search:
+  #   extends:
+  #     file: cve-search/docker-compose.yml
+  #     service: cve_search
+  #   environment:
+  #     - NVD_NIST_API_KEY=${NVD_NIST_API_KEY}
+  # mongo:
+  #   extends:
+  #     file: cve-search/docker-compose.yml
+  #     service: mongo
+  # redis:
+  #   extends:
+  #     file: cve-search/docker-compose.yml
+  #     service: redis
 volumes:
   ollama:
   db:
   dashboard:
+
+# networks:
+#   cve_search:

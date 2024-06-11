@@ -1,19 +1,22 @@
+import datetime
 import time
-
-from fastapi import FastAPI, Request
+from typing import Annotated
+from fastapi import Body, FastAPI,Response,Query
 from fastapi.middleware.cors import CORSMiddleware
 
 import api.ollama as ollama
 from data.helper import get_content_list
-from data.db_types import Recommendation, Response
+from data.types import Recommendation, Response,Content
 from my_db import Session
-from models.models import Finding
-from models.models import Recommendation as DBRecommendation
+import models.models as db_models
 
-# from data.Findings import Findings
 
+import data.apischema as apischema
+
+from sqlalchemy import Date, cast
 
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -47,34 +50,43 @@ def health():
 
 
 @app.post('/upload')
-async def upload(request: Request, response: Response):
+async def upload(data: Annotated[apischema.StartRecommendationTaskRequest,Body(...)]):
     """
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
     """
 
-    try:
-        json_data = await request.json()
-    except Exception as e:
-        response.status_code = 400
-        return 'Invalid JSON data'
-
-    # Check if the JSON data is valid
-    # TODO: fix required properties for eg cvss_rating_list is not required
-    # if not validate_json(json_data):
-    #     return 'Invalid JSON data', 400
-
-    # Convert into Response object
-    response = Response.validate(json_data)
-
     # get the content list
-    content_list = get_content_list(response)
+    content_list = get_content_list(data.data)
 
     with Session() as s:
-        for c in content_list:
-            find = Finding(finding=c.title_list[0].element, content=c.json())
-            s.add(find)
-        s.commit()
+            today = datetime.datetime.now().date()
+            existing_task = s.query(db_models.RecommendationTask).filter(cast(db_models.RecommendationTask.created_at,Date)== today).order_by(db_models.RecommendationTask.created_at).first()
+            if existing_task and data.force_update is False:
+                
+                return 'Recommendation task already exists for today', 400
+            
+            if(data.force_update):
+                # Will nuke old task with all its findings.
+                if(existing_task.status == db_models.TaskStatus.PENDING):
+                    return 'Recommendation task is already processing, cannot exit', 400
+                
+                s.query(db_models.RecommendationTask).filter(db_models.RecommendationTask.id == existing_task.id).delete()
+                s.commit()
+                s.delete(existing_task)
+                s.commit()
+            
+            recommendation_task = db_models.RecommendationTask()
+            
+            s.add(recommendation_task)
+            s.commit()
+            s.flush()
+            s.refresh(recommendation_task)
+            for c in content_list:
+                find = db_models.Finding().from_data(c)
+                find.recommendation_task_id = recommendation_task.id
+                s.add(find)
+            s.commit()
     # start subprocess for processing the data
     # ...
 
@@ -82,7 +94,7 @@ async def upload(request: Request, response: Response):
 
 
 @app.get('/recommendations')
-def recommendations():
+def recommendations(request: Annotated[apischema.GetRecommendationRequest,Query(...)]):
     """
     This function returns the recommendations from the data.
     :return: 200 OK with the recommendations or 204 NO CONTENT if there are no recommendations with retry-after header.
@@ -91,13 +103,20 @@ def recommendations():
     # get the findings
     # ...
     with Session() as s:
-        recs = s.query(DBRecommendation).all()
-
-    recommendations = [Recommendation(recommendation='aa', generic=True) for r in recs]
-    # get the recommendations
-
-    if recommendations:
-        return recommendations, 200
+        total_count = s.query(db_models.Finding).count()
+        recs = s.query(db_models.Finding).join(db_models.RecommendationTask).offset(request.pagination.offset).limit(request.pagination.limit).all()
+        findings = apischema.GetRecommendationResponse(
+            items=[apischema.GetRecommendationResponseItem(
+                description_short="this is a short description",
+                description_long="this is a long description",
+                finding='finding'
+                
+            ) for r in recs],
+        pagination=apischema.Pagination(offset=request.pagination.offset, limit=request.pagination.limit,total=total_count )
+        )
+    
+    if findings:
+        return findings, 200
     else:
         return 'No recommendations found', 204, {'Retry-After': 60}
 
