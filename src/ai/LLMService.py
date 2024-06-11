@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import List, Dict, Union, Optional
 import os
 import json
@@ -20,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def clean(text: str | List[str], split_paragraphs=False) -> str | List[str]:
+def clean(text: Union[str, List[str]], split_paragraphs=False) -> Union[str, List[str]]:
     if isinstance(text, list):
         # strip and if in the first 5 chars there is a ':', remove everything before it
         flattened = [item for sublist
@@ -39,7 +38,16 @@ def clean(text: str | List[str], split_paragraphs=False) -> str | List[str]:
 
 
 class LLMService:
+    """
+    This class is a wrapper around the OLLAMA API. It provides methods for generating recommendations and search terms
+    for security findings, as well as classifying the kind of finding.
+    """
     def __init__(self, model_url: Optional[str] = None, model_name: Optional[str] = None):
+        """
+        Initialize the LLMService object.
+        :param model_url: The URL of the OLLAMA model. If not provided, it will be read from the environment variable OLLAMA_URL or default to http://localhost:11434.
+        :param model_name:  The name of the OLLAMA model. If not provided, it will be read from the environment variable OLLAMA_MODEL or default to llama3:instruct.
+        """
         # Configure logging level for httpx
         logging.getLogger("httpx").setLevel(logging.WARNING)
 
@@ -60,15 +68,29 @@ class LLMService:
         self.init_pull_model()
 
     def init_pull_model(self) -> None:
+        """
+        ATTENTION: If the model is not cached, this function might take a long time to execute (depending on your internet connection).
+        Pull the model from the OLLAMA server.
+        :return: None
+        """
         payload = {"name": self.model_name}
         response = httpx.post(self.pull_url, json=payload)
         response.raise_for_status()
 
     def get_model_name(self) -> str:
+        """
+        Get the name of the OLLAMA model.
+        :return:  The name of the OLLAMA model.
+        """
         return self.model_name
 
     @retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=4, max=60))
     def generate(self, prompt: str) -> Dict[str, str]:
+        """
+        Generate a response from the OLLAMA model given a prompt.
+        :param prompt:  The prompt to generate a response for.
+        :return: The response from the OLLAMA model.
+        """
         payload = {
             "prompt": prompt,
             **self.generate_payload
@@ -89,6 +111,12 @@ class LLMService:
             return {}
 
     def classify_kind(self, finding: Finding, options: Optional[List[FindingKind]] = None) -> FindingKind:
+        """
+        Classify the kind of security finding.
+        :param finding: The finding to classify.
+        :param options: The options to choose from. If not provided, all options are available.
+        :return: The classified kind of finding.
+        """
         if options is None:
             options = list(FindingKind)
 
@@ -101,6 +129,13 @@ class LLMService:
         return FindingKind[response['selected_option']]
 
     def get_recommendation(self, finding: Finding, short: bool = True) -> Union[str, List[str]]:
+        """
+        Generate a recommendation for the security finding.
+        Adds to metadata of the finding: used_meta_prompt, prompt_short, prompt_long
+        :param finding:  The finding to generate a recommendation for.
+        :param short:  Whether to generate a short recommendation or a long one.
+        :return: The recommendation for the finding.
+        """
         if short:
             prompt = SHORT_RECOMMENDATION_TEMPLATE.format(data=str(finding))
         else:
@@ -122,6 +157,11 @@ class LLMService:
         return clean(response['recommendation'])
 
     def _generate_prompt_with_meta_prompts(self, finding: Finding) -> str:
+        """
+        Generate a prompt for the long recommendation based on the short recommendation.
+        :param finding: The finding to generate a prompt for.
+        :return: The prompt for the long recommendation.
+        """
         short_recommendation = finding.solution.short_description
         meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(category=finding.category.name,
                                                                       short_recommendation=short_recommendation)
@@ -130,10 +170,15 @@ class LLMService:
 
         return LONG_RECOMMENDATION_TEMPLATE.format(short_recommendation=short_recommendation, meta_prompts=meta_prompts)
 
-    def get_search_terms(self, finding: Finding) -> List[str]:
+    def get_search_terms(self, finding: Finding) -> str:
+        """
+        Generate search terms for future research into the security finding.
+        :param finding: The finding to generate search terms for.
+        :return: The search terms for the finding.
+        """
         prompt = SEARCH_TERMS_TEMPLATE.format(data=str(finding))
         response = self.generate(prompt)
         if 'search_terms' not in response:
             logger.warning(f"Failed to generate search terms for the finding: {finding.title}")
-            return []
+            return ""
         return clean(response['search_terms'])
