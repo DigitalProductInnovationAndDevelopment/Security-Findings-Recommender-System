@@ -123,6 +123,8 @@ class LLMService:
             prompt += self._generate_long_recommendation_prompt(finding)
 
         prompt += f"[DATA]\n{str(finding)}\n[/DATA]"
+        finding.solution.add_to_metadata(f"prompt_{'short' if short else 'detailed'}", prompt)
+
         response = self.generate(prompt)
 
         if 'recommendation' not in response:
@@ -138,7 +140,7 @@ class LLMService:
 
     def _generate_long_recommendation_prompt(self, finding: Finding, meta_prompting_enabled=True) -> str:
         if meta_prompting_enabled and (finding.solution and finding.solution.short_description):
-            finding.solution.set_used_meta_prompts(True)
+            finding.solution.add_to_metadata("used_meta_prompt", True)
             return self._generate_prompt_with_meta_prompts(finding)
         else:
             return self._generate_generic_long_recommendation_prompt()

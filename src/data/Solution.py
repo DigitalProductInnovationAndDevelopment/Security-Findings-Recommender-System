@@ -3,8 +3,7 @@ class Solution:
         self.short_description = short_description
         self.long_description = long_description
         self.search_terms = search_terms
-
-        self.used_meta_prompts = False
+        self.metadata = {}
 
     def set_short_description(self, short_description: str):
         self.short_description = short_description
@@ -15,17 +14,18 @@ class Solution:
     def set_search_terms(self, search_terms: list):
         self.search_terms = search_terms
 
-    def set_used_meta_prompts(self, used_meta_prompts: bool):
-        self.used_meta_prompts = used_meta_prompts
+    def add_to_metadata(self, key: str, value):
+        self.metadata = {
+            f'{key}': value,
+            **self.metadata
+        }
 
     def to_dict(self):
         return {
             'short_description': self.short_description,
             'long_description': self.long_description,
             'search_terms': self.search_terms if self.search_terms is not None else [],
-            'metadata': {
-                'used_meta_prompts': self.used_meta_prompts
-            }
+            'metadata': self.metadata
         }
 
     def __str__(self):
