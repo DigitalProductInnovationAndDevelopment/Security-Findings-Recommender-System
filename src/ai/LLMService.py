@@ -5,6 +5,7 @@ import logging
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from src.utils.json_helper import parse_json
 from src.utils.text_tools import clean
 from src.data.Finding import Finding, FindingKind
 from src.ai.prompts import (
@@ -81,13 +82,13 @@ class LLMService:
             **self.generate_payload
         }
         try:
-            # Set the timeout to 300 seconds (5 minutes). On m1, it usually takes 20 seconds.
+            # Set the timeout to 300 seconds (5 minutes). On my Mac M1, OLLAMA (llama3:7b) usually takes 30 seconds.
             timeout = httpx.Timeout(timeout=300.0)
             response = httpx.post(self.generate_url, json=payload, timeout=timeout)
             response.raise_for_status()
             try:
                 json_response = response.json()
-                return json.loads(json_response['response'], strict=False)
+                return parse_json(json_response['response'], strict=False)
             except json.JSONDecodeError as e:
                 logger.warning(f"Failed to parse JSON response: {e}")
                 return {}

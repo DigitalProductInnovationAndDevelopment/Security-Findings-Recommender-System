@@ -1,3 +1,4 @@
+import logging
 from typing import Union, List
 
 
@@ -10,12 +11,9 @@ def clean(text: Union[str, List[str]], split_paragraphs=False) -> Union[str, Lis
                          else [clean(t)] for t in text]
                      for item in sublist]
         return flattened
-    if isinstance(text, float):
-        print(f"Float found: {text}")  # Why would there be a float? Noone knows. But it happened, so we are prepared.
-        return str(text)
     if isinstance(text, dict):  # Also happened. LLMs are unpredictable.
         return convert_dict_to_str(text)
-    return text.strip()
+    return str(text).strip()
 
 
 def convert_dict_to_str(data: dict) -> str:
