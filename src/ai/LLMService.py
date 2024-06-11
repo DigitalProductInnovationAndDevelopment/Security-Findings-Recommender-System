@@ -89,10 +89,10 @@ class LLMService:
                 json_response = response.json()
                 return json.loads(json_response['response'], strict=False)
             except json.JSONDecodeError as e:
-                logger.error(f"Failed to parse JSON response: {e}")
+                logger.warning(f"Failed to parse JSON response: {e}")
                 return {}
         except httpx.ReadTimeout as e:
-            logger.error(f"ReadTimeout occurred: {e}")
+            logger.warning(f"ReadTimeout occurred: {e}")
             return {}
 
     def classify_kind(self, finding: Finding, options: Optional[List[FindingKind]] = None) -> FindingKind:
@@ -135,7 +135,7 @@ class LLMService:
 
         if 'recommendation' not in response:
             error_message = f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}"
-            logger.warning(error_message)
+            logger.error(error_message)
             return '[SYSTEM] Failed to generate recommendation.' if short else [
                 '[SYSTEM] Failed to generate recommendation.']
 
