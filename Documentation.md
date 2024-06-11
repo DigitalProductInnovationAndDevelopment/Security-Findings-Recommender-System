@@ -39,6 +39,67 @@ This Python code generates vulnerability reports using AI-powered analysis and r
 5. Sort the findings by severity or priority using the `sort` method.
 6. Access the findings and their details using the `get_findings` method or convert the report to various formats using the `to_dict`, `__str__`, or `to_html` methods.
 
+## Data Types
+
+The `VulnerabilityReport`, `Finding`, and `Solution` classes provide `to_dict` methods that convert the objects to dictionary representations. Here's an overview of the data types and structures returned by these methods:
+
+### `VulnerabilityReport.to_dict()`
+
+Returns a list of dictionaries, where each dictionary represents a `Finding` object:
+
+```python
+[
+    {
+        'title': List[str],
+        'source': Set[str],
+        'description': List[str],
+        'cwe_ids': List[str],
+        'cve_ids': List[str],
+        'severity': int,
+        'priority': int,
+        'category': str (optional),
+        'solution': dict (optional)
+    },
+    ...
+]
+```
+
+### `Finding.to_dict()`
+
+Returns a dictionary representing the `Finding` object:
+
+```python
+{
+    'title': List[str],
+    'source': Set[str],
+    'description': List[str],
+    'cwe_ids': List[str],
+    'cve_ids': List[str],
+    'severity': int,
+    'priority': int,
+    'category': str (optional),
+    'solution': dict (optional)
+}
+```
+
+The `category` field is included only if it is not `None` or `FindingKind.DEFAULT`. The `solution` field is included only if a solution has been generated for the finding.
+
+### `Solution.to_dict()`
+
+Returns a dictionary representing the `Solution` object:
+
+```python
+{
+    'short_description': str,
+    'long_description': str,
+    'search_terms': List[str]
+}
+```
+
+The `search_terms` field is an empty list if no search terms have been generated for the solution.
+
+These dictionary representations provide a structured way to access and manipulate the data contained in the `VulnerabilityReport`, `Finding`, and `Solution` objects. They can be useful for serialization, storage, or integration with other systems.
+
 ## Dependencies
 
 - `tqdm`: Used for progress bars during category and solution generation.
