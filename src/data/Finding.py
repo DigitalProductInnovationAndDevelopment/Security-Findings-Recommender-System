@@ -75,7 +75,7 @@ class Finding:
     def to_dict(self):
         data = {
             'title': self.title,
-            'source': self.source,
+            'source': list(self.source),
             'description': self.description,
             'cwe_ids': self.cwe_ids,
             'cve_ids': self.cve_ids,
