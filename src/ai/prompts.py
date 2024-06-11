@@ -24,7 +24,16 @@ LONG_RECOMMENDATION_TEMPLATE = (
     "Include the following in your response:\n"
     "- Links to relevant documentation or resources, if necessary.\n"
     "- Any potential caveats or considerations to keep in mind.\n\n"
-    'Answer in JSON format: {{"recommendation":["<Step_1_Text>", "<Step_2_Text>", ...]}}.\n\n'
+    "Please provide the steps as separate items in a list, using the following format:\n"
+    "```json\n"
+    '{{"recommendation": [\n'
+    '  "1. First step...",\n'
+    '  "2. Second step...",\n'
+    '  "3. Third step...",\n'
+    '  ...\n'
+    ']}}\n'
+    "```\n"
+    "Ensure that the JSON response is complete and valid."
 )
 
 META_PROMPT_GENERATOR_TEMPLATE = (
@@ -37,7 +46,9 @@ META_PROMPT_GENERATOR_TEMPLATE = (
     "- Request for version numbers or releases to upgrade to, if applicable\n"
     "- Ask for exact commands, code snippets, or configuration changes required\n"
     "- Encourage providing links to relevant documentation or resources\n"
-    "- Remind to include any potential caveats or considerations\n\n"
+    "- Remind to include any potential caveats or considerations\n"
+    "- Emphasize the importance of providing steps as separate items in a list\n"
+    "- Stress the need for a complete and valid JSON response\n\n"
     "Please provide the generated prompt in the following JSON format:\n"
     f"{answer_in_json_prompt('meta_prompts')}"
 )
@@ -50,7 +61,16 @@ GENERIC_LONG_RECOMMENDATION_TEMPLATE = (
     "- Exact commands, code snippets, or configuration changes required.\n"
     "- Links to relevant documentation or resources, if necessary.\n"
     "- Any potential caveats or considerations to keep in mind.\n\n"
-    'Answer in JSON format: {{"recommendation":["<Step_1_Text>", "<Step_2_Text>", ...]}}.'
+    "Please provide the steps as separate items in a list, using the following format:\n"
+    "```json\n"
+    '{{"recommendation": [\n'
+    '  "1. First step...",\n'
+    '  "2. Second step...",\n'
+    '  "3. Third step...",\n'
+    '  ...\n'
+    ']}}\n'
+    "```\n"
+    "Ensure that the JSON response is complete and valid."
 )
 
 SEARCH_TERMS_TEMPLATE = (
