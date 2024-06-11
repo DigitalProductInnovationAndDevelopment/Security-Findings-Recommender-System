@@ -140,7 +140,7 @@ class LLMService:
             return '[SYSTEM] Failed to generate recommendation.' if short else [
                 '[SYSTEM] Failed to generate recommendation.']
 
-        return clean(response['recommendation'])
+        return clean(response['recommendation'], llm_service=self)
 
     def _generate_prompt_with_meta_prompts(self, finding: Finding) -> str:
         """
@@ -152,7 +152,7 @@ class LLMService:
         meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(category=finding.category.name,
                                                                       short_recommendation=short_recommendation)
         meta_prompt_response = self.generate(meta_prompt_generator)
-        meta_prompts = clean(meta_prompt_response.get('meta_prompts', ''))
+        meta_prompts = clean(meta_prompt_response.get('meta_prompts', ''), llm_service=self)
 
         return LONG_RECOMMENDATION_TEMPLATE.format(short_recommendation=short_recommendation, meta_prompts=meta_prompts)
 
@@ -167,7 +167,7 @@ class LLMService:
         if 'search_terms' not in response:
             logger.warning(f"Failed to generate search terms for the finding: {finding.title}")
             return ""
-        return clean(response['search_terms'])
+        return clean(response['search_terms'], llm_service=self)
 
     def convert_dict_to_str(self, data):
         """
@@ -180,4 +180,4 @@ class LLMService:
         if 'converted_text' not in response:
             logger.info(f"Failed to convert dictionary to string, returning it as str conversion.")
             return str(data)
-        return clean(response['converted_text'])
+        return clean(response['converted_text'], llm_service=self)
