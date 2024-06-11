@@ -22,7 +22,7 @@ def clean(text: str | List[str], split_paragraphs=False) -> str | List[str]:
         flattened = [item for sublist
                      in [clean(t).split("\n\n")
                          if split_paragraphs
-                         else clean(t) for t in text]
+                         else [clean(t)] for t in text]
                      for item in sublist]
         return flattened
     if isinstance(text, float):
