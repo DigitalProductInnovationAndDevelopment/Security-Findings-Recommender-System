@@ -5,6 +5,7 @@ import logging
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from src.utils.text_tools import clean
 from src.data.Finding import Finding, FindingKind
 from src.ai.prompts import (
     CLASSIFY_KIND_TEMPLATE,
@@ -13,28 +14,11 @@ from src.ai.prompts import (
     META_PROMPT_GENERATOR_TEMPLATE,
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
     SEARCH_TERMS_TEMPLATE,
+    CONVERT_DICT_TO_STR_TEMPLATE
 )
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-def clean(text: Union[str, List[str]], split_paragraphs=False) -> Union[str, List[str]]:
-    if isinstance(text, list):
-        # strip and if in the first 5 chars there is a ':', remove everything before it
-        flattened = [item for sublist
-                     in [clean(t).split("\n\n")
-                         if split_paragraphs
-                         else [clean(t)] for t in text]
-                     for item in sublist]
-        return flattened
-    if isinstance(text, float):
-        print(f"Float found: {text}")  # Why would there be a float? Noone knows. But it happened, so we are prepared.
-        return str(text)
-    if isinstance(text, dict):  # Also happened. LLMs are unpredictable.
-        print(f"Dict found: {text}")
-        return str(text)  # TODO: Here, we could use the llm to convert it more smartly.
-    return text.strip()
 
 
 class LLMService:
@@ -42,6 +26,7 @@ class LLMService:
     This class is a wrapper around the OLLAMA API. It provides methods for generating recommendations and search terms
     for security findings, as well as classifying the kind of finding.
     """
+
     def __init__(self, model_url: Optional[str] = None, model_name: Optional[str] = None):
         """
         Initialize the LLMService object.
@@ -182,3 +167,16 @@ class LLMService:
             logger.warning(f"Failed to generate search terms for the finding: {finding.title}")
             return ""
         return clean(response['search_terms'])
+
+    def convert_dict_to_str(self, data):
+        """
+        Convert a dictionary to a string.
+        :param data: The dictionary to convert.
+        :return: The string representation of the dictionary.
+        """
+        prompt = CONVERT_DICT_TO_STR_TEMPLATE.format(data=json.dumps(data))
+        response = self.generate(prompt)
+        if 'converted_text' not in response:
+            logger.info(f"Failed to convert dictionary to string, returning it as str conversion.")
+            return str(data)
+        return clean(response['converted_text'])

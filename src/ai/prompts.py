@@ -59,3 +59,9 @@ SEARCH_TERMS_TEMPLATE = (
     f"{answer_in_json_prompt('search_terms')}"
     "[DATA]\n{data}\n[/DATA]"
 )
+
+CONVERT_DICT_TO_STR_TEMPLATE = (
+    "Convert the following dictionary into a string. "
+    f"{answer_in_json_prompt('converted_text')}"
+    "[DATA]\n{data}\n[/DATA]"
+)
