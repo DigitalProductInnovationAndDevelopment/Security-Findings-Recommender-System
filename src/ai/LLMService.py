@@ -18,7 +18,7 @@ from src.ai.prompts import (
     CONVERT_DICT_TO_STR_TEMPLATE
 )
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO,format='%(levelname)s | %(name)s | %(message)s')
 logger = logging.getLogger(__name__)
 
 
@@ -90,7 +90,7 @@ class LLMService:
                 json_response = response.json()
                 return parse_json(json_response['response'], strict=False)
             except json.JSONDecodeError as e:
-                logger.warning(f"Failed to parse JSON response: {e}")
+                logger.error(f"Failed to parse JSON response: {e}")
                 return {}
         except httpx.ReadTimeout as e:
             logger.warning(f"ReadTimeout occurred: {e}")
@@ -124,7 +124,7 @@ class LLMService:
         """
         if short:
             prompt = SHORT_RECOMMENDATION_TEMPLATE.format(data=str(finding))
-        else:
+        if not short:  # long recommendation
             if finding.solution and finding.solution.short_description:
                 finding.solution.add_to_metadata("used_meta_prompt", True)
                 prompt = self._generate_prompt_with_meta_prompts(finding)
@@ -134,11 +134,19 @@ class LLMService:
         finding.solution.add_to_metadata(f"prompt_{'short' if short else 'long'}", prompt)
         response = self.generate(prompt)
 
-        if 'recommendation' not in response:
-            error_message = f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}"
-            logger.error(error_message)
-            return '[SYSTEM] Failed to generate recommendation.' if short else [
-                '[SYSTEM] Failed to generate recommendation.']
+        if (not short) and 'recommendation' not in response:
+            logger.info(
+                f"Failed to generate a {'short' if short else 'long'} recommendation for a finding. Trying once more...")
+            response = self.generate(prompt)
+        if (not short) and 'recommendation' not in response:
+            logger.warning(
+                f"Failed again to generate a {'short' if short else 'long'} recommendation for the finding. Trying with generic prompt...")
+            finding.solution.add_to_metadata(f"fallback_to_generic_long_prompt", True)
+            response = self.generate(GENERIC_LONG_RECOMMENDATION_TEMPLATE)
+        if (not short) and 'recommendation' not in response:
+            logger.error(
+                f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}")
+            return '' if short else ['']
 
         return clean(response['recommendation'], llm_service=self)
 
@@ -154,7 +162,15 @@ class LLMService:
         meta_prompt_response = self.generate(meta_prompt_generator)
         meta_prompts = clean(meta_prompt_response.get('meta_prompts', ''), llm_service=self)
 
-        return LONG_RECOMMENDATION_TEMPLATE.format(short_recommendation=short_recommendation, meta_prompts=meta_prompts)
+        long_prompt = LONG_RECOMMENDATION_TEMPLATE.format(short_recommendation=short_recommendation,
+                                                          meta_prompts=meta_prompts)
+
+        finding.solution.add_to_metadata("prompt_long_breakdown", {
+            "short_recommendation": short_recommendation,
+            "meta_prompts": meta_prompts
+        })
+
+        return long_prompt
 
     def get_search_terms(self, finding: Finding) -> str:
         """

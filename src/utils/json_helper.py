@@ -2,6 +2,7 @@ import json
 import logging
 from typing import Dict, Any, Union, List
 
+logging.basicConfig(level=logging.INFO,format='%(levelname)s | %(name)s | %(message)s')
 logger = logging.getLogger(__name__)
 
 
