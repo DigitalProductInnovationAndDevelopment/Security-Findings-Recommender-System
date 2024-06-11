@@ -23,6 +23,7 @@ class Finding:
                  cve_ids: List[str] = [],
                  severity: int = None,
                  priority: int = None,
+                 location_list: List[dict] = None,
                  llm_service=None):
         """
         A class to represent a finding.
@@ -33,6 +34,7 @@ class Finding:
         :param cve_ids:  The CVE IDs of the finding.
         :param severity: The severity of the finding.
         :param priority:  The priority of the finding.
+        :param location_list: The list of locations for the finding.
         :param llm_service:  The LLM service to use. Optional, will create a new one if not provided.
         """
         self.title = title
@@ -42,6 +44,7 @@ class Finding:
         self.cve_ids = cve_ids
         self.severity = severity
         self.priority = priority
+        self.location_list = location_list or []
         self.category: FindingKind = FindingKind.DEFAULT
 
         self.solution = None
@@ -75,6 +78,7 @@ class Finding:
         data = {
             'title': self.title,
             'source': list(self.source),
+            'location_list': self.location_list,
             'description': self.description,
             'cwe_ids': self.cwe_ids,
             'cve_ids': self.cve_ids,
@@ -99,6 +103,10 @@ class Finding:
             result += f"Source: {', '.join(self.source)}\n"
         if len(self.description) > 0:
             result += f"Description: {', '.join(self.description)}\n"
+        if len(self.location_list) > 0:
+            result += f"Location List:\n"
+            for location in self.location_list:
+                result += f"  - {location}\n"
         if len(self.cwe_ids) > 0:
             result += f"CWE IDs: {', '.join(self.cwe_ids)}\n"
         if len(self.cve_ids) > 0:
@@ -138,6 +146,8 @@ class Finding:
             result += f"<p>Title: {', '.join(self.title)}</p>"
             result += f"<p>Source: {', '.join(self.source)}</p>"
             result += f"<p>Description: {', '.join(self.description)}</p>"
+            if len(self.location_list) > 0:
+                result += f"<p>Location List: {','.join(map(str, self.location_list))}</p>"
             result += f"<p>CWE IDs: {', '.join(self.cwe_ids)}</p>"
             result += f"<p>CVE IDs: {', '.join(self.cve_ids)}</p>"
             result += f"<p>Severity: {self.severity}</p>"
