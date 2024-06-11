@@ -16,10 +16,14 @@ def answer_in_json_promt(key: str) -> str:
     return 'Answer in the following JSON format: {"' + key + '":"<your_selection>"}\n\n'
 
 
-def clean(text: str | List[str]) -> str | List[str]:
+def clean(text: str | List[str], split_paragraphs=False) -> str | List[str]:
     if isinstance(text, list):
         # strip and if in the first 5 chars there is a ':', remove everything before it
-        flattened = [item for sublist in [clean(t).split("\n\n") for t in text] for item in sublist]
+        flattened = [item for sublist
+                     in [clean(t).split("\n\n")
+                         if split_paragraphs
+                         else clean(t) for t in text]
+                     for item in sublist]
         return flattened
     if isinstance(text, float):
         print(f"Float found: {text}")  # Why would there be a float? Noone knows. But it happened, so we are prepared.
