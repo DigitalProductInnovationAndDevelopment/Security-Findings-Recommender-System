@@ -42,7 +42,7 @@ class Finding:
         self.cve_ids = cve_ids
         self.severity = severity
         self.priority = priority
-        self.category:FindingKind = FindingKind.DEFAULT
+        self.category: FindingKind = FindingKind.DEFAULT
 
         self.solution = None
 
@@ -62,15 +62,14 @@ class Finding:
         from src.ai.LLMService import LLMService
         if self.llm_service is None:
             self.llm_service = LLMService()
-        short_str, long_str = "", ""
-        search_terms = None
-        if long:
-            long_str = self.llm_service.get_recommendation(self, False)
+        self.solution = Solution()
         if short:
-            short_str = self.llm_service.get_recommendation(self, True)
+            short_solution = self.llm_service.get_recommendation(self, True)
+            self.solution.set_short_description(short_solution)
+        if long:
+            self.solution.set_long_description(self.llm_service.get_recommendation(self, False))
         if search_term:
-            search_terms = self.llm_service.get_search_terms(self)
-        self.solution = Solution(short_str, long_str, search_terms)
+            self.solution.set_search_terms(self.llm_service.get_search_terms(self))
 
     def to_dict(self):
         data = {
@@ -92,8 +91,8 @@ class Finding:
     def __str__(self):
         result = ""
 
-        #Finding
-        result+="-------    Finding    -------\n"
+        # Finding
+        result += "-------    Finding    -------\n"
         if len(self.title) > 0:
             result += f"Title: {', '.join(self.title)}\n"
         if len(self.source) > 0:
@@ -111,13 +110,13 @@ class Finding:
         if self.category is not None and self.category != FindingKind.DEFAULT:
             result += f"Category: {self.category.name}\n"
 
-        #Solution
+        # Solution
         if self.solution is not None:
             result += f"{str(self.solution)}"
 
         return result
 
-    def to_html(self, table = False):
+    def to_html(self, table=False):
         result = f"<h3>{','.join(self.cve_ids)}</h3>"
 
         # make a table
@@ -148,6 +147,5 @@ class Finding:
 
         if self.solution is not None:
             result += f"{self.solution.to_html()}"
-
 
         return result
