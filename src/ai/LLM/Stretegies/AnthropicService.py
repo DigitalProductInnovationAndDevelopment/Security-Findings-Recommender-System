@@ -1,8 +1,7 @@
-import json
 import os
 from typing import Dict, List, Optional, Union
 
-import openai
+from anthropic import Anthropic
 
 from ai.LLM.BaseLLMService import BaseLLMService
 from data.Finding import FindingKind, Finding
@@ -11,7 +10,9 @@ from ai.LLM.Stretegies.openai_prompts import (
     SHORT_RECOMMENDATION_TEMPLATE,
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
     SEARCH_TERMS_TEMPLATE,
-    CONVERT_DICT_TO_STR_TEMPLATE, META_PROMPT_GENERATOR_TEMPLATE, LONG_RECOMMENDATION_TEMPLATE
+    CONVERT_DICT_TO_STR_TEMPLATE,
+    META_PROMPT_GENERATOR_TEMPLATE,
+    LONG_RECOMMENDATION_TEMPLATE
 )
 from utils.text_tools import clean
 
@@ -19,22 +20,23 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class OpenAIService(BaseLLMService):
-    def __init__(self, api_key: str = os.getenv("OPENAI_API_KEY", None), model: str = "gpt-4o"):
+class AnthropicService(BaseLLMService):
+    def __init__(self, api_key: str = os.getenv("ANTHROPIC_API_KEY", None), model: str = "claude-3-opus-20240229"):
         if api_key is None:
-            raise ValueError("API key not provided and OPENAI_API_KEY environment variable not set.")
-        openai.api_key = api_key
+            raise ValueError("API key not provided and ANTHROPIC_API_KEY environment variable not set.")
+        self.client = Anthropic(api_key=api_key)
         self.model = model
 
     def get_model_name(self) -> str:
-        return self.model
+        return "-".join(self.model.split('-')[:-1])
 
     def generate(self, prompt: str) -> Dict[str, str]:
-        response = openai.chat.completions.create(
+        message = self.client.messages.create(
+            max_tokens=1024,
+            messages=[{"role": "user", "content": prompt}],
             model=self.model,
-            messages=[{"role": "user", "content": prompt}]
         )
-        content = response.choices[0].message.content
+        content = message.content[0].text
         return {"response": content}
 
     def classify_kind(self, finding: Finding, options: Optional[List[FindingKind]] = None) -> FindingKind:

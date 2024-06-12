@@ -128,7 +128,7 @@ class Finding(BaseModel):
         result = ""
 
         # Finding
-        result += "-------    Finding    -------\n"
+        result += "-------    Security Finding    -------\n"
         if len(self.title) > 0:
             result += f"Title: {', '.join(self.title)}\n"
         if len(self.source) > 0:

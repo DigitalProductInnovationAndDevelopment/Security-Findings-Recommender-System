@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Body, FastAPI, Query, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-import api.ollama as ollama
+import ai.LLM.Stretegies.OLLAMAService
 
 from data.helper import get_content_list
 
@@ -43,7 +43,7 @@ def health():
     # check ollama health
     ollama_health = "DOWN"
     try:
-        if ollama.is_up():
+        if ai.LLM.Stretegies.OLLAMAService.is_up():
             ollama_health = "UP"
     except Exception as e:
         print(f"Error checking Ollama health, probably is down: {e}")
@@ -53,7 +53,7 @@ def health():
         "uptime": round(time.time() - start_time, 2),
         "external_modules": {"ollama": ollama_health},
     }
-    return system_info, 200
+    return system_info
 
 
 @app.post("/upload")
@@ -201,9 +201,3 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(
         return Response(status_code=204, headers={"Retry-After": "120"})
 
     return response
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app)

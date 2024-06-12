@@ -33,6 +33,15 @@ def singleton(cls):
 
     return wrapper
 
+def is_up() -> bool:
+    # res = requests.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
+    res = httpx.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
+    if res.status_code == 200:
+        return True
+    else:
+        return False
+
+
 
 @singleton
 class OLLAMAService(BaseLLMService):
@@ -189,17 +198,13 @@ class OLLAMAService(BaseLLMService):
         :return: The prompt for the long recommendation.
         """
         short_recommendation = finding.solution.short_description
-        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(
-            category=finding.category.name, short_recommendation=short_recommendation
-        )
+        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(finding=str(finding))
         meta_prompt_response = self.generate(meta_prompt_generator)
         meta_prompts = clean(
             meta_prompt_response.get("meta_prompts", ""), llm_service=self
         )
 
-        long_prompt = LONG_RECOMMENDATION_TEMPLATE.format(
-            short_recommendation=short_recommendation, meta_prompts=meta_prompts
-        )
+        long_prompt = LONG_RECOMMENDATION_TEMPLATE.format(meta_prompts=meta_prompts)
 
         finding.solution.add_to_metadata(
             "prompt_long_breakdown",
