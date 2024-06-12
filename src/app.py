@@ -43,7 +43,7 @@ def health():
         "uptime": round(time.time() - start_time, 2),
         "external_modules": {"ollama": ollama_health},
     }
-    return system_info, 200
+    return system_info
 
 
 @app.post("/upload")
@@ -104,7 +104,7 @@ async def upload(data: Annotated[apischema.StartRecommendationTaskRequest, Body(
 
 
 @app.get("/recommendations")
-def recommendations(request: Annotated[apischema.GetRecommendationRequest, Query(...)]):
+def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(...)]):
     """
     This function returns the recommendations from the data.
     :return: 200 OK with the recommendations or 204 NO CONTENT if there are no recommendations with retry-after header.
@@ -161,9 +161,3 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Query
         return Response(status_code=204, headers={"Retry-After": "120"})
 
     return response
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app)
