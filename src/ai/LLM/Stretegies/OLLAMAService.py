@@ -33,6 +33,15 @@ def singleton(cls):
 
     return wrapper
 
+def is_up() -> bool:
+    # res = requests.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
+    res = httpx.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
+    if res.status_code == 200:
+        return True
+    else:
+        return False
+
+
 
 @singleton
 class OLLAMAService(BaseLLMService):
