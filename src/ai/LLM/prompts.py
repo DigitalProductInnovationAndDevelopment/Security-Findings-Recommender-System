@@ -24,7 +24,8 @@ LONG_RECOMMENDATION_TEMPLATE = (
     "Include the following in your response:\n"
     "- Links to relevant documentation or resources, if necessary.\n"
     "- Any potential caveats or considerations to keep in mind.\n\n"
-    "The text can be extensive and include MarkDown if appropriate.\n"
+    "The text can be extensive and include MarkDown if appropriate. "
+    "Write at least two paragraphs, each representing one step to the solution. Maximum is ten paragraphs.\n"
     f"{answer_in_json_prompt('recommendation')}"
     "Short Recommendation: {short_recommendation}"
 )
