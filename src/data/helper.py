@@ -1,8 +1,4 @@
-# import json
-# import jsonschema
-# from jsonschema import validate
-
-# from data.types import schema, Response, Content
+from data.types import Content, InputData
 
 # ##TODO:maybe using pydantic should be enough
 # def validate_json(data: any) -> bool:
@@ -20,5 +16,5 @@
 #     return True
 
 
-# def get_content_list(json_data: InputData) -> list[Content]:
-#     return json_data.message.content
+def get_content_list(json_data: InputData) -> list[Content]:
+    return json_data.message.content

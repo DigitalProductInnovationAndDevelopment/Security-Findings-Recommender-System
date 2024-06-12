@@ -2,7 +2,8 @@ from pydantic import BaseModel
 from typing import Optional
 
 from data.pagination import Pagination, PaginationInput
-from data.types import Recommendation, InputData, Content
+from data.types import InputData
+from data.Finding import Finding
 
 
 class StartRecommendationTaskRequest(BaseModel):
@@ -28,12 +29,15 @@ class GetRecommendationRequest(BaseModel):
     pagination: Optional[PaginationInput] = PaginationInput(offset=0, limit=10)
 
 
-class GetRecommendationResponseItem(BaseModel):  # TODO adapt needed fields
-    description_short: str
-    description_long: str
+class SolutionItem(BaseModel):
+    short_description: str
+    long_description: str
+    metadata: dict
     search_terms: str
-    meta: dict
-    finding: Content
+
+
+class GetRecommendationResponseItem(Finding):  # TODO adapt needed fields
+    pass
 
 
 class GetRecommendationResponse(BaseModel):
@@ -46,6 +50,6 @@ class GetSummarizedRecommendationRequest(BaseModel):
     pagination: PaginationInput = PaginationInput(offset=0, limit=10)
 
 
-class GetSummarizedRecommendationResponse(BaseModel):
-    recommendation: list[Recommendation]
-    pagination: Pagination
+# class GetSummarizedRecommendationResponse(BaseModel):
+#     recommendation: list[Recommendation]
+#     pagination: Pagination

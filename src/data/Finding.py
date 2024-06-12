@@ -1,6 +1,6 @@
-from typing import List, Set
+from typing import List, Set, Optional
 from enum import Enum, auto
-
+from pydantic import BaseModel
 from data.Solution import Solution
 
 
@@ -16,8 +16,17 @@ class FindingKind(Enum):
     DEFAULT = auto()
 
 
-class Finding:
+class Finding(BaseModel):
     solution: Solution | None
+    title: List[str]
+    source: Set[str]
+    description: List[str]
+    cwe_ids: List[str]
+    cve_ids: List[str]
+    severity: Optional[int]
+    priority: Optional[int]
+    location_list: List[str]
+    category: FindingKind
 
     def __init__(
         self,
@@ -28,7 +37,7 @@ class Finding:
         cve_ids: List[str] = [],
         severity: int = None,
         priority: int = None,
-        location_list: List[str] = None,
+        location_list: List[str] = [],
         llm_service=None,
     ):
         """

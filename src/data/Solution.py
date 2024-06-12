@@ -1,9 +1,18 @@
-class Solution:
+from typing import Optional
+from pydantic import BaseModel
+
+
+class Solution(BaseModel):
+    short_description: Optional[str]
+    long_description: Optional[str]
+    search_terms: Optional[str]
+    metadata: dict
+
     def __init__(
         self,
         short_description: str = None,
         long_description: str = None,
-        search_terms: list = None,
+        search_terms: str = None,
     ):
         self.short_description = short_description
         self.long_description = long_description
@@ -26,7 +35,7 @@ class Solution:
         return {
             "short_description": self.short_description,
             "long_description": self.long_description,
-            "search_terms": self.search_terms if self.search_terms is not None else [],
+            "search_terms": self.search_terms if self.search_terms is not None else "",
             "metadata": self.metadata,
         }
 

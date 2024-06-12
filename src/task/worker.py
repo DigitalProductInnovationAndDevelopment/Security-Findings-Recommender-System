@@ -1,5 +1,6 @@
 from celery import Celery
-from ai.LLMService import LLMService
+from ai.LLM.Stretegies.OLLAMAService import OLLAMAService
+from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
 from data.VulnerabilityReport import create_from_flama_json
 import models.models as db_models
 from my_db import Session
@@ -7,7 +8,10 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-llm_service = LLMService()
+
+
+my_strategy = OLLAMAService()
+llm_service = LLMServiceStrategy(my_strategy)
 
 
 redis_url = os.getenv("REDIS_ENDPOINT")
