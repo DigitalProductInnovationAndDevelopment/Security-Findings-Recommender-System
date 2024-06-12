@@ -53,12 +53,13 @@ Returns a list of dictionaries, where each dictionary represents a `Finding` obj
         'title': List[str],
         'source': Set[str],
         'description': List[str],
+        'location_list': List[str],
         'cwe_ids': List[str],
         'cve_ids': List[str],
         'severity': int,
         'priority': int,
-        'category': str (optional),
-        'solution': dict (optional)
+        'category': str(optional),
+        'solution': dict(optional)
     },
     ...
 ]
