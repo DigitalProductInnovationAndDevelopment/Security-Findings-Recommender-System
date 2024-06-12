@@ -5,10 +5,11 @@ import logging
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from src.ai.LLM.BaseLLMService import BaseLLMService
 from src.utils.json_helper import parse_json
 from src.utils.text_tools import clean
 from src.data.Finding import Finding, FindingKind
-from src.ai.prompts import (
+from src.ai.LLM.prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
     LONG_RECOMMENDATION_TEMPLATE,
@@ -22,7 +23,7 @@ logging.basicConfig(level=logging.INFO,format='%(levelname)s | %(name)s | %(mess
 logger = logging.getLogger(__name__)
 
 
-class LLMService:
+class OLLAMAService(BaseLLMService):
     """
     This class is a wrapper around the OLLAMA API. It provides methods for generating recommendations and search terms
     for security findings, as well as classifying the kind of finding.
@@ -114,7 +115,7 @@ class LLMService:
             return FindingKind.DEFAULT
         return FindingKind[response['selected_option']]
 
-    def get_recommendation(self, finding: Finding, short: bool = True) -> Union[str, List[str]]:
+    def get_recommendation(self, finding: Finding, short: bool = True) -> str:
         """
         Generate a recommendation for the security finding.
         Adds to metadata of the finding: used_meta_prompt, prompt_short, prompt_long
@@ -122,6 +123,7 @@ class LLMService:
         :param short:  Whether to generate a short recommendation or a long one.
         :return: The recommendation for the finding.
         """
+        prompt = ""
         if short:
             prompt = SHORT_RECOMMENDATION_TEMPLATE.format(data=str(finding))
         if not short:  # long recommendation

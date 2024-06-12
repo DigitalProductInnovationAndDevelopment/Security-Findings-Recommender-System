@@ -24,19 +24,8 @@ LONG_RECOMMENDATION_TEMPLATE = (
     "Include the following in your response:\n"
     "- Links to relevant documentation or resources, if necessary.\n"
     "- Any potential caveats or considerations to keep in mind.\n\n"
-    "Format your response as a JSON object with a single 'recommendation' field containing an array of strings. "
-    "Each string in the array should represent a sensible step in the solution. "
-    "The step text can be extensive and include MarkDown if appropriate."
-    # "Iff a step-by-step solution is not possible or appropriate for this query, put your solution in the first and single array element.\n\n"
-    "Example JSON format:\n"
-    "{{\n"
-    '  "recommendation": [\n'
-    '    "STEP_1_TEXT",\n'
-    '    "STEP_2_TEXT",\n'
-    '    "STEP_3_TEXT",\n'
-    "    ...\n"
-    "  ]\n"
-    "}}\n\n"
+    "The text can be extensive and include MarkDown if appropriate.\n"
+    f"{answer_in_json_prompt('recommendation')}"
     "Short Recommendation: {short_recommendation}"
 )
 META_PROMPT_GENERATOR_TEMPLATE = (
@@ -65,7 +54,8 @@ GENERIC_LONG_RECOMMENDATION_TEMPLATE = (
     "- Exact commands, code snippets, or configuration changes required.\n"
     "- Links to relevant documentation or resources, if necessary.\n"
     "- Any potential caveats or considerations to keep in mind.\n\n"
-    'Answer in JSON format, replace the placeholders: {{"recommendation":["STEP_1_TEXT", "STEP_2_TEXT", ...]}}. '
+    "The text can be extensive and include MarkDown if appropriate.\n"
+    f"{answer_in_json_prompt('recommendation')}"
 )
 
 SEARCH_TERMS_TEMPLATE = (

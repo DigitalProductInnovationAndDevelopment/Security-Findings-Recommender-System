@@ -53,9 +53,9 @@ class Finding:
         self.llm_service = llm_service
 
     def add_category(self) -> 'Finding':
-        from src.ai.LLMService import LLMService  # Lazy import to avoid circular imports
+        from src.ai.LLM.LLMServiceStrategy import LLMServiceStrategy  # Lazy import to avoid circular imports
         if self.llm_service is None:
-            self.llm_service = LLMService()
+            self.llm_service = LLMServiceStrategy()
         self.category = self.llm_service.classify_kind(self)
         return self
 
@@ -63,9 +63,9 @@ class Finding:
         if not short and not long:
             print("No solution requested, skipping generation. (But why would you do that?)")
             return self
-        from src.ai.LLMService import LLMService
+        from src.ai.LLM.LLMServiceStrategy import LLMServiceStrategy
         if self.llm_service is None:
-            self.llm_service = LLMService()
+            self.llm_service = LLMServiceStrategy()
         self.solution = Solution()
         if short:
             short_solution = self.llm_service.get_recommendation(self, True)

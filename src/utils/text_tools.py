@@ -1,4 +1,3 @@
-import logging
 from typing import Union, List
 
 
@@ -29,6 +28,6 @@ def clean(text: Union[str, List[str]], split_paragraphs=False, llm_service=None)
 
 def convert_dict_to_str(data: dict, llm_service=None) -> str:
     if llm_service is None:
-        from src.ai.LLMService import LLMService  # Lazy import to avoid circular imports
-        llm_service = LLMService()
+        from src.ai.LLM.LLMServiceStrategy import LLMServiceStrategy  # Lazy import to avoid circular imports
+        llm_service = LLMServiceStrategy()
     return llm_service.convert_dict_to_str(data)

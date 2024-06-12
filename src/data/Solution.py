@@ -11,7 +11,7 @@ class Solution:
     def set_long_description(self, long_description: str):
         self.long_description = long_description
 
-    def set_search_terms(self, search_terms: list):
+    def set_search_terms(self, search_terms: str):
         self.search_terms = search_terms
 
     def add_to_metadata(self, key: str, value):
@@ -38,18 +38,17 @@ class Solution:
 
     def to_html(self, table=False):
         result = ""
+        if table:
+            result += "<table>"
+            result += "<tr><th>Solution</th></tr>"
+            result += f"<tr><td>Short Description</td><td>{self.short_description}</td></tr>"
+            result += f"<tr><td>Long Description</td><td>{self.long_description}</td></tr>"
+            result += f"<tr><td>Search Terms</td><td>{self.search_terms}</td></tr>"
+            result += "</table>"
+            return
         result += "<h3>Solution</h3>"
         result += f"<h4>Short Description</h4> <p>{self.short_description}</p>"
-        if table:
-            result += (f"<h4>Long Description</h4><table style='width:100%'>" +
-                       "<thead><tr><th align='left'>Step</th><th text-"
-                       "align='left'>Description</th></tr></thead>" +
-                       "".join(
-                           [f"<tr><td align='left'>{x[0] + 1}</td><td text-align='left'><p>{x[1]}</p></td></tr>" for x
-                            in
-                            enumerate(self.long_description)]) +
-                       "</table>")
-        else:
-            result += f"<h4>Long Description</h4><ul>{''.join([f'<li>{x}</li>' for x in self.long_description])}</ul>"
+        result += (f"<h4>Long Description</h4>"
+                       f"<p>{self.long_description}</p>")
         result += f"<h4>Search Terms</h4> <p>{self.search_terms}</p>"
         return result
