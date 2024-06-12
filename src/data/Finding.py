@@ -1,6 +1,6 @@
 from typing import List, Set, Optional
 from enum import Enum, auto
-from pydantic import BaseModel
+from pydantic import BaseModel, PrivateAttr
 from data.Solution import Solution
 
 
@@ -18,52 +18,53 @@ class FindingKind(Enum):
 
 class Finding(BaseModel):
     solution: Solution | None
-    title: List[str]
-    source: Set[str]
-    description: List[str]
-    cwe_ids: List[str]
-    cve_ids: List[str]
+    title: Optional[List[str]] = []
+    source: Optional[Set[str]] = set()
+    description: Optional[List[str]] = []
+    cwe_ids: Optional[List[str]] = []
+    cve_ids: Optional[List[str]] = []
     severity: Optional[int]
     priority: Optional[int]
-    location_list: List[str]
-    category: FindingKind
+    location_list: Optional[List[str]] = []
+    category: Optional[FindingKind] = FindingKind.DEFAULT
+    _llm_service = PrivateAttr(None)
 
-    def __init__(
-        self,
-        title: List[str] = {},
-        source: Set[str] = {},
-        description: List[str] = [],
-        cwe_ids: List[str] = [],
-        cve_ids: List[str] = [],
-        severity: int = None,
-        priority: int = None,
-        location_list: List[str] = [],
-        llm_service=None,
-    ):
-        """
-        A class to represent a finding.
-        :param title:  The title of the finding.
-        :param source:  The source of the finding.
-        :param description:  The description of the finding.
-        :param cwe_ids:  The CWE IDs of the finding.
-        :param cve_ids:  The CVE IDs of the finding.
-        :param severity: The severity of the finding.
-        :param priority:  The priority of the finding.
-        :param location_list: The list of locations for the finding.
-        :param llm_service:  The LLM service to use. Optional, will create a new one if not provided.
-        """
-        self.title = title
-        self.source = source
-        self.description = description
-        self.cwe_ids = cwe_ids
-        self.cve_ids = cve_ids
-        self.severity = severity
-        self.priority = priority
-        self.location_list = location_list or []
-        self.category: FindingKind = FindingKind.DEFAULT
+    # def __init__(
+    #     self,
+    #     title: List[str] = {},
+    #     source: Set[str] = {},
+    #     description: List[str] = [],
+    #     cwe_ids: List[str] = [],
+    #     cve_ids: List[str] = [],
+    #     severity: int = None,
+    #     priority: int = None,
+    #     location_list: List[str] = [],
+    #     llm_service=None,
+    # ):
+    #     """
+    #     A class to represent a finding.
+    #     :param title:  The title of the finding.
+    #     :param source:  The source of the finding.
+    #     :param description:  The description of the finding.
+    #     :param cwe_ids:  The CWE IDs of the finding.
+    #     :param cve_ids:  The CVE IDs of the finding.
+    #     :param severity: The severity of the finding.
+    #     :param priority:  The priority of the finding.
+    #     :param location_list: The list of locations for the finding.
+    #     :param llm_service:  The LLM service to use. Optional, will create a new one if not provided.
+    #     """
+    #     self.title = title
+    #     self.source = source
+    #     self.description = description
+    #     self.cwe_ids = cwe_ids
+    #     self.cve_ids = cve_ids
+    #     self.severity = severity
+    #     self.priority = priority
+    #     self.location_list = location_list or []
+    #     self.category: FindingKind = FindingKind.DEFAULT
 
-        self.solution = None
-        self.llm_service = llm_service
+    #     self.solution = None
+    #     self.llm_service = llm_service
 
     def add_category(self) -> "Finding":
         from ai.LLM.LLMServiceStrategy import (
@@ -74,6 +75,14 @@ class Finding(BaseModel):
             self.llm_service = LLMServiceStrategy()
         self.category = self.llm_service.classify_kind(self)
         return self
+
+    @property
+    def llm_service(self):
+        return self._llm_service
+
+    @llm_service.setter
+    def llm_service(self, llm_service):
+        self._llm_service = llm_service
 
     def generate_solution(self, long=True, short=True, search_term=True) -> "Finding":
         if not short and not long:

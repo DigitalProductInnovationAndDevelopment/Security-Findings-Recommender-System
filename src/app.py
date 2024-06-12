@@ -3,17 +3,27 @@ import time
 from typing import Annotated
 from fastapi import Body, FastAPI, Query, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
+
 import api.ollama as ollama
+
 from data.helper import get_content_list
 
 from my_db import Session
 import models.models as db_models
-
+from data.Solution import Solution
+from data.types import Content
 import data.apischema as apischema
 from sqlalchemy import Date, cast
 
 from task.worker import worker
 
+from data.VulnerabilityReport import create_from_flama_json
+
+from ai.LLM.Stretegies.OLLAMAService import OLLAMAService
+from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
+
+my_strategy = OLLAMAService()
+llm_service = LLMServiceStrategy(my_strategy)
 
 app = FastAPI()
 
@@ -54,6 +64,10 @@ async def upload(data: Annotated[apischema.StartRecommendationTaskRequest, Body(
     """
     # get the content list
     content_list = get_content_list(data.data)
+
+    data2 = [x.dict() for x in content_list]
+    vulnerability_report = create_from_flama_json(data2, n=5, llm_service=llm_service)
+    print(vulnerability_report.findings[0].llm_service)
     recommendation_task_id = None
     with Session() as s:
         today = datetime.datetime.now().date()
@@ -104,7 +118,7 @@ async def upload(data: Annotated[apischema.StartRecommendationTaskRequest, Body(
 
 
 @app.get("/recommendations")
-def recommendations(request: Annotated[apischema.GetRecommendationRequest, Query(...)]):
+def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(...)]):
     """
     This function returns the recommendations from the data.
     :return: 200 OK with the recommendations or 204 NO CONTENT if there are no recommendations with retry-after header.
@@ -129,23 +143,27 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Query
         response = apischema.GetRecommendationResponse(
             items=[
                 apischema.GetRecommendationResponseItem(
-                    description_short=(
-                        find.recommendations[0].description_short
-                        if find.recommendations
-                        else ""
+                    title=[],
+                    solution=Solution(
+                        short_description=(
+                            find.recommendations[0].description_short
+                            if find.recommendations
+                            else None
+                        ),
+                        long_description=(
+                            find.recommendations[0].description_long
+                            if find.recommendations
+                            else None
+                        ),
+                        search_terms=(
+                            find.recommendations[0].search_terms
+                            if find.recommendations
+                            else None
+                        ),
+                        metadata=(
+                            find.recommendations[0].meta if find.recommendations else {}
+                        ),
                     ),
-                    description_long=(
-                        find.recommendations[0].description_long
-                        if find.recommendations
-                        else ""
-                    ),
-                    finding=find.raw_data,
-                    search_terms=(
-                        find.recommendations[0].search_terms
-                        if find.recommendations
-                        else ""
-                    ),
-                    meta=find.recommendations[0].meta if find.recommendations else {},
                 )
                 for find in findings
             ],
@@ -153,9 +171,10 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Query
                 offset=request.pagination.offset,
                 limit=request.pagination.limit,
                 total=total_count,
+                count=len(findings),
             ),
         )
-    print(response)
+
     if not response or len(response.items) == 0:
 
         return Response(status_code=204, headers={"Retry-After": "120"})
