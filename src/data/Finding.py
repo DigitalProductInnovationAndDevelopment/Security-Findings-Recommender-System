@@ -1,6 +1,6 @@
-from typing import List, Set, Optional
+from typing import List, Set, Optional, Any
 from enum import Enum, auto
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from data.Solution import Solution
 
 
@@ -17,53 +17,17 @@ class FindingKind(Enum):
 
 
 class Finding(BaseModel):
-    solution: Solution | None
-    title: List[str]
-    source: Set[str]
-    description: List[str]
-    cwe_ids: List[str]
-    cve_ids: List[str]
-    severity: Optional[int]
-    priority: Optional[int]
-    location_list: List[str]
-    category: FindingKind
-
-    def __init__(
-        self,
-        title: List[str] = {},
-        source: Set[str] = {},
-        description: List[str] = [],
-        cwe_ids: List[str] = [],
-        cve_ids: List[str] = [],
-        severity: int = None,
-        priority: int = None,
-        location_list: List[str] = [],
-        llm_service=None,
-    ):
-        """
-        A class to represent a finding.
-        :param title:  The title of the finding.
-        :param source:  The source of the finding.
-        :param description:  The description of the finding.
-        :param cwe_ids:  The CWE IDs of the finding.
-        :param cve_ids:  The CVE IDs of the finding.
-        :param severity: The severity of the finding.
-        :param priority:  The priority of the finding.
-        :param location_list: The list of locations for the finding.
-        :param llm_service:  The LLM service to use. Optional, will create a new one if not provided.
-        """
-        self.title = title
-        self.source = source
-        self.description = description
-        self.cwe_ids = cwe_ids
-        self.cve_ids = cve_ids
-        self.severity = severity
-        self.priority = priority
-        self.location_list = location_list or []
-        self.category: FindingKind = FindingKind.DEFAULT
-
-        self.solution = None
-        self.llm_service = llm_service
+    title: List[str] = Field(default_factory=list)
+    source: Set[str] = Field(default_factory=set)
+    description: List[str] = Field(default_factory=list)
+    cwe_ids: List[str] = Field(default_factory=list)
+    cve_ids: List[str] = Field(default_factory=list)
+    severity: Optional[int] = None
+    priority: Optional[int] = None
+    location_list: List[str] = Field(default_factory=list)
+    category: FindingKind = FindingKind.DEFAULT
+    solution: Optional['Solution'] = None
+    llm_service: Optional[Any] = None
 
     def add_category(self) -> "Finding":
         from ai.LLM.LLMServiceStrategy import (

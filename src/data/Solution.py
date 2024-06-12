@@ -1,23 +1,12 @@
-from typing import Optional
-from pydantic import BaseModel
+from typing import Optional, Dict
+from pydantic import BaseModel, Field
 
 
 class Solution(BaseModel):
-    short_description: Optional[str]
-    long_description: Optional[str]
-    search_terms: Optional[str]
-    metadata: dict
-
-    def __init__(
-        self,
-        short_description: str = None,
-        long_description: str = None,
-        search_terms: str = None,
-    ):
-        self.short_description = short_description
-        self.long_description = long_description
-        self.search_terms = search_terms
-        self.metadata = {}
+    short_description: Optional[str] = None
+    long_description: Optional[str] = None
+    search_terms: Optional[str] = None
+    metadata: Dict = Field(default_factory=dict)
 
     def set_short_description(self, short_description: str):
         self.short_description = short_description
@@ -41,9 +30,9 @@ class Solution(BaseModel):
 
     def __str__(self):
         if (
-            (self.short_description is None)
-            and (self.long_description is None)
-            and (self.search_terms is None)
+                (self.short_description is None)
+                and (self.long_description is None)
+                and (self.search_terms is None)
         ):
             return ""
         result = ""
