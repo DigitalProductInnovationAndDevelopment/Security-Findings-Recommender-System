@@ -29,11 +29,16 @@ class Solution:
         }
 
     def __str__(self):
+        if (self.short_description is None) and (self.long_description is None) and (self.search_terms is None):
+            return ""
         result = ""
         result += "-------    Solution    -------\n"
-        result += f"Short Description: {self.short_description}\n"
-        result += f"Long Description: {self.long_description}\n"
-        result += f"Search Terms: {self.search_terms}\n"
+        if self.short_description is not None:
+            result += f"Short Description: {self.short_description}\n"
+        if self.long_description is not None:
+            result += f"Long Description: {self.long_description}\n"
+        if self.search_terms is not None:
+            result += f"Search Terms: {self.search_terms}\n"
         return result
 
     def to_html(self, table=False):
