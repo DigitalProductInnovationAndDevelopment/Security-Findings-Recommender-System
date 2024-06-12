@@ -9,6 +9,16 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+# CVE Search plugin data
+
+.cve_search_data/
+
+.DS_Store
+
+.env.docker
+
+cve-search 
+
 # AWS User-specific
 .idea/**/aws.xml
 

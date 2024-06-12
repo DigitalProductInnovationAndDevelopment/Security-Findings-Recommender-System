@@ -16,20 +16,34 @@ from ai.LLM.Stretegies.ollama_prompts import (
     META_PROMPT_GENERATOR_TEMPLATE,
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
     SEARCH_TERMS_TEMPLATE,
-    CONVERT_DICT_TO_STR_TEMPLATE
+    CONVERT_DICT_TO_STR_TEMPLATE,
 )
 
-logging.basicConfig(level=logging.INFO,format='%(levelname)s | %(name)s | %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(name)s | %(message)s")
 logger = logging.getLogger(__name__)
 
 
+def singleton(cls):
+    instances = {}
+
+    def wrapper(*args, **kwargs):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kwargs)
+        return instances[cls]
+
+    return wrapper
+
+
+@singleton
 class OLLAMAService(BaseLLMService):
     """
     This class is a wrapper around the OLLAMA API. It provides methods for generating recommendations and search terms
     for security findings, as well as classifying the kind of finding.
     """
 
-    def __init__(self, model_url: Optional[str] = None, model_name: Optional[str] = None):
+    def __init__(
+        self, model_url: Optional[str] = None, model_name: Optional[str] = None
+    ):
         """
         Initialize the LLMService object.
         :param model_url: The URL of the OLLAMA model. If not provided, it will be read from the environment variable OLLAMA_URL or default to http://localhost:11434.
@@ -43,14 +57,15 @@ class OLLAMAService(BaseLLMService):
             model_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
         self.pull_url: str = model_url + "/api/pull"
         self.generate_url: str = model_url + "/api/generate"
-        self.model_name: str = model_name or os.getenv("OLLAMA_MODEL", "llama3:instruct")
+        self.model_name: str = model_name or os.getenv(
+            "OLLAMA_MODEL", "llama3:instruct"
+        )
 
         self.generate_payload: Dict[str, Union[str, bool]] = {
             "model": self.model_name,
             "stream": False,
             "format": "json",
         }
-
         # and finally, init functions
         self.init_pull_model()
 
@@ -71,17 +86,17 @@ class OLLAMAService(BaseLLMService):
         """
         return self.model_name
 
-    @retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=4, max=60))
+    @retry(
+        stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=4, max=60)
+    )
     def generate(self, prompt: str) -> Dict[str, str]:
         """
         Generate a response from the OLLAMA model given a prompt.
         :param prompt:  The prompt to generate a response for.
         :return: The response from the OLLAMA model.
         """
-        payload = {
-            "prompt": prompt,
-            **self.generate_payload
-        }
+        payload = {"prompt": prompt, **self.generate_payload}
+
         try:
             # Set the timeout to 300 seconds (5 minutes). On my Mac M1, OLLAMA (llama3:7b) usually takes 30 seconds.
             timeout = httpx.Timeout(timeout=300.0)
@@ -89,7 +104,7 @@ class OLLAMAService(BaseLLMService):
             response.raise_for_status()
             try:
                 json_response = response.json()
-                return parse_json(json_response['response'], strict=False)
+                return parse_json(json_response["response"], strict=False)
             except json.JSONDecodeError as e:
                 logger.error(f"Failed to parse JSON response: {e}")
                 return {}
@@ -97,7 +112,9 @@ class OLLAMAService(BaseLLMService):
             logger.warning(f"ReadTimeout occurred: {e}")
             return {}
 
-    def classify_kind(self, finding: Finding, options: Optional[List[FindingKind]] = None) -> FindingKind:
+    def classify_kind(
+        self, finding: Finding, options: Optional[List[FindingKind]] = None
+    ) -> FindingKind:
         """
         Classify the kind of security finding.
         :param finding: The finding to classify.
@@ -107,13 +124,13 @@ class OLLAMAService(BaseLLMService):
         if options is None:
             options = list(FindingKind)
 
-        options_str = ', '.join([kind.name for kind in options])
+        options_str = ", ".join([kind.name for kind in options])
         prompt = CLASSIFY_KIND_TEMPLATE.format(options=options_str, data=str(finding))
         response = self.generate(prompt)
-        if 'selected_option' not in response:
+        if "selected_option" not in response:
             logger.warning(f"Failed to classify the finding: {finding.title}")
             return FindingKind.DEFAULT
-        return FindingKind[response['selected_option']]
+        return FindingKind[response["selected_option"]]
 
     def get_recommendation(self, finding: Finding, short: bool = True) -> str:
         """
@@ -133,29 +150,37 @@ class OLLAMAService(BaseLLMService):
             else:
                 prompt = GENERIC_LONG_RECOMMENDATION_TEMPLATE
 
-        finding.solution.add_to_metadata(f"prompt_{'short' if short else 'long'}", prompt)
+        finding.solution.add_to_metadata(
+            f"prompt_{'short' if short else 'long'}", prompt
+        )
         response = self.generate(prompt)
 
-        if 'recommendation' not in response:
+        if "recommendation" not in response:
             logger.info(
-                f"Failed to generate a {'short' if short else 'long'} recommendation for a finding. Trying once more...")
+                f"Failed to generate a {'short' if short else 'long'} recommendation for a finding. Trying once more..."
+            )
             response = self.generate(prompt)
-        if 'recommendation' not in response:
+        if "recommendation" not in response:
             if short:
                 logger.warning(
-                    f"Failed again to generate a {'short' if short else 'long'} recommendation for the finding. Trying one last time....")
+                    f"Failed again to generate a {'short' if short else 'long'} recommendation for the finding. Trying one last time...."
+                )
                 response = self.generate(prompt)
             else:
                 logger.warning(
-                    f"Failed again to generate a {'short' if short else 'long'} recommendation for the finding. Trying with generic prompt...")
-                finding.solution.add_to_metadata(f"fallback_to_generic_long_prompt", True)
+                    f"Failed again to generate a {'short' if short else 'long'} recommendation for the finding. Trying with generic prompt..."
+                )
+                finding.solution.add_to_metadata(
+                    f"fallback_to_generic_long_prompt", True
+                )
                 response = self.generate(GENERIC_LONG_RECOMMENDATION_TEMPLATE)
-        if 'recommendation' not in response:
+        if "recommendation" not in response:
             logger.error(
-                f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}")
-            return '' if short else ['']
+                f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}"
+            )
+            return "" if short else [""]
 
-        return clean(response['recommendation'], llm_service=self)
+        return clean(response["recommendation"], llm_service=self)
 
     def _generate_prompt_with_meta_prompts(self, finding: Finding) -> str:
         """
@@ -164,18 +189,25 @@ class OLLAMAService(BaseLLMService):
         :return: The prompt for the long recommendation.
         """
         short_recommendation = finding.solution.short_description
-        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(category=finding.category.name,
-                                                                      short_recommendation=short_recommendation)
+        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(
+            category=finding.category.name, short_recommendation=short_recommendation
+        )
         meta_prompt_response = self.generate(meta_prompt_generator)
-        meta_prompts = clean(meta_prompt_response.get('meta_prompts', ''), llm_service=self)
+        meta_prompts = clean(
+            meta_prompt_response.get("meta_prompts", ""), llm_service=self
+        )
 
-        long_prompt = LONG_RECOMMENDATION_TEMPLATE.format(short_recommendation=short_recommendation,
-                                                          meta_prompts=meta_prompts)
+        long_prompt = LONG_RECOMMENDATION_TEMPLATE.format(
+            short_recommendation=short_recommendation, meta_prompts=meta_prompts
+        )
 
-        finding.solution.add_to_metadata("prompt_long_breakdown", {
-            "short_recommendation": short_recommendation,
-            "meta_prompts": meta_prompts
-        })
+        finding.solution.add_to_metadata(
+            "prompt_long_breakdown",
+            {
+                "short_recommendation": short_recommendation,
+                "meta_prompts": meta_prompts,
+            },
+        )
 
         return long_prompt
 
@@ -187,10 +219,12 @@ class OLLAMAService(BaseLLMService):
         """
         prompt = SEARCH_TERMS_TEMPLATE.format(data=str(finding))
         response = self.generate(prompt)
-        if 'search_terms' not in response:
-            logger.warning(f"Failed to generate search terms for the finding: {finding.title}")
+        if "search_terms" not in response:
+            logger.warning(
+                f"Failed to generate search terms for the finding: {finding.title}"
+            )
             return ""
-        return clean(response['search_terms'], llm_service=self)
+        return clean(response["search_terms"], llm_service=self)
 
     def convert_dict_to_str(self, data):
         """
@@ -200,7 +234,9 @@ class OLLAMAService(BaseLLMService):
         """
         prompt = CONVERT_DICT_TO_STR_TEMPLATE.format(data=json.dumps(data))
         response = self.generate(prompt)
-        if 'converted_text' not in response:
-            logger.info(f"Failed to convert dictionary to string, returning it as str conversion.")
+        if "converted_text" not in response:
+            logger.info(
+                f"Failed to convert dictionary to string, returning it as str conversion."
+            )
             return str(data)
-        return clean(response['converted_text'], llm_service=self)
+        return clean(response["converted_text"], llm_service=self)

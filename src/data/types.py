@@ -116,6 +116,10 @@ class Rule(BaseModel):
 
 
 class CveId(BaseModel):
+    element: str
+    source: str
+
+class CweId(BaseModel):
     element: List[str]
     source: str
 
@@ -134,12 +138,13 @@ class Content(BaseModel):
     requirement_list: List[str]
     title_list: List[Title]
     location_list: List[Location]
-    description_list:  Optional[List[Description]] =None
-    internal_rating_list: Optional[ List[Rating]] = None
+    description_list:  Optional[List[Description]] = []
+    internal_rating_list: Optional[ List[Rating]] = []
     internal_ratingsource_list: List[Rating]
-    cvss_rating_list: Optional[ List[CvssRating]] = None
+    cvss_rating_list: Optional[ List[CvssRating]] = []
     rule_list: List[Rule]
-    cwe_id_list: Optional[ List[CveId]] = None
+    cve_id_list: Optional[ List[CveId]] = []
+    cwe_id_list: Optional[ List[CweId]] = []
     activity_list: List[Activity]
     first_found: str
     last_found: str
@@ -162,7 +167,7 @@ class Message(BaseModel):
 
 
 
-class Response(BaseModel):
+class InputData(BaseModel):
     status: str
     message: Message
 

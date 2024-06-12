@@ -22,6 +22,9 @@ def clean(text: Union[str, List[str]], llm_service=None) -> str:
 
 def convert_dict_to_str(data: dict, llm_service=None) -> str:
     if llm_service is None:
-        from src.ai.LLM.LLMServiceStrategy import LLMServiceStrategy  # Lazy import to avoid circular imports
+        from ai.LLM.LLMServiceStrategy import (
+            LLMServiceStrategy,
+        )  # Lazy import to avoid circular imports
+
         llm_service = LLMServiceStrategy()
     return llm_service.convert_dict_to_str(data)

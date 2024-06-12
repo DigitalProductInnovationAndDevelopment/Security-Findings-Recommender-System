@@ -12,7 +12,7 @@ def get_db_url():
     server = os.getenv("POSTGRES_SERVER", "db")
     port = os.getenv("POSTGRES_PORT", "5432")
     db = os.getenv("POSTGRES_DB", "app")
-    
+    print(f"postgresql+psycopg://{user}:{password}@{server}:{port}/{db}")
     return f"postgresql+psycopg://{user}:{password}@{server}:{port}/{db}"
 
 
