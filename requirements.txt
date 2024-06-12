@@ -14,3 +14,4 @@ tqdm~=4.66.4
 httpx~=0.27.0
 tenacity~=8.3.0
 openai~=1.33.0 # only if you plan to use the OpenAI Service
+anthropic~=0.28.0 # only if you plan to use the Anthropic Service

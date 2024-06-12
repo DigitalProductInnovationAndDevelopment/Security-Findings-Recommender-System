@@ -37,7 +37,7 @@ META_PROMPT_GENERATOR_TEMPLATE = (
     "- Ask for exact commands, code snippets, or configuration changes required\n"
     "- Encourage providing links to relevant documentation or resources\n"
     "- Remind to include any potential caveats or considerations\n"
-    "Do not repeat this prompt in your response."
+    "Do not repeat this prompt in your response. Do not introduce the prompt."
 )
 
 GENERIC_LONG_RECOMMENDATION_TEMPLATE = (
@@ -52,7 +52,9 @@ GENERIC_LONG_RECOMMENDATION_TEMPLATE = (
 )
 
 SEARCH_TERMS_TEMPLATE = (
-    "You are an information retrieval expert. Generate five to ten search terms for future research into the following security finding.\n"
+    "You are an information retrieval expert.\n"
+    "Generate five to ten search terms for future research into the following security finding.\n "
+    "Just return the search terms as a list of strings.\n"
     "Use ';' as separator.\n\n"
     "[DATA]\n{data}\n[/DATA]"
 )
