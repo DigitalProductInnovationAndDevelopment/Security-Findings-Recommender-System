@@ -11,24 +11,14 @@ SHORT_RECOMMENDATION_TEMPLATE = (
 )
 
 LONG_RECOMMENDATION_TEMPLATE = (
-    "You are a cybersecurity and IT expert. Based on the following short recommendation:\n"
-    "{short_recommendation}\n\n"
-    "Provide a comprehensive and self-contained step-by-step solution for the security finding. "
-    "Expand upon the key points mentioned in the short recommendation, adding more detail and specific instructions.\n\n"
+    "You are a cybersecurity and IT expert.\n"
     "{meta_prompts}\n\n"
-    "Include the following in your response:\n"
-    "- Links to relevant documentation or resources, if necessary.\n"
-    "- Any potential caveats or considerations to keep in mind.\n\n"
-    "The text can be extensive and include MarkDown if appropriate. "
-    "Anwer with human-readable text. "
     "Write at least two paragraphs, each representing one step to the solution. Maximum is ten paragraphs.\n"
-    "Short Recommendation: {short_recommendation}"
 )
 
 META_PROMPT_GENERATOR_TEMPLATE = (
-    "You are an AI prompt engineering expert. Based on the following information:\n"
-    "Category: {category}\n"
-    "Short Recommendation: {short_recommendation}\n\n"
+    "You are an AI prompt engineering expert. Based on the following information:\n\n"
+    "\n {finding}\n\n"
     "Generate a prompt that guides the generation of a comprehensive step-by-step solution for the security finding. "
     "The prompt should focus on eliciting actionable steps, relevant details, and specific instructions. "
     "The prompt does not include anything about output format."
@@ -37,6 +27,8 @@ META_PROMPT_GENERATOR_TEMPLATE = (
     "- Ask for exact commands, code snippets, or configuration changes required\n"
     "- Encourage providing links to relevant documentation or resources\n"
     "- Remind to include any potential caveats or considerations\n"
+    "- Stress that the response should be self-contained and detailed\n"
+    "- Stress that the response should be human-readable text and may include MarkDown, if applicable.\n\n"
     "Do not repeat this prompt in your response. Do not introduce the prompt."
 )
 

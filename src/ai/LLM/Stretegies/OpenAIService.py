@@ -30,7 +30,7 @@ class OpenAIService(BaseLLMService):
         return self.model
 
     def generate(self, prompt: str) -> Dict[str, str]:
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model=self.model,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -71,13 +71,13 @@ class OpenAIService(BaseLLMService):
 
     def _generate_prompt_with_meta_prompts(self, finding: Finding) -> str:
         short_recommendation = finding.solution.short_description
-        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(category=finding.category.name,
-                                                                      short_recommendation=short_recommendation)
+        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(finding=str(finding))
         meta_prompt_response = self.generate(meta_prompt_generator)
-        meta_prompts = clean(meta_prompt_response.get('response', ''), llm_service=self)
+        meta_prompts = clean(
+            meta_prompt_response.get("response", ""), llm_service=self
+        )
 
-        long_prompt = LONG_RECOMMENDATION_TEMPLATE.format(short_recommendation=short_recommendation,
-                                                          meta_prompts=meta_prompts)
+        long_prompt = LONG_RECOMMENDATION_TEMPLATE.format(meta_prompts=meta_prompts)
 
         finding.solution.add_to_metadata("prompt_long_breakdown", {
             "short_recommendation": short_recommendation,
