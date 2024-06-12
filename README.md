@@ -14,7 +14,7 @@ To run the code within Docker, you should install Docker Desktop from [the offic
 
 To run the code without Docker, follow these steps:
 
-- Install Python 3.8 or higher from [the official website](https://www.python.org/downloads/).
+- Install Python 3.9 or higher from [the official website](https://www.python.org/downloads/).
 - Install the required packages by running the following command:
 
 ```bash
