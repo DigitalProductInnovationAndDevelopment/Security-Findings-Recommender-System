@@ -92,7 +92,7 @@ Returns a dictionary representing the `Solution` object:
 {
     'short_description': str,
     'long_description': str,
-    'search_terms': List[str]
+    'search_terms': str
 }
 ```
 
