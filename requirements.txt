@@ -7,7 +7,7 @@ fastapi==0.70.0
 uvicorn==0.15.0
 python-dotenv
 jsonschema==4.22.0
-requests~=2.31.0
+requests>=2.32.0
 SQLAlchemy~=2.0.30
 tqdm~=4.66.4
 httpx~=0.27.0
