@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import api.ollama as ollama
 from data.helper import get_content_list
-from data.types import Recommendation, Response
-from db import Session
+from data.db_types import Recommendation, Response
+from my_db import Session
 from models.models import Finding
 from models.models import Recommendation as DBRecommendation
 
@@ -47,13 +47,18 @@ def health():
 
 
 @app.post('/upload')
-async def upload(request: Request):
+async def upload(request: Request, response: Response):
     """
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
     """
 
-    json_data = await request.json()
+    try:
+        json_data = await request.json()
+    except Exception as e:
+        response.status_code = 400
+        return 'Invalid JSON data'
+
     # Check if the JSON data is valid
     # TODO: fix required properties for eg cvss_rating_list is not required
     # if not validate_json(json_data):
@@ -73,7 +78,7 @@ async def upload(request: Request):
     # start subprocess for processing the data
     # ...
 
-    return 'Data uploaded successfully', 200
+    return 'Data uploaded successfully'
 
 
 @app.get('/recommendations')

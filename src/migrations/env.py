@@ -36,7 +36,7 @@ def get_url():
     # load env from file
 
     
-    from db import get_db_url
+    from db import (get_db_url)
     return get_db_url()
 
 
