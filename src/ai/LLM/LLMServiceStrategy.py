@@ -1,8 +1,8 @@
-from src.ai.LLM.BaseLLMService import BaseLLMService
 from typing import Dict, Optional, List
 
-from src.ai.LLM.Stretegies.OLLAMAService import OLLAMAService
-from src.data.Finding import Finding, FindingKind
+from ai.LLM.BaseLLMService import BaseLLMService
+from ai.LLM.Stretegies.OLLAMAService import OLLAMAService
+from data.Finding import Finding, FindingKind
 
 
 class LLMServiceStrategy:

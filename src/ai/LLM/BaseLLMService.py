@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Optional, List, Union
 
-from src.data.Finding import Finding, FindingKind
+from data.Finding import Finding, FindingKind
 
 
 class BaseLLMService(ABC):

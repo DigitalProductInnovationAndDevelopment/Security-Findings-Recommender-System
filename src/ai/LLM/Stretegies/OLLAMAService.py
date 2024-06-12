@@ -5,11 +5,11 @@ import logging
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from src.ai.LLM.BaseLLMService import BaseLLMService
-from src.utils.json_helper import parse_json
-from src.utils.text_tools import clean
-from src.data.Finding import Finding, FindingKind
-from src.ai.LLM.Stretegies.ollama_prompts import (
+from ai.LLM.BaseLLMService import BaseLLMService
+from utils.json_helper import parse_json
+from utils.text_tools import clean
+from data.Finding import Finding, FindingKind
+from ai.LLM.Stretegies.ollama_prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
     LONG_RECOMMENDATION_TEMPLATE,

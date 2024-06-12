@@ -4,16 +4,16 @@ from typing import Dict, List, Optional, Union
 
 import openai
 
-from src.ai.LLM.BaseLLMService import BaseLLMService
-from src.data.Finding import FindingKind, Finding
-from src.ai.LLM.Stretegies.openai_prompts import (
+from ai.LLM.BaseLLMService import BaseLLMService
+from data.Finding import FindingKind, Finding
+from ai.LLM.Stretegies.openai_prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
     SEARCH_TERMS_TEMPLATE,
     CONVERT_DICT_TO_STR_TEMPLATE, META_PROMPT_GENERATOR_TEMPLATE, LONG_RECOMMENDATION_TEMPLATE
 )
-from src.utils.text_tools import clean
+from utils.text_tools import clean
 
 import logging
 logger = logging.getLogger(__name__)

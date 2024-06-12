@@ -1,7 +1,7 @@
 from typing import List, Set
 from enum import Enum, auto
 
-from src.data.Solution import Solution
+from data.Solution import Solution
 
 
 class FindingKind(Enum):
@@ -53,7 +53,7 @@ class Finding:
         self.llm_service = llm_service
 
     def add_category(self) -> 'Finding':
-        from src.ai.LLM.LLMServiceStrategy import LLMServiceStrategy  # Lazy import to avoid circular imports
+        from ai.LLM.LLMServiceStrategy import LLMServiceStrategy  # Lazy import to avoid circular imports
         if self.llm_service is None:
             self.llm_service = LLMServiceStrategy()
         self.category = self.llm_service.classify_kind(self)
@@ -63,7 +63,7 @@ class Finding:
         if not short and not long:
             print("No solution requested, skipping generation. (But why would you do that?)")
             return self
-        from src.ai.LLM.LLMServiceStrategy import LLMServiceStrategy
+        from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
         if self.llm_service is None:
             self.llm_service = LLMServiceStrategy()
         self.solution = Solution()
