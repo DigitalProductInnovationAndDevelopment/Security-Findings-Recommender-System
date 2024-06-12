@@ -1,6 +1,6 @@
 from typing import List, Set, Optional, Any
 from enum import Enum, auto
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, PrivateAttr
 from data.Solution import Solution
 
 
@@ -26,7 +26,7 @@ class Finding(BaseModel):
     priority: Optional[int] = None
     location_list: List[str] = Field(default_factory=list)
     category: FindingKind = FindingKind.DEFAULT
-    solution: Optional['Solution'] = None
+    solution: Optional["Solution"] = None
     llm_service: Optional[Any] = None
 
     def add_category(self) -> "Finding":

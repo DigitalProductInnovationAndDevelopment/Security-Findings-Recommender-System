@@ -30,9 +30,9 @@ class Solution(BaseModel):
 
     def __str__(self):
         if (
-                (self.short_description is None)
-                and (self.long_description is None)
-                and (self.search_terms is None)
+            (self.short_description is None)
+            and (self.long_description is None)
+            and (self.search_terms is None)
         ):
             return ""
         result = ""
