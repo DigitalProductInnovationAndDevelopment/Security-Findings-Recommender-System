@@ -2,6 +2,7 @@ from typing import List, Set, Optional, Any
 from enum import Enum, auto
 from pydantic import BaseModel, Field, PrivateAttr
 from data.Solution import Solution
+import json
 
 
 class FindingKind(Enum):
@@ -27,7 +28,7 @@ class Finding(BaseModel):
     location_list: List[str] = Field(default_factory=list)
     category: FindingKind = FindingKind.DEFAULT
     solution: Optional["Solution"] = None
-    llm_service: Optional[Any] = None
+    _llm_service: Optional[Any] = PrivateAttr(default=None)
 
     def add_category(self) -> "Finding":
         from ai.LLM.LLMServiceStrategy import (
@@ -37,6 +38,51 @@ class Finding(BaseModel):
         if self.llm_service is None:
             self.llm_service = LLMServiceStrategy()
         self.category = self.llm_service.classify_kind(self)
+        return self
+
+    @property
+    def llm_service(self) -> Optional[Any]:
+        return self._llm_service
+
+    @llm_service.setter
+    def llm_service(self, value: Optional[Any]):
+        self._llm_service = value
+
+    def from_json(self, d: dict) -> "Finding":
+        """
+        Load the finding from a JSON(finding) dictionary.
+        """
+        self.title = [x["element"] for x in d["title_list"]]
+        self.source = set([x["source"] for x in d["title_list"]])
+        self.description = [x["element"] for x in d.get("description_list", [])]
+        self.cwe_ids = [", ".join(x["element"]) for x in d.get("cwe_id_list", [])]
+        self.cve_ids = (
+            [x["element"] for x in d.get("cve_id_list", [])]
+            if "cve_id_list" in d
+            else []
+        )
+        self.severity = d.get("severity", None)
+        self.priority = d.get("priority", None)
+
+        locations = []
+        for loc in d.get("location_list", []):
+            try:
+                location = json.loads(
+                    loc["location"].replace("'", '"')
+                )  # This is a hack to fix the single quotes in the JSON
+            except json.JSONDecodeError:
+                locations.append(loc["location"])
+                continue
+
+            file = location.get("file", "")
+            line = location.get("line", "")
+            column = location.get("column", "")
+
+            location_str = f"{file}:{line}, {column}"
+
+            locations.append(location_str)
+
+        self.location_list = locations
         return self
 
     def generate_solution(self, long=True, short=True, search_term=True) -> "Finding":

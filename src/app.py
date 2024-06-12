@@ -117,6 +117,27 @@ async def upload(data: Annotated[apischema.StartRecommendationTaskRequest, Body(
     return response
 
 
+@app.get("/status")
+def status():
+    """
+    This function returns the status of the recommendation task.
+    :return: 200 OK with the status of the task.
+    """
+    with Session() as s:
+
+        today = datetime.datetime.now().date()
+
+        task = (
+            s.query(db_models.RecommendationTask)
+            .filter(cast(db_models.RecommendationTask.created_at, Date) == today)
+            .first()
+        )
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+
+        return apischema.GetRecommendationTaskStatusResponse(status=task.status)
+
+
 @app.get("/recommendations")
 def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(...)]):
     """
@@ -128,6 +149,7 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(
     # ...
     with Session() as s:
         total_count = s.query(db_models.Finding).count()
+
         findings = (
             s.query(db_models.Finding)
             .join(db_models.RecommendationTask)
@@ -143,7 +165,6 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(
         response = apischema.GetRecommendationResponse(
             items=[
                 apischema.GetRecommendationResponseItem(
-                    title=[],
                     solution=Solution(
                         short_description=(
                             find.recommendations[0].description_short
@@ -164,7 +185,7 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(
                             find.recommendations[0].meta if find.recommendations else {}
                         ),
                     ),
-                )
+                ).from_json(find.raw_data)
                 for find in findings
             ],
             pagination=apischema.Pagination(

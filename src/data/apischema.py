@@ -4,6 +4,7 @@ from typing import Optional
 from data.pagination import Pagination, PaginationInput
 from data.types import InputData
 from data.Finding import Finding
+from models.models import TaskStatus
 
 
 class StartRecommendationTaskRequest(BaseModel):
@@ -43,6 +44,10 @@ class GetRecommendationResponseItem(Finding):  # TODO adapt needed fields
 class GetRecommendationResponse(BaseModel):
     items: list[GetRecommendationResponseItem]
     pagination: Pagination
+
+
+class GetRecommendationTaskStatusResponse(BaseModel):
+    status: TaskStatus
 
 
 class GetSummarizedRecommendationRequest(BaseModel):
