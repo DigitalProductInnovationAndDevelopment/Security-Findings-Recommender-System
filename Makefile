@@ -24,3 +24,7 @@ db-migrate-down-base:
 
 dev:
 	cd src && uvicorn app:app --host 0.0.0.0 --port 8001 --reload 
+
+
+start-worker:
+	cd src && celery -A task.worker worker --loglevel=info --concurrency 1

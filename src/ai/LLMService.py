@@ -5,9 +5,9 @@ import logging
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from src.utils.text_tools import clean
-from src.data.Finding import Finding, FindingKind
-from src.ai.prompts import (
+from utils.text_tools import clean
+from data.Finding import Finding, FindingKind
+from ai.prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
     LONG_RECOMMENDATION_TEMPLATE,
@@ -21,12 +21,22 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def singleton(cls):
+    instances = {}
+    def wrapper(*args, **kwargs):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kwargs)
+        return instances[cls]
+    return wrapper
+
+
+@singleton
 class LLMService:
     """
     This class is a wrapper around the OLLAMA API. It provides methods for generating recommendations and search terms
     for security findings, as well as classifying the kind of finding.
     """
-
+        
     def __init__(self, model_url: Optional[str] = None, model_name: Optional[str] = None):
         """
         Initialize the LLMService object.
@@ -48,7 +58,6 @@ class LLMService:
             "stream": False,
             "format": "json",
         }
-
         # and finally, init functions
         self.init_pull_model()
 
@@ -80,6 +89,7 @@ class LLMService:
             "prompt": prompt,
             **self.generate_payload
         }
+        
         try:
             # Set the timeout to 300 seconds (5 minutes). On m1, it usually takes 20 seconds.
             timeout = httpx.Timeout(timeout=300.0)
@@ -94,6 +104,7 @@ class LLMService:
         except httpx.ReadTimeout as e:
             logger.error(f"ReadTimeout occurred: {e}")
             return {}
+    
 
     def classify_kind(self, finding: Finding, options: Optional[List[FindingKind]] = None) -> FindingKind:
         """

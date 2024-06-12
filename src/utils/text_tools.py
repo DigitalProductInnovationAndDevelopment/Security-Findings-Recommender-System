@@ -19,6 +19,6 @@ def clean(text: Union[str, List[str]], split_paragraphs=False) -> Union[str, Lis
 
 
 def convert_dict_to_str(data: dict) -> str:
-    from src.ai.LLMService import LLMService  # Lazy import to avoid circular imports
+    from ai.LLMService import LLMService  # Lazy import to avoid circular imports
     llm_service = LLMService()
     return llm_service.convert_dict_to_str(data)
