@@ -3,7 +3,7 @@ sqlmodel~=0.0.18
 alembic~=1.13.1
 psycopg
 psycopg-binary
-fastapi==0.70.0
+fastapi==0.109.1
 uvicorn==0.15.0
 python-dotenv
 jsonschema==4.22.0
@@ -12,5 +12,5 @@ SQLAlchemy~=2.0.30
 tqdm~=4.66.4
 httpx~=0.27.0
 tenacity~=8.3.0
-celery[redis]==5.2.0
+celery[redis]==5.2.2
 openai~=1.33.0 # only if you plan to use the OpenAI Service
