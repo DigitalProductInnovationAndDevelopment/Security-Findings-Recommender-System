@@ -1,12 +1,12 @@
-from typing import Optional
-from pydantic import BaseModel
+from typing import Optional, Dict
+from pydantic import BaseModel, Field
 
 
 class Solution(BaseModel):
     short_description: Optional[str] = None
     long_description: Optional[str] = None
     search_terms: Optional[str] = None
-    metadata: dict = {}
+    metadata: Dict = Field(default_factory=dict)
 
     def set_short_description(self, short_description: str):
         self.short_description = short_description
