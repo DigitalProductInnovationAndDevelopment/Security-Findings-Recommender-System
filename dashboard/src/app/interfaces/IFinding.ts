@@ -1,8 +1,12 @@
+import { ISolution, ISolutionCategory } from './ISolution';
 export interface IFinding {
-  findingTitle: string;
+  title: string;
+  source: string[];
   description: string;
+  cwe_ids: string[];
+  cve_ids: string[];
+  severity: number;
   priority: number;
-  source: string;
-  lastFound: string;
-  recommendation?: string;
+  category: ISolutionCategory;
+  solution: ISolution;
 }

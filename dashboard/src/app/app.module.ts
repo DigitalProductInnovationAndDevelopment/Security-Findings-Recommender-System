@@ -18,6 +18,9 @@ import { OverviewComponent } from './pages/overview/overview.component';
 import { ResultsComponent } from './pages/results/results.component';
 import { RecommendationsState } from './states/recommendations.state';
 
+import { MatDialogModule } from '@angular/material/dialog';
+import { FindingDetailsDialogComponent } from './components/finding-details-dialog/finding-details-dialog.component';
+import { RiskScoreChartComponent } from './components/risk-score-chart/risk-score-chart.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,6 +30,8 @@ import { RecommendationsState } from './states/recommendations.state';
     ResultsComponent,
     FindingsInputComponent,
     ResultTableComponent,
+    FindingDetailsDialogComponent,
+    RiskScoreChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,6 +43,7 @@ import { RecommendationsState } from './states/recommendations.state';
     MatIconModule,
     BrowserAnimationsModule,
     MatPaginatorModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

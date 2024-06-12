@@ -1,0 +1,48 @@
+<header>
+  <p class="dialog-title">Finding Details</p>
+  <button (click)="closeDialog()" class="close-btn">
+    <i class="bi bi-x-lg"></i>
+  </button>
+</header>
+<div mat-dialog-content>
+  <div class="details-container">
+    <div class="details-container__row first">
+      <div class="details-container__item">
+        <label for="category">Category</label>
+        <span>{{ data.category }}</span>
+      </div>
+      <div class="details-container__item">
+        <label for="source">Source</label>
+        <span>{{ data.source }}</span>
+      </div>
+      <div class="details-container__item">
+        <label for="cve_idsd">CVE_ids</label>
+        <span>{{ data.cve_ids }}</span>
+      </div>
+      <app-risk-score-chart [score]="data.priority"></app-risk-score-chart>
+    </div>
+    <div class="details-container__row">
+      <div class="details-container__item">
+        <label for="title">Title</label>
+        <span>{{ data.title }}</span>
+      </div>
+    </div>
+    <div class="details-container__item description">
+      <label for="description">Vulnerability</label>
+      <span>{{ data.description }}</span>
+    </div>
+    <div class="details-container__item solution">
+      <label for="solution">Solution</label>
+      <div>
+        <label for="short_description">Short Description:</label>
+        <span>{{ data.solution.short_description }}</span>
+        <br>
+        <label for="long_description">Long Description:</label>
+        <span>{{ data.solution.long_description }}</span>
+        <br>
+        <label for="search_terms">Search Terms:</label>
+        <span>{{ data.solution.search_terms }}</span>
+      </div>
+    </div>
+  </div>
+</div>

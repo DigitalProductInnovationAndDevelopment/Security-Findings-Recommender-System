@@ -47,15 +47,22 @@
         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
       >
         <div class="element-detail__row">
-          <i class="bi bi-shield-exclamation element-detail__row__icon finding"></i>
+          <i
+            class="bi bi-shield-exclamation element-detail__row__icon finding"
+          ></i>
           <div class="element-description">
             {{ element.description }}
           </div>
         </div>
-        <div class="element-detail__row">
-          <i class="bi bi-check-circle element-detail__row__icon recommendation"></i>
-          <div class="element-description">
-            {{ element.recommendation }}
+        <div class="element-detail__row solution">
+          <i
+            class="bi bi-check-circle element-detail__row__icon recommendation"
+          ></i>
+          <div
+            class="element-description"
+            (click)="openFindingDetails(element)"
+          >
+            Short Description: {{ element.solution.short_description }}
           </div>
         </div>
       </div>
@@ -77,7 +84,7 @@
   ></tr>
 </table>
 <mat-paginator
-length=50
-(page)="pageEvent = $event"
-pageSize=10
+  length="50"
+  (page)="pageEvent = $event"
+  pageSize="10"
 ></mat-paginator>

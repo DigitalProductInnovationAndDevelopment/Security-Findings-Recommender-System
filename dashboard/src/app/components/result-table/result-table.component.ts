@@ -6,12 +6,14 @@ import {
   trigger,
 } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Select } from '@ngxs/store';
 import { Observable, take, tap } from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
 import { RecommendationsState } from 'src/app/states/recommendations.state';
+import { FindingDetailsDialogComponent } from '../finding-details-dialog/finding-details-dialog.component';
 
 /**
  * @title Table with expandable rows
@@ -35,7 +37,7 @@ export class ResultTableComponent implements OnInit {
   @Select(RecommendationsState.findings)
   findings$!: Observable<any | null>;
 
-  columnsToDisplay = ['findingTitle', 'priority', 'source', 'lastFound'];
+  columnsToDisplay = ['title', 'severity', 'priority', 'category', 'source'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: IFinding | null | undefined;
 
@@ -44,6 +46,8 @@ export class ResultTableComponent implements OnInit {
   dataSource: any;
   pageSizeOptions: number[] = [10, 20, 30];
   pageEvent!: PageEvent;
+
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit() {
     this.initFindings();
@@ -68,5 +72,15 @@ export class ResultTableComponent implements OnInit {
       .split(' ') // Split the string into words
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
       .join(' ');
+  }
+
+  public openFindingDetails(finding: IFinding): void {
+    const dialogRef = this.dialog.open(FindingDetailsDialogComponent, {
+      height: '700px',
+      width: '1100px',
+      data: finding,
+    });
+
+    dialogRef.afterClosed().pipe().subscribe();
   }
 }

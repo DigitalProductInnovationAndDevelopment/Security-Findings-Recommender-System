@@ -1,3 +1,19 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+$recommender-system-primary: mat.define-palette(mat.$indigo-palette);
+$recommender-system-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$recommender-system-warn: mat.define-palette(mat.$red-palette);
+
+$recommender-system-theme: mat.define-light-theme((color: (primary: $recommender-system-primary,
+        accent: $recommender-system-accent,
+        warn: $recommender-system-warn,
+      ),
+      typography: mat.define-typography-config(),
+      density: 0));
+
+@include mat.all-component-themes($recommender-system-theme);
+
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
@@ -6,4 +22,10 @@ body {
     background: linear-gradient(65deg, var(--bgColorPrimary) 60%, var(--bgColorSecondary) 40%);
 
 
+}
+
+
+.flex {
+    display: flex;
+    align-items: center;
 }

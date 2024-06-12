@@ -32,10 +32,13 @@ tr.element-row:not(.expanded-row):active {
   background-color: #f5f6f8;
   width: 100%;
   padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
   &__row {
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: 100%;
     &__icon {
       font-size: 2rem !important;
       &.finding {
@@ -43,6 +46,13 @@ tr.element-row:not(.expanded-row):active {
       }
       &.recommendation {
         color: green;
+      }
+    }
+    &.solution {
+      padding-bottom: 10px;
+      .element-description:hover {
+        text-decoration: underline;
+        cursor: pointer;
       }
     }
   }
@@ -54,4 +64,21 @@ tr.element-row:not(.expanded-row):active {
 
 .element-description-attribution {
   opacity: 0.5;
+}
+
+.mat-mdc-paginator {
+  background-color: transparent;
+}
+::ng-deep .mat-mdc-paginator-container {
+  // justify-content: start !important;
+  color: #efefef;
+  > * {
+    text-align: end;
+  }
+  .mat-mdc-icon-button .mat-mdc-paginator-icon {
+    fill: #ffffff;
+  }
+    .mat-mdc-icon-button[disabled] .mat-mdc-paginator-icon {
+    fill: rgb(186, 186, 186)
+  }
 }

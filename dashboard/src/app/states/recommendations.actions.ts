@@ -10,3 +10,14 @@ export class UploadFile {
     }
   ) {}
 }
+
+export class setFindings {
+  static readonly type = '[Findings] set Findings';
+
+  constructor(
+    public readonly payload: {
+      data: any;
+      fileName?: string;
+    }
+  ) {}
+}

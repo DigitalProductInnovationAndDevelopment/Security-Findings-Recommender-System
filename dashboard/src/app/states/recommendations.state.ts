@@ -3,7 +3,7 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, finalize, Observable, tap } from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
 import { RecommendationsService } from '../services/recommendations.service';
-import { UploadFile } from './recommendations.actions';
+import { setFindings, UploadFile } from './recommendations.actions';
 
 export interface RecommendationsStateModel {
   isLoading: boolean;
@@ -45,36 +45,33 @@ export class RecommendationsState {
     return state.findings;
   }
 
+  @Action(setFindings)
+  setFindings(
+    context: StateContext<RecommendationsStateModel>,
+    { payload }: setFindings
+  ): void {
+    context.patchState({
+      findings: payload.data,
+      fileName: (payload.fileName = 'example.json'),
+    });
+  }
+
   @Action(UploadFile)
   uploadFile(
     context: StateContext<RecommendationsStateModel>,
     { payload }: UploadFile
   ): Observable<void> {
-    const findings = payload.data.message.content.map((finding: any) => ({
-      findingTitle: finding.title_list[0].element,
-      description:
-        finding?.description_list && !!finding.description_list.length
-          ? finding.description_list[0].element
-          : null,
-      priority: finding.priority,
-      source: finding.title_list[0].source,
-      lastFound: finding.last_found,
-    }));
-
-    return (
-      this.recommendationService
-        // .uploadFindings(payload.data)
-        .checkConnection()
-        .pipe(
-          catchError<void, Observable<never>>((error) => {
-            context.patchState({ hasError: true });
-            throw error;
-          }),
-          tap(() => {
-            void context.patchState({ findings, fileName: payload.fileName });
-          }),
-          finalize(() => void context.patchState({ isLoading: false }))
-        )
+    return this.recommendationService.uploadFindings(payload.data).pipe(
+      catchError<void, Observable<never>>((error) => {
+        context.patchState({ hasError: true });
+        throw error;
+      }),
+      tap(() => {
+        void context.patchState({
+          fileName: payload.fileName,
+        });
+      }),
+      finalize(() => void context.patchState({ isLoading: false }))
     );
   }
 }

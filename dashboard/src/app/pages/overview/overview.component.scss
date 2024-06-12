@@ -11,6 +11,22 @@
       }
 }
 
+.exampleFile {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  button {
+    border: none;
+    background-color: transparent;
+    display: flex;
+    gap: 5px;
+    color: var(--bgColorTertiary);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 .content {
     display: flex;
     flex-direction: column;

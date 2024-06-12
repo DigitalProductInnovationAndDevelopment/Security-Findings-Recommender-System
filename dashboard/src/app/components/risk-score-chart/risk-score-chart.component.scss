@@ -1,0 +1,98 @@
+.chart-container {
+height: 150px;
+width: 150px;
+position: relative;
+}
+.outer-circle {
+ width: 100%;
+ height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  transform: rotate(235deg);
+  background: conic-gradient(
+    #fecb40 0deg 105deg,
+    #ff862b 105deg 180deg,
+    #f32940 180deg 230deg,
+    #9a0012 230deg 250deg,
+    transparent 250deg 360deg
+  );
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#inner-circle {
+  height: 70%;
+  width: 70%;
+  border-radius: 50%;
+  background-color: #ffffff;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.needle-point {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #000000;
+  position: relative;
+}
+.needle-point:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  height: 70%;
+  width: 70%;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+
+.needle {
+  position: absolute;
+  bottom: 42%;
+  left: 50%;
+  transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 60px solid #000000;
+}
+
+.severity-container {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, - 30%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// .chart-content {
+//   position: absolute;
+//   top: 70%;
+//   left: 50%;
+//   transform: translate(-50%, -30%);
+//   text-align: center;
+//   font-size: 18px;
+//   color: white;
+// }
+
+// .chart-score {
+//   color: var(--bgColorSecondary);
+//   display: flex;
+//   flex-direction: column;
+//   &__value {
+//     font-size: 25px;
+//   }
+//   &__label {
+//     font-size: 14px;
+//   }
+
+// }

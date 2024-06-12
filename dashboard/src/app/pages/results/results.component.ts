@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
-import { Observable, take, tap } from 'rxjs';
+import { combineLatest, filter, map, Observable, switchMap } from 'rxjs';
+import { RecommendationsService } from 'src/app/services/recommendations.service';
 import { RecommendationsState } from 'src/app/states/recommendations.state';
 
 @Component({
@@ -14,19 +15,38 @@ export class ResultsComponent implements OnInit {
   fileName$!: Observable<string>;
   @Select(RecommendationsState.findings) findings$!: Observable<any | null>;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private recommendationService: RecommendationsService
+  ) {}
 
   ngOnInit(): void {
-    this.initSelectedFile();
+    this.getRecommendations();
   }
 
-  private initSelectedFile(): void {
-    this.findings$
+  private getRecommendations(): void {
+    combineLatest([this.findings$, this.fileName$])
       .pipe(
-        take(1),
-        tap((findings) => !findings.length && this.router.navigate(['home']))
-        // TODO Add getRecommendations request
+        map(([findings, fileName]) => {
+          if (!fileName) {
+            this.router.navigate(['home']);
+            return null;
+          } else if (findings.length) {
+            return null;
+          } else {
+            return findings;
+          }
+        }),
+        filter((result) => !!result),
+        switchMap(() => this.recommendationService.getRecommendations())
       )
       .subscribe();
+    // this.findings$
+    //   .pipe(
+    //     take(1),
+    //     tap((findings) => !findings.length && this.router.navigate(['home']))
+    //     // TODO Add getRecommendations request
+    //   )
+    //   .subscribe();
   }
 }
