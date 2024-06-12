@@ -134,16 +134,21 @@ class LLMService:
         finding.solution.add_to_metadata(f"prompt_{'short' if short else 'long'}", prompt)
         response = self.generate(prompt)
 
-        if (not short) and 'recommendation' not in response:
+        if 'recommendation' not in response:
             logger.info(
                 f"Failed to generate a {'short' if short else 'long'} recommendation for a finding. Trying once more...")
             response = self.generate(prompt)
-        if (not short) and 'recommendation' not in response:
-            logger.warning(
-                f"Failed again to generate a {'short' if short else 'long'} recommendation for the finding. Trying with generic prompt...")
-            finding.solution.add_to_metadata(f"fallback_to_generic_long_prompt", True)
-            response = self.generate(GENERIC_LONG_RECOMMENDATION_TEMPLATE)
-        if (not short) and 'recommendation' not in response:
+        if 'recommendation' not in response:
+            if short:
+                logger.warning(
+                    f"Failed again to generate a {'short' if short else 'long'} recommendation for the finding. Trying one last time....")
+                response = self.generate(prompt)
+            else:
+                logger.warning(
+                    f"Failed again to generate a {'short' if short else 'long'} recommendation for the finding. Trying with generic prompt...")
+                finding.solution.add_to_metadata(f"fallback_to_generic_long_prompt", True)
+                response = self.generate(GENERIC_LONG_RECOMMENDATION_TEMPLATE)
+        if 'recommendation' not in response:
             logger.error(
                 f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}")
             return '' if short else ['']
