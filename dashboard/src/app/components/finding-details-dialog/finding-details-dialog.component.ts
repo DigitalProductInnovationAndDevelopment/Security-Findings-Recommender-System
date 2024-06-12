@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { marked } from 'marked';
 import { IFinding } from 'src/app/interfaces/IFinding';
 
 @Component({
@@ -15,5 +16,9 @@ export class FindingDetailsDialogComponent {
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+
+  convertMarkdown(text: string) {
+    return marked(text);
   }
 }

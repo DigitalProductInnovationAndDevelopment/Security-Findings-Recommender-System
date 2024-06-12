@@ -41,12 +41,5 @@ export class ResultsComponent implements OnInit {
         switchMap(() => this.recommendationService.getRecommendations())
       )
       .subscribe();
-    // this.findings$
-    //   .pipe(
-    //     take(1),
-    //     tap((findings) => !findings.length && this.router.navigate(['home']))
-    //     // TODO Add getRecommendations request
-    //   )
-    //   .subscribe();
   }
 }
