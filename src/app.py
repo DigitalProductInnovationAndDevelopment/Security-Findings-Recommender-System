@@ -143,7 +143,7 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Query
                     search_terms=(
                         find.recommendations[0].search_terms
                         if find.recommendations
-                        else []
+                        else ""
                     ),
                     meta=find.recommendations[0].meta if find.recommendations else {},
                 )

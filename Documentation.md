@@ -53,12 +53,13 @@ Returns a list of dictionaries, where each dictionary represents a `Finding` obj
         'title': List[str],
         'source': Set[str],
         'description': List[str],
+        'location_list': List[str],
         'cwe_ids': List[str],
         'cve_ids': List[str],
         'severity': int,
         'priority': int,
-        'category': str (optional),
-        'solution': dict (optional)
+        'category': str(optional),
+        'solution': dict(optional)
     },
     ...
 ]
@@ -92,7 +93,7 @@ Returns a dictionary representing the `Solution` object:
 {
     'short_description': str,
     'long_description': str,
-    'search_terms': List[str]
+    'search_terms': str
 }
 ```
 
