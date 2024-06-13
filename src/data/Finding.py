@@ -10,12 +10,12 @@ class FindingKind(Enum):
     An enum to represent the kind of finding.
     """
 
-    SYSTEM = auto()
-    PROGRAM = auto()
-    LIBRARY = auto()
-    USER = auto()
-    CODE = auto()
-    DEFAULT = auto()
+    SYSTEM = "system"
+    PROGRAM = "program"
+    LIBRARY = "library"
+    USER = "user"
+    CODE = "code"
+    DEFAULT = "default"
 
 
 class Finding(BaseModel):

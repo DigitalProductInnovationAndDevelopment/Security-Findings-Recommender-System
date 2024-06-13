@@ -6,6 +6,9 @@ import models.models as db_models
 from my_db import Session
 from dotenv import load_dotenv
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -16,37 +19,51 @@ llm_service = LLMServiceStrategy(my_strategy)
 
 redis_url = os.getenv("REDIS_ENDPOINT")
 
+
+limit = int(
+    os.getenv("QUEUE_PROCESSING_LIMIT", "5")
+)  # default limit is 5 , -1 means no limit
+
 worker = Celery("worker", broker=redis_url, backend=redis_url)
 
 
-def fun(self, exc, task_id, args, kwargs, einfo):
-    print("Failed!")
+def error(self, exc, task_id, args, kwargs, einfo):
+    logger.error(f"Task {task_id} raised exception: {exc}")
 
 
-@worker.task(name="worker.generate_report", on_failure=fun)
+@worker.task(name="worker.generate_report", on_failure=error)
 def generate_report(recommendation_task_id: int):
 
     if recommendation_task_id is None:
-        print("recommendation_task_id is None")
+        logger.warning("Recommendation task id is None")
         return
-    print("recommendation_task_id", recommendation_task_id)
+
+    logger.info(f"Processing recommendation task with id {recommendation_task_id}")
+    logger.info(f"Processing recommendation task with limit {limit}")
+    logger.info(
+        f"Processing recommendation task with model_name {my_strategy.model_name}"
+    )
     with Session() as session:
-        findings_from_db = (
+        query = (
             session.query(db_models.Finding)
             .join(db_models.RecommendationTask)
             .filter(db_models.RecommendationTask.id == recommendation_task_id)
-            .limit(5)
-            .all()
         )
+        if limit > 0:
+            query = query.limit(limit)
+
+        findings_from_db = query.all()
 
         if not findings_from_db:
-            print("No findings found")
+            logger.warn(
+                f"No findings found for recommendation task {recommendation_task_id}"
+            )
             return
-        print("llm_service", llm_service)
+
         findings = [f.raw_data for f in findings_from_db]
         finding_ids = [f.id for f in findings_from_db]
     vulnerability_report = create_from_flama_json(
-        findings, n=5, llm_service=llm_service
+        findings, n=limit, llm_service=llm_service
     )
     vulnerability_report.add_category()
     vulnerability_report.add_solution()
@@ -76,6 +93,7 @@ def generate_report(recommendation_task_id: int):
                 search_terms=f.solution.search_terms if f.solution.search_terms else [],
                 finding_id=finding_id,
                 recommendation_task_id=recommendation_task_id,
+                category=f.category.name if f.category else None,
             )
             session.add(recommendation)
             ## updat recommendation task status

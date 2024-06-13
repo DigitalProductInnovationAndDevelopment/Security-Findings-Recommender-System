@@ -11,6 +11,7 @@ from data.helper import get_content_list
 from my_db import Session
 import models.models as db_models
 from data.Solution import Solution
+from data.Finding import FindingKind
 from data.types import Content
 import data.apischema as apischema
 from sqlalchemy import Date, cast
@@ -57,7 +58,9 @@ def health():
 
 
 @app.post("/upload")
-async def upload(data: Annotated[apischema.StartRecommendationTaskRequest, Body(...)]):
+async def upload(
+    data: Annotated[apischema.StartRecommendationTaskRequest, Body(...)]
+) -> apischema.StartRecommendationTaskResponse:
     """
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
@@ -118,7 +121,7 @@ async def upload(data: Annotated[apischema.StartRecommendationTaskRequest, Body(
 
 
 @app.get("/status")
-def status():
+def status() -> apischema.GetRecommendationTaskStatusResponse:
     """
     This function returns the status of the recommendation task.
     :return: 200 OK with the status of the task.
@@ -139,7 +142,9 @@ def status():
 
 
 @app.get("/recommendations")
-def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(...)]):
+def recommendations(
+    request: Annotated[apischema.GetRecommendationRequest, Body(...)]
+) -> apischema.GetRecommendationResponse:
     """
     This function returns the recommendations from the data.
     :return: 200 OK with the recommendations or 204 NO CONTENT if there are no recommendations with retry-after header.
@@ -165,6 +170,11 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(
         response = apischema.GetRecommendationResponse(
             items=[
                 apischema.GetRecommendationResponseItem(
+                    category=(
+                        FindingKind[find.recommendations[0].category]
+                        if find.recommendations
+                        else FindingKind.DEFAULT
+                    ),
                     solution=Solution(
                         short_description=(
                             find.recommendations[0].description_short
