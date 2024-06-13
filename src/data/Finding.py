@@ -12,6 +12,7 @@ class FindingKind(Enum):
 
     SYSTEM = auto()
     PROGRAM = auto()
+    LIBRARY = auto()
     USER = auto()
     CODE = auto()
     DEFAULT = auto()
