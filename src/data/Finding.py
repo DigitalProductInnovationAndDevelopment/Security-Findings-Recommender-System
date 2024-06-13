@@ -12,6 +12,7 @@ class FindingKind(Enum):
 
     SYSTEM = "system"
     PROGRAM = "program"
+    LIBRARY = "library"
     USER = "user"
     CODE = "code"
     DEFAULT = "default"

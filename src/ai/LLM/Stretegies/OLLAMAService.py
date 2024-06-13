@@ -58,7 +58,7 @@ class OLLAMAService(BaseLLMService):
     """
 
     def __init__(
-        self, model_url: Optional[str] = None, model_name: Optional[str] = None
+            self, model_url: Optional[str] = None, model_name: Optional[str] = None
     ):
         """
         Initialize the LLMService object.
@@ -92,7 +92,7 @@ class OLLAMAService(BaseLLMService):
         :return: None
         """
         payload = {"name": self.model_name}
-        response = httpx.post(self.pull_url, json=payload)
+        response = httpx.post(self.pull_url, json=payload, timeout=60 * 10)  # 10 minutes timeout
         response.raise_for_status()
 
     def get_model_name(self) -> str:
@@ -122,14 +122,14 @@ class OLLAMAService(BaseLLMService):
                 json_response = response.json()
                 return parse_json(json_response["response"], strict=False)
             except json.JSONDecodeError as e:
-                logger.error(f"Failed to parse JSON response: {e}")
+                logger.error(f"LLM-Models JSON response is malformed, could not be parsed: {e}")
                 return {}
         except httpx.ReadTimeout as e:
             logger.warning(f"ReadTimeout occurred: {e}")
             return {}
 
     def classify_kind(
-        self, finding: Finding, options: Optional[List[FindingKind]] = None
+            self, finding: Finding, options: Optional[List[FindingKind]] = None
     ) -> FindingKind:
         """
         Classify the kind of security finding.
@@ -146,7 +146,15 @@ class OLLAMAService(BaseLLMService):
         if "selected_option" not in response:
             logger.warning(f"Failed to classify the finding: {finding.title}")
             return FindingKind.DEFAULT
-        return FindingKind[response["selected_option"]]
+        try:
+            return FindingKind[response["selected_option"]]
+        except KeyError:
+            logger.error(
+                f"Failed to classify the finding: {finding.title}. "
+                f"Selected option: {response['selected_option']} does not exist in FindingKind."
+                f"Returning default kind."
+            )
+            return FindingKind.DEFAULT
 
     def get_recommendation(self, finding: Finding, short: bool = True) -> str:
         """

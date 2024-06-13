@@ -26,9 +26,9 @@ META_PROMPT_GENERATOR_TEMPLATE = (
     "- Request for version numbers or releases to upgrade to, if applicable\n"
     "- Ask for exact commands, code snippets, or configuration changes required\n"
     "- Encourage providing links to relevant documentation or resources\n"
-    "- Remind to include any potential caveats or considerations\n"
     "- Stress that the response should be self-contained and detailed\n"
-    "- Stress that the response should be human-readable text and may include MarkDown, if applicable.\n\n"
+    "- Remind to include any potential caveats or considerations\n"
+    "- Stress that the response should be human-readable text and may include MarkDown, if applicable\n\n"
     "Do not repeat this prompt in your response. Do not introduce the prompt."
 )
 
