@@ -4,7 +4,11 @@ import { Select, Store } from '@ngxs/store';
 import { Observable, take, tap } from 'rxjs';
 import { setFindings } from 'src/app/states/recommendations.actions';
 import { RecommendationsState } from 'src/app/states/recommendations.state';
-import { example_llama3, example_claude, example_gpt4o } from 'src/assets/example';
+import {
+  example_claude,
+  example_gpt4o,
+  example_llama3,
+} from 'src/assets/example';
 
 @Component({
   selector: 'app-overview',
@@ -16,7 +20,7 @@ export class OverviewComponent {
 
   constructor(private router: Router, private store: Store) {}
 
-  openExample(which='llama3') {
+  openExample(which = 'llama3') {
     let exampleFindings;
     switch (which) {
       case 'llama3':
@@ -37,6 +41,7 @@ export class OverviewComponent {
       .dispatch(
         new setFindings({
           data: exampleFindings,
+          fileName: `${which}.json`,
         })
       )
       .pipe(
