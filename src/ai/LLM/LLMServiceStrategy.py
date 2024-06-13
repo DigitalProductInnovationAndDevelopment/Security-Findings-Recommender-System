@@ -1,12 +1,11 @@
 from typing import Dict, Optional, List
 
 from ai.LLM.BaseLLMService import BaseLLMService
-from ai.LLM.Stretegies.OLLAMAService import OLLAMAService
 from data.Finding import Finding, FindingKind
 
 
 class LLMServiceStrategy:
-    def __init__(self, llm_service: BaseLLMService = OLLAMAService()):
+    def __init__(self, llm_service: BaseLLMService):
         self.llm_service = llm_service
 
     def generate(self, prompt: str) -> Dict[str, str]:
