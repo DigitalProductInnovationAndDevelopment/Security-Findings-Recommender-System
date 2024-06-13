@@ -87,10 +87,21 @@ export const example_main = [
 ];
 export const example_claude = [
   {
-    "title": ["entropy and regex for passwords or secrets"],
-    "source": ["Gitleaks"],
-    "location_list": ["{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '20-20', 'column': '13-64'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '22-22', 'column': '17-68'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '3-3', 'column': '13-59'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '5-5', 'column': '17-63'}"],
-    "description": ["entropy and regex for passwords or secrets"],
+    "title": [
+      "entropy and regex for passwords or secrets"
+    ],
+    "source": [
+      "Gitleaks"
+    ],
+    "location_list": [
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '20-20', 'column': '13-64'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '22-22', 'column': '17-68'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '3-3', 'column': '13-59'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '5-5', 'column': '17-63'}"
+    ],
+    "description": [
+      "entropy and regex for passwords or secrets"
+    ],
     "cwe_ids": [],
     "cve_ids": [],
     "severity": 90,
@@ -110,13 +121,28 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: entropy and regex for passwords or secrets\nSource: Gitleaks\nDescription: entropy and regex for passwords or secrets\nLocation List:\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '20-20', 'column': '13-64'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '22-22', 'column': '17-68'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '3-3', 'column': '13-59'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '5-5', 'column': '17-63'}\nSeverity: 90\nPriority: 90\nCategory: CODE\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["out of heap memory issue due to missing limit on header quantity", "out of heap memory issue due to missing limit on header quntity"],
-    "source": ["Trivy"],
-    "location_list": ["curl:, ", "libcurl:, "],
-    "description": ["When curl retrieves an HTTP response, it stores the incoming headers so that\nthey can be accessed later via the libcurl headers API.\n\nHowever, curl did not have a limit in how many or how large headers it would\naccept in a response, allowing a malicious server to stream an endless series\nof headers and eventually cause curl to run out of heap memory."],
-    "cwe_ids": ["CWE-770"],
-    "cve_ids": ["CVE-2023-38039"],
+  },
+  {
+    "title": [
+      "out of heap memory issue due to missing limit on header quantity",
+      "out of heap memory issue due to missing limit on header quntity"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "curl:, ",
+      "libcurl:, "
+    ],
+    "description": [
+      "When curl retrieves an HTTP response, it stores the incoming headers so that\nthey can be accessed later via the libcurl headers API.\n\nHowever, curl did not have a limit in how many or how large headers it would\naccept in a response, allowing a malicious server to stream an endless series\nof headers and eventually cause curl to run out of heap memory."
+    ],
+    "cwe_ids": [
+      "CWE-770"
+    ],
+    "cve_ids": [
+      "CVE-2023-38039"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "PROGRAM",
@@ -134,13 +160,25 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: out of heap memory issue due to missing limit on header quantity, out of heap memory issue due to missing limit on header quntity\nSource: Trivy\nDescription: When curl retrieves an HTTP response, it stores the incoming headers so that\nthey can be accessed later via the libcurl headers API.\n\nHowever, curl did not have a limit in how many or how large headers it would\naccept in a response, allowing a malicious server to stream an endless series\nof headers and eventually cause curl to run out of heap memory.\nLocation List:\n  - curl:, \n  - libcurl:, \nCWE IDs: CWE-770\nCVE IDs: CVE-2023-38039\nSeverity: 80\nPriority: 80\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["curl: HTTP/2 push headers memory-leak"],
-    "source": ["Trivy"],
-    "location_list": ["curl:, ", "libcurl4:, "],
-    "description": ["When an application tells libcurl it wants to allow HTTP/2 server push, and the amount of received headers for the push surpasses the maximum allowed limit (1000), libcurl aborts the server push. When aborting, libcurl inadvertently does not free all the previously allocated headers and instead leaks the memory.  Further, this error condition fails silently and is therefore not easily detected by an application."],
+  },
+  {
+    "title": [
+      "curl: HTTP/2 push headers memory-leak"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "curl:, ",
+      "libcurl4:, "
+    ],
+    "description": [
+      "When an application tells libcurl it wants to allow HTTP/2 server push, and the amount of received headers for the push surpasses the maximum allowed limit (1000), libcurl aborts the server push. When aborting, libcurl inadvertently does not free all the previously allocated headers and instead leaks the memory.  Further, this error condition fails silently and is therefore not easily detected by an application."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2024-2398"],
+    "cve_ids": [
+      "CVE-2024-2398"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "PROGRAM",
@@ -158,13 +196,27 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: curl: HTTP/2 push headers memory-leak\nSource: Trivy\nDescription: When an application tells libcurl it wants to allow HTTP/2 server push, and the amount of received headers for the push surpasses the maximum allowed limit (1000), libcurl aborts the server push. When aborting, libcurl inadvertently does not free all the previously allocated headers and instead leaks the memory.  Further, this error condition fails silently and is therefore not easily detected by an application.\nLocation List:\n  - curl:, \n  - libcurl4:, \nCVE IDs: CVE-2024-2398\nSeverity: 80\nPriority: 80\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["There is a type confusion vulnerability relating to X.400 address proc ...", "[openssl: X.400 address type confusion in X.509 GeneralName]"],
-    "source": ["Trivy"],
-    "location_list": ["libcrypto3:, ", "libssl3:, "],
-    "description": ["There is a type confusion vulnerability relating to X.400 address processing inside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but the public structure definition for GENERAL_NAME incorrectly specified the type of the x400Address field as ASN1_TYPE. This field is subsequently interpreted by the OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an ASN1_STRING. When CRL checking is enabled (i.e. the application sets the X509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass arbitrary pointers to a memcmp call, enabling them to read memory contents or enact a denial of service. In most cases, the attack requires the attacker to provide both the certificate chain and CRL, neither of which need to have a valid signature. If the attacker only controls one of these inputs, the other input must already contain an X.400 address as a CRL distribution point, which is uncommon. As such, this vulnerability is most likely to only affect applications which have implemented their own functionality for retrieving CRLs over a network.", "X.400 address type confusion in X.509 GeneralName"],
+  },
+  {
+    "title": [
+      "There is a type confusion vulnerability relating to X.400 address proc ...",
+      "[openssl: X.400 address type confusion in X.509 GeneralName]"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "libcrypto3:, ",
+      "libssl3:, "
+    ],
+    "description": [
+      "There is a type confusion vulnerability relating to X.400 address processing inside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but the public structure definition for GENERAL_NAME incorrectly specified the type of the x400Address field as ASN1_TYPE. This field is subsequently interpreted by the OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an ASN1_STRING. When CRL checking is enabled (i.e. the application sets the X509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass arbitrary pointers to a memcmp call, enabling them to read memory contents or enact a denial of service. In most cases, the attack requires the attacker to provide both the certificate chain and CRL, neither of which need to have a valid signature. If the attacker only controls one of these inputs, the other input must already contain an X.400 address as a CRL distribution point, which is uncommon. As such, this vulnerability is most likely to only affect applications which have implemented their own functionality for retrieving CRLs over a network.",
+      "X.400 address type confusion in X.509 GeneralName"
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2023-0286"],
+    "cve_ids": [
+      "CVE-2023-0286"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "LIBRARY",
@@ -182,13 +234,26 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: There is a type confusion vulnerability relating to X.400 address proc ..., [openssl: X.400 address type confusion in X.509 GeneralName]\nSource: Trivy\nDescription: There is a type confusion vulnerability relating to X.400 address processing inside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but the public structure definition for GENERAL_NAME incorrectly specified the type of the x400Address field as ASN1_TYPE. This field is subsequently interpreted by the OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an ASN1_STRING. When CRL checking is enabled (i.e. the application sets the X509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass arbitrary pointers to a memcmp call, enabling them to read memory contents or enact a denial of service. In most cases, the attack requires the attacker to provide both the certificate chain and CRL, neither of which need to have a valid signature. If the attacker only controls one of these inputs, the other input must already contain an X.400 address as a CRL distribution point, which is uncommon. As such, this vulnerability is most likely to only affect applications which have implemented their own functionality for retrieving CRLs over a network., X.400 address type confusion in X.509 GeneralName\nLocation List:\n  - libcrypto3:, \n  - libssl3:, \nCVE IDs: CVE-2023-0286\nSeverity: 80\nPriority: 80\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["low-privileged user privileges escalation"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["An unauthorized access to the execution of the setuid file with capabilities flaw in the Linux kernel OverlayFS subsystem was found in the way user copying a capable file from a nosuid mount into another mount. A local user could use this flaw to escalate their privileges on the system."],
-    "cwe_ids": ["CWE-281"],
-    "cve_ids": ["CVE-2021-3847"],
+  },
+  {
+    "title": [
+      "low-privileged user privileges escalation"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "An unauthorized access to the execution of the setuid file with capabilities flaw in the Linux kernel OverlayFS subsystem was found in the way user copying a capable file from a nosuid mount into another mount. A local user could use this flaw to escalate their privileges on the system."
+    ],
+    "cwe_ids": [
+      "CWE-281"
+    ],
+    "cve_ids": [
+      "CVE-2021-3847"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "SYSTEM",
@@ -206,13 +271,26 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: low-privileged user privileges escalation\nSource: Trivy\nDescription: An unauthorized access to the execution of the setuid file with capabilities flaw in the Linux kernel OverlayFS subsystem was found in the way user copying a capable file from a nosuid mount into another mount. A local user could use this flaw to escalate their privileges on the system.\nLocation List:\n  - linux-libc-dev:, \nCWE IDs: CWE-281\nCVE IDs: CVE-2021-3847\nSeverity: 80\nPriority: 80\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)"],
-    "source": ["Trivy"],
-    "location_list": ["nghttp2-libs:, "],
-    "description": ["The HTTP/2 protocol allows a denial of service (server resource consumption) because request cancellation can reset many streams quickly, as exploited in the wild in August through October 2023."],
-    "cwe_ids": ["CWE-400"],
-    "cve_ids": ["CVE-2023-44487"],
+  },
+  {
+    "title": [
+      "Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "nghttp2-libs:, "
+    ],
+    "description": [
+      "The HTTP/2 protocol allows a denial of service (server resource consumption) because request cancellation can reset many streams quickly, as exploited in the wild in August through October 2023."
+    ],
+    "cwe_ids": [
+      "CWE-400"
+    ],
+    "cve_ids": [
+      "CVE-2023-44487"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "PROGRAM",
@@ -230,13 +308,26 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)\nSource: Trivy\nDescription: The HTTP/2 protocol allows a denial of service (server resource consumption) because request cancellation can reset many streams quickly, as exploited in the wild in August through October 2023.\nLocation List:\n  - nghttp2-libs:, \nCWE IDs: CWE-400\nCVE IDs: CVE-2023-44487\nSeverity: 80\nPriority: 80\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["use-after-free caused by do_submit_urb()"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["A use-after-free vulnerability was found in the siano smsusb module in the Linux kernel. The bug occurs during device initialization when the siano device is plugged in. This flaw allows a local user to crash the system, causing a denial of service condition."],
-    "cwe_ids": ["CWE-416"],
-    "cve_ids": ["CVE-2023-4132"],
+  },
+  {
+    "title": [
+      "use-after-free caused by do_submit_urb()"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "A use-after-free vulnerability was found in the siano smsusb module in the Linux kernel. The bug occurs during device initialization when the siano device is plugged in. This flaw allows a local user to crash the system, causing a denial of service condition."
+    ],
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "cve_ids": [
+      "CVE-2023-4132"
+    ],
     "severity": 60,
     "priority": 60,
     "category": "SYSTEM",
@@ -254,13 +345,26 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: use-after-free caused by do_submit_urb()\nSource: Trivy\nDescription: A use-after-free vulnerability was found in the siano smsusb module in the Linux kernel. The bug occurs during device initialization when the siano device is plugged in. This flaw allows a local user to crash the system, causing a denial of service condition.\nLocation List:\n  - linux-libc-dev:, \nCWE IDs: CWE-416\nCVE IDs: CVE-2023-4132\nSeverity: 60\nPriority: 60\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["libtiff: out-of-bounds read in extractContigSamplesShifted8bits() in tools/tiffcrop.c"],
-    "source": ["Trivy"],
-    "location_list": ["tiff:, "],
-    "description": ["LibTIFF 4.4.0 has an out-of-bounds read in tiffcrop in tools/tiffcrop.c:3400, allowing attackers to cause a denial-of-service via a crafted tiff file. For users that compile libtiff from sources, the fix is available with commit afaabc3e."],
-    "cwe_ids": ["CWE-125"],
-    "cve_ids": ["CVE-2023-0798"],
+  },
+  {
+    "title": [
+      "libtiff: out-of-bounds read in extractContigSamplesShifted8bits() in tools/tiffcrop.c"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "tiff:, "
+    ],
+    "description": [
+      "LibTIFF 4.4.0 has an out-of-bounds read in tiffcrop in tools/tiffcrop.c:3400, allowing attackers to cause a denial-of-service via a crafted tiff file. For users that compile libtiff from sources, the fix is available with commit afaabc3e."
+    ],
+    "cwe_ids": [
+      "CWE-125"
+    ],
+    "cve_ids": [
+      "CVE-2023-0798"
+    ],
     "severity": 60,
     "priority": 60,
     "category": "LIBRARY",
@@ -278,13 +382,26 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: libtiff: out-of-bounds read in extractContigSamplesShifted8bits() in tools/tiffcrop.c\nSource: Trivy\nDescription: LibTIFF 4.4.0 has an out-of-bounds read in tiffcrop in tools/tiffcrop.c:3400, allowing attackers to cause a denial-of-service via a crafted tiff file. For users that compile libtiff from sources, the fix is available with commit afaabc3e.\nLocation List:\n  - tiff:, \nCWE IDs: CWE-125\nCVE IDs: CVE-2023-0798\nSeverity: 60\nPriority: 60\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["stack overflow in exfat_get_uniname_from_ext_entry"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["A flaw was found in the exFAT driver of the Linux kernel. The vulnerability exists in the implementation of the file name reconstruction function, which is responsible for reading file name entries from a directory index and merging file name parts belonging to one file into a single long file name. Since the file name characters are copied into a stack variable, a local privileged attacker could use this flaw to overflow the kernel stack."],
-    "cwe_ids": ["CWE-787"],
-    "cve_ids": ["CVE-2023-4273"],
+  },
+  {
+    "title": [
+      "stack overflow in exfat_get_uniname_from_ext_entry"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "A flaw was found in the exFAT driver of the Linux kernel. The vulnerability exists in the implementation of the file name reconstruction function, which is responsible for reading file name entries from a directory index and merging file name parts belonging to one file into a single long file name. Since the file name characters are copied into a stack variable, a local privileged attacker could use this flaw to overflow the kernel stack."
+    ],
+    "cwe_ids": [
+      "CWE-787"
+    ],
+    "cve_ids": [
+      "CVE-2023-4273"
+    ],
     "severity": 60,
     "priority": 60,
     "category": "SYSTEM",
@@ -302,11 +419,29 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: stack overflow in exfat_get_uniname_from_ext_entry\nSource: Trivy\nDescription: A flaw was found in the exFAT driver of the Linux kernel. The vulnerability exists in the implementation of the file name reconstruction function, which is responsible for reading file name entries from a directory index and merging file name parts belonging to one file into a single long file name. Since the file name characters are copied into a stack variable, a local privileged attacker could use this flaw to overflow the kernel stack.\nLocation List:\n  - linux-libc-dev:, \nCWE IDs: CWE-787\nCVE IDs: CVE-2023-4273\nSeverity: 60\nPriority: 60\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host"],
-    "source": ["Semgrep"],
-    "location_list": ["{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1617-1617', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1618-1618', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1749-1749', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1762-1762', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1773-1773', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1801-1801', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1810-1810', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1837-1837', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1843-1843', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1846-1846', 'column': '3-38'}"],
-    "description": ["Running flask app with host 0.0.0.0 could expose the server publicly."],
+  },
+  {
+    "title": [
+      "python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host"
+    ],
+    "source": [
+      "Semgrep"
+    ],
+    "location_list": [
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1617-1617', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1618-1618', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1749-1749', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1762-1762', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1773-1773', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1801-1801', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1810-1810', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1837-1837', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1843-1843', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1846-1846', 'column': '3-38'}"
+    ],
+    "description": [
+      "Running flask app with host 0.0.0.0 could expose the server publicly."
+    ],
     "cwe_ids": [],
     "cve_ids": [],
     "severity": 50,
@@ -326,13 +461,25 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host\nSource: Semgrep\nDescription: Running flask app with host 0.0.0.0 could expose the server publicly.\nLocation List:\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1617-1617', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1618-1618', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1749-1749', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1762-1762', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1773-1773', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1801-1801', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1810-1810', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1837-1837', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1843-1843', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1846-1846', 'column': '3-38'}\nSeverity: 50\nPriority: 50\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["tar: does not properly warn the user when extracting setuid or setgid files"],
-    "source": ["Trivy"],
-    "location_list": ["tar:, ", "tar:, "],
-    "description": ["Tar 1.15.1 does not properly warn the user when extracting setuid or setgid files, which may allow local users or remote attackers to gain privileges."],
+  },
+  {
+    "title": [
+      "tar: does not properly warn the user when extracting setuid or setgid files"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "tar:, ",
+      "tar:, "
+    ],
+    "description": [
+      "Tar 1.15.1 does not properly warn the user when extracting setuid or setgid files, which may allow local users or remote attackers to gain privileges."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2005-2541"],
+    "cve_ids": [
+      "CVE-2005-2541"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -350,13 +497,34 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: tar: does not properly warn the user when extracting setuid or setgid files\nSource: Trivy\nDescription: Tar 1.15.1 does not properly warn the user when extracting setuid or setgid files, which may allow local users or remote attackers to gain privileges.\nLocation List:\n  - tar:, \n  - tar:, \nCVE IDs: CVE-2005-2541\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["glibc: information disclosure of heap addresses of pthread_created thread"],
-    "source": ["Trivy"],
-    "location_list": ["libc-bin:, ", "libc-bin:, ", "libc-bin:, ", "libc-dev-bin:, ", "libc6:, ", "libc6:, ", "libc6:, ", "libc6-dev:, "],
-    "description": ["** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.\"", "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability."],
-    "cwe_ids": ["CWE-330"],
-    "cve_ids": ["CVE-2019-1010025"],
+  },
+  {
+    "title": [
+      "glibc: information disclosure of heap addresses of pthread_created thread"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "libc-bin:, ",
+      "libc-bin:, ",
+      "libc-bin:, ",
+      "libc-dev-bin:, ",
+      "libc6:, ",
+      "libc6:, ",
+      "libc6:, ",
+      "libc6-dev:, "
+    ],
+    "description": [
+      "** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.\"",
+      "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability."
+    ],
+    "cwe_ids": [
+      "CWE-330"
+    ],
+    "cve_ids": [
+      "CVE-2019-1010025"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "LIBRARY",
@@ -374,13 +542,25 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: glibc: information disclosure of heap addresses of pthread_created thread\nSource: Trivy\nDescription: ** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.\", GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.\nLocation List:\n  - libc-bin:, \n  - libc-bin:, \n  - libc-bin:, \n  - libc-dev-bin:, \n  - libc6:, \n  - libc6:, \n  - libc6:, \n  - libc6-dev:, \nCWE IDs: CWE-330\nCVE IDs: CVE-2019-1010025\nSeverity: 30\nPriority: 30\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["incorrect multi-keyword mode cipherstring parsing"],
-    "source": ["Trivy"],
-    "location_list": ["libldap-2.5-0:, ", "libldap-common:, "],
-    "description": ["The nss_parse_ciphers function in libraries/libldap/tls_m.c in OpenLDAP does not properly parse OpenSSL-style multi-keyword mode cipher strings, which might cause a weaker than intended cipher to be used and allow remote attackers to have unspecified impact via unknown vectors."],
+  },
+  {
+    "title": [
+      "incorrect multi-keyword mode cipherstring parsing"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "libldap-2.5-0:, ",
+      "libldap-common:, "
+    ],
+    "description": [
+      "The nss_parse_ciphers function in libraries/libldap/tls_m.c in OpenLDAP does not properly parse OpenSSL-style multi-keyword mode cipher strings, which might cause a weaker than intended cipher to be used and allow remote attackers to have unspecified impact via unknown vectors."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2015-3276"],
+    "cve_ids": [
+      "CVE-2015-3276"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "LIBRARY",
@@ -398,13 +578,24 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: incorrect multi-keyword mode cipherstring parsing\nSource: Trivy\nDescription: The nss_parse_ciphers function in libraries/libldap/tls_m.c in OpenLDAP does not properly parse OpenSSL-style multi-keyword mode cipher strings, which might cause a weaker than intended cipher to be used and allow remote attackers to have unspecified impact via unknown vectors.\nLocation List:\n  - libldap-2.5-0:, \n  - libldap-common:, \nCVE IDs: CVE-2015-3276\nSeverity: 30\nPriority: 30\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["kernel: double fetch in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["** DISPUTED ** An issue was discovered in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c in the Linux kernel through 5.1.5. It allows local users to cause a denial of service or possibly have unspecified other impact by changing the value of ioc_number between two kernel reads of that value, aka a \"double fetch\" vulnerability. NOTE: a third party reports that this is unexploitable because the doubly fetched value is not used."],
+  },
+  {
+    "title": [
+      "kernel: double fetch in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "** DISPUTED ** An issue was discovered in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c in the Linux kernel through 5.1.5. It allows local users to cause a denial of service or possibly have unspecified other impact by changing the value of ioc_number between two kernel reads of that value, aka a \"double fetch\" vulnerability. NOTE: a third party reports that this is unexploitable because the doubly fetched value is not used."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2019-12456"],
+    "cve_ids": [
+      "CVE-2019-12456"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -422,13 +613,26 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: kernel: double fetch in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c\nSource: Trivy\nDescription: ** DISPUTED ** An issue was discovered in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c in the Linux kernel through 5.1.5. It allows local users to cause a denial of service or possibly have unspecified other impact by changing the value of ioc_number between two kernel reads of that value, aka a \"double fetch\" vulnerability. NOTE: a third party reports that this is unexploitable because the doubly fetched value is not used.\nLocation List:\n  - linux-libc-dev:, \nCVE IDs: CVE-2019-12456\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["Werkzeug is a comprehensive WSGI web application library. Browsers may ...", "python-werkzeug: cookie prefixed with = can shadow unprefixed cookie"],
-    "source": ["Trivy"],
-    "location_list": ["Werkzeug:, ", "werkzeug:, "],
-    "description": ["Werkzeug is a comprehensive WSGI web application library. Browsers may allow \"nameless\" cookies that look like `=value` instead of `key=value`. A vulnerable browser may allow a compromised application on an adjacent subdomain to exploit this to set a cookie like `=__Host-test=bad` for another subdomain. Werkzeug prior to 2.2.3 will parse the cookie `=__Host-test=bad` as __Host-test=bad`. If a Werkzeug application is running next to a vulnerable or malicious subdomain which sets such a cookie using a vulnerable browser, the Werkzeug application will see the bad cookie value but the valid cookie key. The issue is fixed in Werkzeug 2.2.3."],
+  },
+  {
+    "title": [
+      "Werkzeug is a comprehensive WSGI web application library. Browsers may ...",
+      "python-werkzeug: cookie prefixed with = can shadow unprefixed cookie"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "Werkzeug:, ",
+      "werkzeug:, "
+    ],
+    "description": [
+      "Werkzeug is a comprehensive WSGI web application library. Browsers may allow \"nameless\" cookies that look like `=value` instead of `key=value`. A vulnerable browser may allow a compromised application on an adjacent subdomain to exploit this to set a cookie like `=__Host-test=bad` for another subdomain. Werkzeug prior to 2.2.3 will parse the cookie `=__Host-test=bad` as __Host-test=bad`. If a Werkzeug application is running next to a vulnerable or malicious subdomain which sets such a cookie using a vulnerable browser, the Werkzeug application will see the bad cookie value but the valid cookie key. The issue is fixed in Werkzeug 2.2.3."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2023-23934"],
+    "cve_ids": [
+      "CVE-2023-23934"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "LIBRARY",
@@ -446,13 +650,24 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: Werkzeug is a comprehensive WSGI web application library. Browsers may ..., python-werkzeug: cookie prefixed with = can shadow unprefixed cookie\nSource: Trivy\nDescription: Werkzeug is a comprehensive WSGI web application library. Browsers may allow \"nameless\" cookies that look like `=value` instead of `key=value`. A vulnerable browser may allow a compromised application on an adjacent subdomain to exploit this to set a cookie like `=__Host-test=bad` for another subdomain. Werkzeug prior to 2.2.3 will parse the cookie `=__Host-test=bad` as __Host-test=bad`. If a Werkzeug application is running next to a vulnerable or malicious subdomain which sets such a cookie using a vulnerable browser, the Werkzeug application will see the bad cookie value but the valid cookie key. The issue is fixed in Werkzeug 2.2.3.\nLocation List:\n  - Werkzeug:, \n  - werkzeug:, \nCVE IDs: CVE-2023-23934\nSeverity: 30\nPriority: 30\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["TCP, when using a large Window Size, makes it easier for remote attack ..."],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["TCP, when using a large Window Size, makes it easier for remote attackers to guess sequence numbers and cause a denial of service (connection loss) to persistent TCP connections by repeatedly injecting a TCP RST packet, especially in protocols that use long-lived connections, such as BGP."],
+  },
+  {
+    "title": [
+      "TCP, when using a large Window Size, makes it easier for remote attack ..."
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "TCP, when using a large Window Size, makes it easier for remote attackers to guess sequence numbers and cause a denial of service (connection loss) to persistent TCP connections by repeatedly injecting a TCP RST packet, especially in protocols that use long-lived connections, such as BGP."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2004-0230"],
+    "cve_ids": [
+      "CVE-2004-0230"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -470,12 +685,30 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: TCP, when using a large Window Size, makes it easier for remote attack ...\nSource: Trivy\nDescription: TCP, when using a large Window Size, makes it easier for remote attackers to guess sequence numbers and cause a denial of service (connection loss) to persistent TCP connections by repeatedly injecting a TCP RST packet, especially in protocols that use long-lived connections, such as BGP.\nLocation List:\n  - linux-libc-dev:, \nCVE IDs: CVE-2004-0230\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["try_except_continue"],
-    "source": ["Bandit"],
-    "location_list": ["flama/api.py:193-193, 2-2", "flama/api.py:211-211, 2-2", "flama/api.py:214-214, 2-2", "flama/api.py:217-217, 2-2", "flama/api.py:222-222, 2-2", "{'file': 'flama/api.py', 'ressource': '221 \\t\\t\\tbreak\\n222 \\t\\texcept Exception:\\n223 \\t\\t\\tcontinue\\n224 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '222-222', 'column': '2-2'}", "{'file': 'flama/api.py', 'ressource': '222 \\t\\t\\tbreak\\n223 \\t\\texcept Exception:\\n224 \\t\\t\\tcontinue\\n225 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '223-223', 'column': '2-2'}", "{'file': 'flama/api.py', 'ressource': '223 \\t\\t\\tbreak\\n224 \\t\\texcept Exception:\\n225 \\t\\t\\tcontinue\\n226 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '224-224', 'column': '2-2'}"],
-    "description": ["Try, Except, Continue detected."],
-    "cwe_ids": ["CWE-703"],
+  },
+  {
+    "title": [
+      "try_except_continue"
+    ],
+    "source": [
+      "Bandit"
+    ],
+    "location_list": [
+      "flama/api.py:193-193, 2-2",
+      "flama/api.py:211-211, 2-2",
+      "flama/api.py:214-214, 2-2",
+      "flama/api.py:217-217, 2-2",
+      "flama/api.py:222-222, 2-2",
+      "{'file': 'flama/api.py', 'ressource': '221 \\t\\t\\tbreak\\n222 \\t\\texcept Exception:\\n223 \\t\\t\\tcontinue\\n224 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '222-222', 'column': '2-2'}",
+      "{'file': 'flama/api.py', 'ressource': '222 \\t\\t\\tbreak\\n223 \\t\\texcept Exception:\\n224 \\t\\t\\tcontinue\\n225 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '223-223', 'column': '2-2'}",
+      "{'file': 'flama/api.py', 'ressource': '223 \\t\\t\\tbreak\\n224 \\t\\texcept Exception:\\n225 \\t\\t\\tcontinue\\n226 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '224-224', 'column': '2-2'}"
+    ],
+    "description": [
+      "Try, Except, Continue detected."
+    ],
+    "cwe_ids": [
+      "CWE-703"
+    ],
     "cve_ids": [],
     "severity": 30,
     "priority": 30,
@@ -494,13 +727,26 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: try_except_continue\nSource: Bandit\nDescription: Try, Except, Continue detected.\nLocation List:\n  - flama/api.py:193-193, 2-2\n  - flama/api.py:211-211, 2-2\n  - flama/api.py:214-214, 2-2\n  - flama/api.py:217-217, 2-2\n  - flama/api.py:222-222, 2-2\n  - {'file': 'flama/api.py', 'ressource': '221 \\t\\t\\tbreak\\n222 \\t\\texcept Exception:\\n223 \\t\\t\\tcontinue\\n224 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '222-222', 'column': '2-2'}\n  - {'file': 'flama/api.py', 'ressource': '222 \\t\\t\\tbreak\\n223 \\t\\texcept Exception:\\n224 \\t\\t\\tcontinue\\n225 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '223-223', 'column': '2-2'}\n  - {'file': 'flama/api.py', 'ressource': '223 \\t\\t\\tbreak\\n224 \\t\\texcept Exception:\\n225 \\t\\t\\tcontinue\\n226 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '224-224', 'column': '2-2'}\nCWE IDs: CWE-703\nSeverity: 30\nPriority: 30\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["race condition in rose_bind()"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["A use-after-free flaw was found in the Linux kernel\u2019s PLP Rose functionality in the way a user triggers a race condition by calling bind while simultaneously triggering the rose_bind() function. This flaw allows a local user to crash or potentially escalate their privileges on the system."],
-    "cwe_ids": ["CWE-362"],
-    "cve_ids": ["CVE-2022-2961"],
+  },
+  {
+    "title": [
+      "race condition in rose_bind()"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "A use-after-free flaw was found in the Linux kernel\u2019s PLP Rose functionality in the way a user triggers a race condition by calling bind while simultaneously triggering the rose_bind() function. This flaw allows a local user to crash or potentially escalate their privileges on the system."
+    ],
+    "cwe_ids": [
+      "CWE-362"
+    ],
+    "cve_ids": [
+      "CVE-2022-2961"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -518,13 +764,26 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: race condition in rose_bind()\nSource: Trivy\nDescription: A use-after-free flaw was found in the Linux kernel\u2019s PLP Rose functionality in the way a user triggers a race condition by calling bind while simultaneously triggering the rose_bind() function. This flaw allows a local user to crash or potentially escalate their privileges on the system.\nLocation List:\n  - linux-libc-dev:, \nCWE IDs: CWE-362\nCVE IDs: CVE-2022-2961\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["denial of service issue (resource consumption) using compressed packets"],
-    "source": ["Trivy"],
-    "location_list": ["gpgv:, "],
-    "description": ["GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB."],
-    "cwe_ids": ["CWE-787"],
-    "cve_ids": ["CVE-2022-3219"],
+  },
+  {
+    "title": [
+      "denial of service issue (resource consumption) using compressed packets"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "gpgv:, "
+    ],
+    "description": [
+      "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB."
+    ],
+    "cwe_ids": [
+      "CWE-787"
+    ],
+    "cve_ids": [
+      "CVE-2022-3219"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -542,13 +801,34 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: denial of service issue (resource consumption) using compressed packets\nSource: Trivy\nDescription: GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.\nLocation List:\n  - gpgv:, \nCWE IDs: CWE-787\nCVE IDs: CVE-2022-3219\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["glibc: stack guard protection bypass"],
-    "source": ["Trivy"],
-    "location_list": ["libc-bin:, ", "libc-bin:, ", "libc-bin:, ", "libc-dev-bin:, ", "libc6:, ", "libc6:, ", "libc6:, ", "libc6-dev:, "],
-    "description": ["** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.\"", "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat."],
-    "cwe_ids": ["CWE-119"],
-    "cve_ids": ["CVE-2019-1010022"],
+  },
+  {
+    "title": [
+      "glibc: stack guard protection bypass"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "libc-bin:, ",
+      "libc-bin:, ",
+      "libc-bin:, ",
+      "libc-dev-bin:, ",
+      "libc6:, ",
+      "libc6:, ",
+      "libc6:, ",
+      "libc6-dev:, "
+    ],
+    "description": [
+      "** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.\"",
+      "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat."
+    ],
+    "cwe_ids": [
+      "CWE-119"
+    ],
+    "cve_ids": [
+      "CVE-2019-1010022"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "PROGRAM",
@@ -566,13 +846,25 @@ export const example_claude = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: glibc: stack guard protection bypass\nSource: Trivy\nDescription: ** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.\", GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.\nLocation List:\n  - libc-bin:, \n  - libc-bin:, \n  - libc-bin:, \n  - libc-dev-bin:, \n  - libc6:, \n  - libc6:, \n  - libc6:, \n  - libc6-dev:, \nCWE IDs: CWE-119\nCVE IDs: CVE-2019-1010022\nSeverity: 30\nPriority: 30\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }];
+  }
+];
 export const example_gpt4o = [
   {
-    "title": ["entropy and regex for passwords or secrets"],
-    "source": ["Gitleaks"],
-    "location_list": ["{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '20-20', 'column': '13-64'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '22-22', 'column': '17-68'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '3-3', 'column': '13-59'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '5-5', 'column': '17-63'}"],
-    "description": ["entropy and regex for passwords or secrets"],
+    "title": [
+      "entropy and regex for passwords or secrets"
+    ],
+    "source": [
+      "Gitleaks"
+    ],
+    "location_list": [
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '20-20', 'column': '13-64'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '22-22', 'column': '17-68'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '3-3', 'column': '13-59'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '5-5', 'column': '17-63'}"
+    ],
+    "description": [
+      "entropy and regex for passwords or secrets"
+    ],
     "cwe_ids": [],
     "cve_ids": [],
     "severity": 90,
@@ -592,13 +884,28 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: entropy and regex for passwords or secrets\nSource: Gitleaks\nDescription: entropy and regex for passwords or secrets\nLocation List:\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '20-20', 'column': '13-64'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"aws_secret='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'\", 'line': '22-22', 'column': '17-68'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '3-3', 'column': '13-59'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/examples/example_reports/gitleaks_old.json', 'ressource': \"secret='12345678912345678912345678912345678912'\", 'line': '5-5', 'column': '17-63'}\nSeverity: 90\nPriority: 90\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["out of heap memory issue due to missing limit on header quantity", "out of heap memory issue due to missing limit on header quntity"],
-    "source": ["Trivy"],
-    "location_list": ["curl:, ", "libcurl:, "],
-    "description": ["When curl retrieves an HTTP response, it stores the incoming headers so that\nthey can be accessed later via the libcurl headers API.\n\nHowever, curl did not have a limit in how many or how large headers it would\naccept in a response, allowing a malicious server to stream an endless series\nof headers and eventually cause curl to run out of heap memory."],
-    "cwe_ids": ["CWE-770"],
-    "cve_ids": ["CVE-2023-38039"],
+  },
+  {
+    "title": [
+      "out of heap memory issue due to missing limit on header quantity",
+      "out of heap memory issue due to missing limit on header quntity"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "curl:, ",
+      "libcurl:, "
+    ],
+    "description": [
+      "When curl retrieves an HTTP response, it stores the incoming headers so that\nthey can be accessed later via the libcurl headers API.\n\nHowever, curl did not have a limit in how many or how large headers it would\naccept in a response, allowing a malicious server to stream an endless series\nof headers and eventually cause curl to run out of heap memory."
+    ],
+    "cwe_ids": [
+      "CWE-770"
+    ],
+    "cve_ids": [
+      "CVE-2023-38039"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "SYSTEM",
@@ -616,13 +923,25 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: out of heap memory issue due to missing limit on header quantity, out of heap memory issue due to missing limit on header quntity\nSource: Trivy\nDescription: When curl retrieves an HTTP response, it stores the incoming headers so that\nthey can be accessed later via the libcurl headers API.\n\nHowever, curl did not have a limit in how many or how large headers it would\naccept in a response, allowing a malicious server to stream an endless series\nof headers and eventually cause curl to run out of heap memory.\nLocation List:\n  - curl:, \n  - libcurl:, \nCWE IDs: CWE-770\nCVE IDs: CVE-2023-38039\nSeverity: 80\nPriority: 80\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["curl: HTTP/2 push headers memory-leak"],
-    "source": ["Trivy"],
-    "location_list": ["curl:, ", "libcurl4:, "],
-    "description": ["When an application tells libcurl it wants to allow HTTP/2 server push, and the amount of received headers for the push surpasses the maximum allowed limit (1000), libcurl aborts the server push. When aborting, libcurl inadvertently does not free all the previously allocated headers and instead leaks the memory.  Further, this error condition fails silently and is therefore not easily detected by an application."],
+  },
+  {
+    "title": [
+      "curl: HTTP/2 push headers memory-leak"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "curl:, ",
+      "libcurl4:, "
+    ],
+    "description": [
+      "When an application tells libcurl it wants to allow HTTP/2 server push, and the amount of received headers for the push surpasses the maximum allowed limit (1000), libcurl aborts the server push. When aborting, libcurl inadvertently does not free all the previously allocated headers and instead leaks the memory.  Further, this error condition fails silently and is therefore not easily detected by an application."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2024-2398"],
+    "cve_ids": [
+      "CVE-2024-2398"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "LIBRARY",
@@ -640,13 +959,27 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: curl: HTTP/2 push headers memory-leak\nSource: Trivy\nDescription: When an application tells libcurl it wants to allow HTTP/2 server push, and the amount of received headers for the push surpasses the maximum allowed limit (1000), libcurl aborts the server push. When aborting, libcurl inadvertently does not free all the previously allocated headers and instead leaks the memory.  Further, this error condition fails silently and is therefore not easily detected by an application.\nLocation List:\n  - curl:, \n  - libcurl4:, \nCVE IDs: CVE-2024-2398\nSeverity: 80\nPriority: 80\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["There is a type confusion vulnerability relating to X.400 address proc ...", "[openssl: X.400 address type confusion in X.509 GeneralName]"],
-    "source": ["Trivy"],
-    "location_list": ["libcrypto3:, ", "libssl3:, "],
-    "description": ["There is a type confusion vulnerability relating to X.400 address processing inside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but the public structure definition for GENERAL_NAME incorrectly specified the type of the x400Address field as ASN1_TYPE. This field is subsequently interpreted by the OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an ASN1_STRING. When CRL checking is enabled (i.e. the application sets the X509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass arbitrary pointers to a memcmp call, enabling them to read memory contents or enact a denial of service. In most cases, the attack requires the attacker to provide both the certificate chain and CRL, neither of which need to have a valid signature. If the attacker only controls one of these inputs, the other input must already contain an X.400 address as a CRL distribution point, which is uncommon. As such, this vulnerability is most likely to only affect applications which have implemented their own functionality for retrieving CRLs over a network.", "X.400 address type confusion in X.509 GeneralName"],
+  },
+  {
+    "title": [
+      "There is a type confusion vulnerability relating to X.400 address proc ...",
+      "[openssl: X.400 address type confusion in X.509 GeneralName]"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "libcrypto3:, ",
+      "libssl3:, "
+    ],
+    "description": [
+      "There is a type confusion vulnerability relating to X.400 address processing inside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but the public structure definition for GENERAL_NAME incorrectly specified the type of the x400Address field as ASN1_TYPE. This field is subsequently interpreted by the OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an ASN1_STRING. When CRL checking is enabled (i.e. the application sets the X509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass arbitrary pointers to a memcmp call, enabling them to read memory contents or enact a denial of service. In most cases, the attack requires the attacker to provide both the certificate chain and CRL, neither of which need to have a valid signature. If the attacker only controls one of these inputs, the other input must already contain an X.400 address as a CRL distribution point, which is uncommon. As such, this vulnerability is most likely to only affect applications which have implemented their own functionality for retrieving CRLs over a network.",
+      "X.400 address type confusion in X.509 GeneralName"
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2023-0286"],
+    "cve_ids": [
+      "CVE-2023-0286"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "LIBRARY",
@@ -664,13 +997,26 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: There is a type confusion vulnerability relating to X.400 address proc ..., [openssl: X.400 address type confusion in X.509 GeneralName]\nSource: Trivy\nDescription: There is a type confusion vulnerability relating to X.400 address processing inside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but the public structure definition for GENERAL_NAME incorrectly specified the type of the x400Address field as ASN1_TYPE. This field is subsequently interpreted by the OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an ASN1_STRING. When CRL checking is enabled (i.e. the application sets the X509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass arbitrary pointers to a memcmp call, enabling them to read memory contents or enact a denial of service. In most cases, the attack requires the attacker to provide both the certificate chain and CRL, neither of which need to have a valid signature. If the attacker only controls one of these inputs, the other input must already contain an X.400 address as a CRL distribution point, which is uncommon. As such, this vulnerability is most likely to only affect applications which have implemented their own functionality for retrieving CRLs over a network., X.400 address type confusion in X.509 GeneralName\nLocation List:\n  - libcrypto3:, \n  - libssl3:, \nCVE IDs: CVE-2023-0286\nSeverity: 80\nPriority: 80\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["low-privileged user privileges escalation"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["An unauthorized access to the execution of the setuid file with capabilities flaw in the Linux kernel OverlayFS subsystem was found in the way user copying a capable file from a nosuid mount into another mount. A local user could use this flaw to escalate their privileges on the system."],
-    "cwe_ids": ["CWE-281"],
-    "cve_ids": ["CVE-2021-3847"],
+  },
+  {
+    "title": [
+      "low-privileged user privileges escalation"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "An unauthorized access to the execution of the setuid file with capabilities flaw in the Linux kernel OverlayFS subsystem was found in the way user copying a capable file from a nosuid mount into another mount. A local user could use this flaw to escalate their privileges on the system."
+    ],
+    "cwe_ids": [
+      "CWE-281"
+    ],
+    "cve_ids": [
+      "CVE-2021-3847"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "SYSTEM",
@@ -688,13 +1034,26 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: low-privileged user privileges escalation\nSource: Trivy\nDescription: An unauthorized access to the execution of the setuid file with capabilities flaw in the Linux kernel OverlayFS subsystem was found in the way user copying a capable file from a nosuid mount into another mount. A local user could use this flaw to escalate their privileges on the system.\nLocation List:\n  - linux-libc-dev:, \nCWE IDs: CWE-281\nCVE IDs: CVE-2021-3847\nSeverity: 80\nPriority: 80\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)"],
-    "source": ["Trivy"],
-    "location_list": ["nghttp2-libs:, "],
-    "description": ["The HTTP/2 protocol allows a denial of service (server resource consumption) because request cancellation can reset many streams quickly, as exploited in the wild in August through October 2023."],
-    "cwe_ids": ["CWE-400"],
-    "cve_ids": ["CVE-2023-44487"],
+  },
+  {
+    "title": [
+      "Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "nghttp2-libs:, "
+    ],
+    "description": [
+      "The HTTP/2 protocol allows a denial of service (server resource consumption) because request cancellation can reset many streams quickly, as exploited in the wild in August through October 2023."
+    ],
+    "cwe_ids": [
+      "CWE-400"
+    ],
+    "cve_ids": [
+      "CVE-2023-44487"
+    ],
     "severity": 80,
     "priority": 80,
     "category": "SYSTEM",
@@ -712,13 +1071,26 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: Multiple HTTP/2 enabled web servers are vulnerable to a DDoS attack (Rapid Reset Attack)\nSource: Trivy\nDescription: The HTTP/2 protocol allows a denial of service (server resource consumption) because request cancellation can reset many streams quickly, as exploited in the wild in August through October 2023.\nLocation List:\n  - nghttp2-libs:, \nCWE IDs: CWE-400\nCVE IDs: CVE-2023-44487\nSeverity: 80\nPriority: 80\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["use-after-free caused by do_submit_urb()"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["A use-after-free vulnerability was found in the siano smsusb module in the Linux kernel. The bug occurs during device initialization when the siano device is plugged in. This flaw allows a local user to crash the system, causing a denial of service condition."],
-    "cwe_ids": ["CWE-416"],
-    "cve_ids": ["CVE-2023-4132"],
+  },
+  {
+    "title": [
+      "use-after-free caused by do_submit_urb()"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "A use-after-free vulnerability was found in the siano smsusb module in the Linux kernel. The bug occurs during device initialization when the siano device is plugged in. This flaw allows a local user to crash the system, causing a denial of service condition."
+    ],
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "cve_ids": [
+      "CVE-2023-4132"
+    ],
     "severity": 60,
     "priority": 60,
     "category": "SYSTEM",
@@ -736,13 +1108,26 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: use-after-free caused by do_submit_urb()\nSource: Trivy\nDescription: A use-after-free vulnerability was found in the siano smsusb module in the Linux kernel. The bug occurs during device initialization when the siano device is plugged in. This flaw allows a local user to crash the system, causing a denial of service condition.\nLocation List:\n  - linux-libc-dev:, \nCWE IDs: CWE-416\nCVE IDs: CVE-2023-4132\nSeverity: 60\nPriority: 60\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["libtiff: out-of-bounds read in extractContigSamplesShifted8bits() in tools/tiffcrop.c"],
-    "source": ["Trivy"],
-    "location_list": ["tiff:, "],
-    "description": ["LibTIFF 4.4.0 has an out-of-bounds read in tiffcrop in tools/tiffcrop.c:3400, allowing attackers to cause a denial-of-service via a crafted tiff file. For users that compile libtiff from sources, the fix is available with commit afaabc3e."],
-    "cwe_ids": ["CWE-125"],
-    "cve_ids": ["CVE-2023-0798"],
+  },
+  {
+    "title": [
+      "libtiff: out-of-bounds read in extractContigSamplesShifted8bits() in tools/tiffcrop.c"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "tiff:, "
+    ],
+    "description": [
+      "LibTIFF 4.4.0 has an out-of-bounds read in tiffcrop in tools/tiffcrop.c:3400, allowing attackers to cause a denial-of-service via a crafted tiff file. For users that compile libtiff from sources, the fix is available with commit afaabc3e."
+    ],
+    "cwe_ids": [
+      "CWE-125"
+    ],
+    "cve_ids": [
+      "CVE-2023-0798"
+    ],
     "severity": 60,
     "priority": 60,
     "category": "LIBRARY",
@@ -760,13 +1145,26 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: libtiff: out-of-bounds read in extractContigSamplesShifted8bits() in tools/tiffcrop.c\nSource: Trivy\nDescription: LibTIFF 4.4.0 has an out-of-bounds read in tiffcrop in tools/tiffcrop.c:3400, allowing attackers to cause a denial-of-service via a crafted tiff file. For users that compile libtiff from sources, the fix is available with commit afaabc3e.\nLocation List:\n  - tiff:, \nCWE IDs: CWE-125\nCVE IDs: CVE-2023-0798\nSeverity: 60\nPriority: 60\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["stack overflow in exfat_get_uniname_from_ext_entry"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["A flaw was found in the exFAT driver of the Linux kernel. The vulnerability exists in the implementation of the file name reconstruction function, which is responsible for reading file name entries from a directory index and merging file name parts belonging to one file into a single long file name. Since the file name characters are copied into a stack variable, a local privileged attacker could use this flaw to overflow the kernel stack."],
-    "cwe_ids": ["CWE-787"],
-    "cve_ids": ["CVE-2023-4273"],
+  },
+  {
+    "title": [
+      "stack overflow in exfat_get_uniname_from_ext_entry"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "A flaw was found in the exFAT driver of the Linux kernel. The vulnerability exists in the implementation of the file name reconstruction function, which is responsible for reading file name entries from a directory index and merging file name parts belonging to one file into a single long file name. Since the file name characters are copied into a stack variable, a local privileged attacker could use this flaw to overflow the kernel stack."
+    ],
+    "cwe_ids": [
+      "CWE-787"
+    ],
+    "cve_ids": [
+      "CVE-2023-4273"
+    ],
     "severity": 60,
     "priority": 60,
     "category": "SYSTEM",
@@ -784,11 +1182,29 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: stack overflow in exfat_get_uniname_from_ext_entry\nSource: Trivy\nDescription: A flaw was found in the exFAT driver of the Linux kernel. The vulnerability exists in the implementation of the file name reconstruction function, which is responsible for reading file name entries from a directory index and merging file name parts belonging to one file into a single long file name. Since the file name characters are copied into a stack variable, a local privileged attacker could use this flaw to overflow the kernel stack.\nLocation List:\n  - linux-libc-dev:, \nCWE IDs: CWE-787\nCVE IDs: CVE-2023-4273\nSeverity: 60\nPriority: 60\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host"],
-    "source": ["Semgrep"],
-    "location_list": ["{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1617-1617', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1618-1618', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1749-1749', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1762-1762', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1773-1773', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1801-1801', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1810-1810', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1837-1837', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1843-1843', 'column': '3-38'}", "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1846-1846', 'column': '3-38'}"],
-    "description": ["Running flask app with host 0.0.0.0 could expose the server publicly."],
+  },
+  {
+    "title": [
+      "python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host"
+    ],
+    "source": [
+      "Semgrep"
+    ],
+    "location_list": [
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1617-1617', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1618-1618', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1749-1749', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1762-1762', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1773-1773', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1801-1801', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1810-1810', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1837-1837', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1843-1843', 'column': '3-38'}",
+      "{'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1846-1846', 'column': '3-38'}"
+    ],
+    "description": [
+      "Running flask app with host 0.0.0.0 could expose the server publicly."
+    ],
     "cwe_ids": [],
     "cve_ids": [],
     "severity": 50,
@@ -808,13 +1224,25 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: python.flask.security.audit.app-run-param-config.avoid_app_run_with_bad_host\nSource: Semgrep\nDescription: Running flask app with host 0.0.0.0 could expose the server publicly.\nLocation List:\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1617-1617', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1618-1618', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1749-1749', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1762-1762', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1773-1773', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1801-1801', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1810-1810', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1837-1837', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1843-1843', 'column': '3-38'}\n  - {'file': '/builds/devsecops-sel/security-flama/feedbacklama/flama/api.py', 'ressource': \"\\t\\tapp.run(host='0.0.0.0', debug=True)  # nosec\", 'line': '1846-1846', 'column': '3-38'}\nSeverity: 50\nPriority: 50\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["tar: does not properly warn the user when extracting setuid or setgid files"],
-    "source": ["Trivy"],
-    "location_list": ["tar:, ", "tar:, "],
-    "description": ["Tar 1.15.1 does not properly warn the user when extracting setuid or setgid files, which may allow local users or remote attackers to gain privileges."],
+  },
+  {
+    "title": [
+      "tar: does not properly warn the user when extracting setuid or setgid files"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "tar:, ",
+      "tar:, "
+    ],
+    "description": [
+      "Tar 1.15.1 does not properly warn the user when extracting setuid or setgid files, which may allow local users or remote attackers to gain privileges."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2005-2541"],
+    "cve_ids": [
+      "CVE-2005-2541"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "PROGRAM",
@@ -832,13 +1260,34 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: tar: does not properly warn the user when extracting setuid or setgid files\nSource: Trivy\nDescription: Tar 1.15.1 does not properly warn the user when extracting setuid or setgid files, which may allow local users or remote attackers to gain privileges.\nLocation List:\n  - tar:, \n  - tar:, \nCVE IDs: CVE-2005-2541\nSeverity: 30\nPriority: 30\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["glibc: information disclosure of heap addresses of pthread_created thread"],
-    "source": ["Trivy"],
-    "location_list": ["libc-bin:, ", "libc-bin:, ", "libc-bin:, ", "libc-dev-bin:, ", "libc6:, ", "libc6:, ", "libc6:, ", "libc6-dev:, "],
-    "description": ["** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.\"", "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability."],
-    "cwe_ids": ["CWE-330"],
-    "cve_ids": ["CVE-2019-1010025"],
+  },
+  {
+    "title": [
+      "glibc: information disclosure of heap addresses of pthread_created thread"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "libc-bin:, ",
+      "libc-bin:, ",
+      "libc-bin:, ",
+      "libc-dev-bin:, ",
+      "libc6:, ",
+      "libc6:, ",
+      "libc6:, ",
+      "libc6-dev:, "
+    ],
+    "description": [
+      "** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.\"",
+      "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability."
+    ],
+    "cwe_ids": [
+      "CWE-330"
+    ],
+    "cve_ids": [
+      "CVE-2019-1010025"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -856,13 +1305,25 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: glibc: information disclosure of heap addresses of pthread_created thread\nSource: Trivy\nDescription: ** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.\", GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may guess the heap addresses of pthread_created thread. The component is: glibc. NOTE: the vendor's position is \"ASLR bypass itself is not a vulnerability.\nLocation List:\n  - libc-bin:, \n  - libc-bin:, \n  - libc-bin:, \n  - libc-dev-bin:, \n  - libc6:, \n  - libc6:, \n  - libc6:, \n  - libc6-dev:, \nCWE IDs: CWE-330\nCVE IDs: CVE-2019-1010025\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["incorrect multi-keyword mode cipherstring parsing"],
-    "source": ["Trivy"],
-    "location_list": ["libldap-2.5-0:, ", "libldap-common:, "],
-    "description": ["The nss_parse_ciphers function in libraries/libldap/tls_m.c in OpenLDAP does not properly parse OpenSSL-style multi-keyword mode cipher strings, which might cause a weaker than intended cipher to be used and allow remote attackers to have unspecified impact via unknown vectors."],
+  },
+  {
+    "title": [
+      "incorrect multi-keyword mode cipherstring parsing"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "libldap-2.5-0:, ",
+      "libldap-common:, "
+    ],
+    "description": [
+      "The nss_parse_ciphers function in libraries/libldap/tls_m.c in OpenLDAP does not properly parse OpenSSL-style multi-keyword mode cipher strings, which might cause a weaker than intended cipher to be used and allow remote attackers to have unspecified impact via unknown vectors."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2015-3276"],
+    "cve_ids": [
+      "CVE-2015-3276"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "LIBRARY",
@@ -880,13 +1341,24 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: incorrect multi-keyword mode cipherstring parsing\nSource: Trivy\nDescription: The nss_parse_ciphers function in libraries/libldap/tls_m.c in OpenLDAP does not properly parse OpenSSL-style multi-keyword mode cipher strings, which might cause a weaker than intended cipher to be used and allow remote attackers to have unspecified impact via unknown vectors.\nLocation List:\n  - libldap-2.5-0:, \n  - libldap-common:, \nCVE IDs: CVE-2015-3276\nSeverity: 30\nPriority: 30\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["kernel: double fetch in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["** DISPUTED ** An issue was discovered in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c in the Linux kernel through 5.1.5. It allows local users to cause a denial of service or possibly have unspecified other impact by changing the value of ioc_number between two kernel reads of that value, aka a \"double fetch\" vulnerability. NOTE: a third party reports that this is unexploitable because the doubly fetched value is not used."],
+  },
+  {
+    "title": [
+      "kernel: double fetch in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "** DISPUTED ** An issue was discovered in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c in the Linux kernel through 5.1.5. It allows local users to cause a denial of service or possibly have unspecified other impact by changing the value of ioc_number between two kernel reads of that value, aka a \"double fetch\" vulnerability. NOTE: a third party reports that this is unexploitable because the doubly fetched value is not used."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2019-12456"],
+    "cve_ids": [
+      "CVE-2019-12456"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -904,13 +1376,26 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: kernel: double fetch in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c\nSource: Trivy\nDescription: ** DISPUTED ** An issue was discovered in the MPT3COMMAND case in _ctl_ioctl_main in drivers/scsi/mpt3sas/mpt3sas_ctl.c in the Linux kernel through 5.1.5. It allows local users to cause a denial of service or possibly have unspecified other impact by changing the value of ioc_number between two kernel reads of that value, aka a \"double fetch\" vulnerability. NOTE: a third party reports that this is unexploitable because the doubly fetched value is not used.\nLocation List:\n  - linux-libc-dev:, \nCVE IDs: CVE-2019-12456\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["Werkzeug is a comprehensive WSGI web application library. Browsers may ...", "python-werkzeug: cookie prefixed with = can shadow unprefixed cookie"],
-    "source": ["Trivy"],
-    "location_list": ["Werkzeug:, ", "werkzeug:, "],
-    "description": ["Werkzeug is a comprehensive WSGI web application library. Browsers may allow \"nameless\" cookies that look like `=value` instead of `key=value`. A vulnerable browser may allow a compromised application on an adjacent subdomain to exploit this to set a cookie like `=__Host-test=bad` for another subdomain. Werkzeug prior to 2.2.3 will parse the cookie `=__Host-test=bad` as __Host-test=bad`. If a Werkzeug application is running next to a vulnerable or malicious subdomain which sets such a cookie using a vulnerable browser, the Werkzeug application will see the bad cookie value but the valid cookie key. The issue is fixed in Werkzeug 2.2.3."],
+  },
+  {
+    "title": [
+      "Werkzeug is a comprehensive WSGI web application library. Browsers may ...",
+      "python-werkzeug: cookie prefixed with = can shadow unprefixed cookie"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "Werkzeug:, ",
+      "werkzeug:, "
+    ],
+    "description": [
+      "Werkzeug is a comprehensive WSGI web application library. Browsers may allow \"nameless\" cookies that look like `=value` instead of `key=value`. A vulnerable browser may allow a compromised application on an adjacent subdomain to exploit this to set a cookie like `=__Host-test=bad` for another subdomain. Werkzeug prior to 2.2.3 will parse the cookie `=__Host-test=bad` as __Host-test=bad`. If a Werkzeug application is running next to a vulnerable or malicious subdomain which sets such a cookie using a vulnerable browser, the Werkzeug application will see the bad cookie value but the valid cookie key. The issue is fixed in Werkzeug 2.2.3."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2023-23934"],
+    "cve_ids": [
+      "CVE-2023-23934"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "LIBRARY",
@@ -928,13 +1413,24 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: Werkzeug is a comprehensive WSGI web application library. Browsers may ..., python-werkzeug: cookie prefixed with = can shadow unprefixed cookie\nSource: Trivy\nDescription: Werkzeug is a comprehensive WSGI web application library. Browsers may allow \"nameless\" cookies that look like `=value` instead of `key=value`. A vulnerable browser may allow a compromised application on an adjacent subdomain to exploit this to set a cookie like `=__Host-test=bad` for another subdomain. Werkzeug prior to 2.2.3 will parse the cookie `=__Host-test=bad` as __Host-test=bad`. If a Werkzeug application is running next to a vulnerable or malicious subdomain which sets such a cookie using a vulnerable browser, the Werkzeug application will see the bad cookie value but the valid cookie key. The issue is fixed in Werkzeug 2.2.3.\nLocation List:\n  - Werkzeug:, \n  - werkzeug:, \nCVE IDs: CVE-2023-23934\nSeverity: 30\nPriority: 30\nCategory: LIBRARY\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["TCP, when using a large Window Size, makes it easier for remote attack ..."],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["TCP, when using a large Window Size, makes it easier for remote attackers to guess sequence numbers and cause a denial of service (connection loss) to persistent TCP connections by repeatedly injecting a TCP RST packet, especially in protocols that use long-lived connections, such as BGP."],
+  },
+  {
+    "title": [
+      "TCP, when using a large Window Size, makes it easier for remote attack ..."
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "TCP, when using a large Window Size, makes it easier for remote attackers to guess sequence numbers and cause a denial of service (connection loss) to persistent TCP connections by repeatedly injecting a TCP RST packet, especially in protocols that use long-lived connections, such as BGP."
+    ],
     "cwe_ids": [],
-    "cve_ids": ["CVE-2004-0230"],
+    "cve_ids": [
+      "CVE-2004-0230"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -952,12 +1448,30 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: TCP, when using a large Window Size, makes it easier for remote attack ...\nSource: Trivy\nDescription: TCP, when using a large Window Size, makes it easier for remote attackers to guess sequence numbers and cause a denial of service (connection loss) to persistent TCP connections by repeatedly injecting a TCP RST packet, especially in protocols that use long-lived connections, such as BGP.\nLocation List:\n  - linux-libc-dev:, \nCVE IDs: CVE-2004-0230\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["try_except_continue"],
-    "source": ["Bandit"],
-    "location_list": ["flama/api.py:193-193, 2-2", "flama/api.py:211-211, 2-2", "flama/api.py:214-214, 2-2", "flama/api.py:217-217, 2-2", "flama/api.py:222-222, 2-2", "{'file': 'flama/api.py', 'ressource': '221 \\t\\t\\tbreak\\n222 \\t\\texcept Exception:\\n223 \\t\\t\\tcontinue\\n224 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '222-222', 'column': '2-2'}", "{'file': 'flama/api.py', 'ressource': '222 \\t\\t\\tbreak\\n223 \\t\\texcept Exception:\\n224 \\t\\t\\tcontinue\\n225 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '223-223', 'column': '2-2'}", "{'file': 'flama/api.py', 'ressource': '223 \\t\\t\\tbreak\\n224 \\t\\texcept Exception:\\n225 \\t\\t\\tcontinue\\n226 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '224-224', 'column': '2-2'}"],
-    "description": ["Try, Except, Continue detected."],
-    "cwe_ids": ["CWE-703"],
+  },
+  {
+    "title": [
+      "try_except_continue"
+    ],
+    "source": [
+      "Bandit"
+    ],
+    "location_list": [
+      "flama/api.py:193-193, 2-2",
+      "flama/api.py:211-211, 2-2",
+      "flama/api.py:214-214, 2-2",
+      "flama/api.py:217-217, 2-2",
+      "flama/api.py:222-222, 2-2",
+      "{'file': 'flama/api.py', 'ressource': '221 \\t\\t\\tbreak\\n222 \\t\\texcept Exception:\\n223 \\t\\t\\tcontinue\\n224 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '222-222', 'column': '2-2'}",
+      "{'file': 'flama/api.py', 'ressource': '222 \\t\\t\\tbreak\\n223 \\t\\texcept Exception:\\n224 \\t\\t\\tcontinue\\n225 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '223-223', 'column': '2-2'}",
+      "{'file': 'flama/api.py', 'ressource': '223 \\t\\t\\tbreak\\n224 \\t\\texcept Exception:\\n225 \\t\\t\\tcontinue\\n226 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '224-224', 'column': '2-2'}"
+    ],
+    "description": [
+      "Try, Except, Continue detected."
+    ],
+    "cwe_ids": [
+      "CWE-703"
+    ],
     "cve_ids": [],
     "severity": 30,
     "priority": 30,
@@ -976,13 +1490,26 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: try_except_continue\nSource: Bandit\nDescription: Try, Except, Continue detected.\nLocation List:\n  - flama/api.py:193-193, 2-2\n  - flama/api.py:211-211, 2-2\n  - flama/api.py:214-214, 2-2\n  - flama/api.py:217-217, 2-2\n  - flama/api.py:222-222, 2-2\n  - {'file': 'flama/api.py', 'ressource': '221 \\t\\t\\tbreak\\n222 \\t\\texcept Exception:\\n223 \\t\\t\\tcontinue\\n224 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '222-222', 'column': '2-2'}\n  - {'file': 'flama/api.py', 'ressource': '222 \\t\\t\\tbreak\\n223 \\t\\texcept Exception:\\n224 \\t\\t\\tcontinue\\n225 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '223-223', 'column': '2-2'}\n  - {'file': 'flama/api.py', 'ressource': '223 \\t\\t\\tbreak\\n224 \\t\\texcept Exception:\\n225 \\t\\t\\tcontinue\\n226 \\ttmp_admin = authmgmt.add_user(name=\"Temporary Admin\", email=\"tmp.admin@flama.com\", role=\"Admin\")\\n', 'line': '224-224', 'column': '2-2'}\nCWE IDs: CWE-703\nSeverity: 30\nPriority: 30\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["race condition in rose_bind()"],
-    "source": ["Trivy"],
-    "location_list": ["linux-libc-dev:, "],
-    "description": ["A use-after-free flaw was found in the Linux kernel\u2019s PLP Rose functionality in the way a user triggers a race condition by calling bind while simultaneously triggering the rose_bind() function. This flaw allows a local user to crash or potentially escalate their privileges on the system."],
-    "cwe_ids": ["CWE-362"],
-    "cve_ids": ["CVE-2022-2961"],
+  },
+  {
+    "title": [
+      "race condition in rose_bind()"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "linux-libc-dev:, "
+    ],
+    "description": [
+      "A use-after-free flaw was found in the Linux kernel\u2019s PLP Rose functionality in the way a user triggers a race condition by calling bind while simultaneously triggering the rose_bind() function. This flaw allows a local user to crash or potentially escalate their privileges on the system."
+    ],
+    "cwe_ids": [
+      "CWE-362"
+    ],
+    "cve_ids": [
+      "CVE-2022-2961"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "SYSTEM",
@@ -1000,13 +1527,26 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: race condition in rose_bind()\nSource: Trivy\nDescription: A use-after-free flaw was found in the Linux kernel\u2019s PLP Rose functionality in the way a user triggers a race condition by calling bind while simultaneously triggering the rose_bind() function. This flaw allows a local user to crash or potentially escalate their privileges on the system.\nLocation List:\n  - linux-libc-dev:, \nCWE IDs: CWE-362\nCVE IDs: CVE-2022-2961\nSeverity: 30\nPriority: 30\nCategory: SYSTEM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["denial of service issue (resource consumption) using compressed packets"],
-    "source": ["Trivy"],
-    "location_list": ["gpgv:, "],
-    "description": ["GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB."],
-    "cwe_ids": ["CWE-787"],
-    "cve_ids": ["CVE-2022-3219"],
+  },
+  {
+    "title": [
+      "denial of service issue (resource consumption) using compressed packets"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "gpgv:, "
+    ],
+    "description": [
+      "GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB."
+    ],
+    "cwe_ids": [
+      "CWE-787"
+    ],
+    "cve_ids": [
+      "CVE-2022-3219"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "PROGRAM",
@@ -1024,13 +1564,34 @@ export const example_gpt4o = [
         "prompt_short": "You are a cybersecurity and IT expert. Explain how to fix the following security finding.\n\nKeep it short and concise, answer in maximum 2 sentences.\n\n[DATA]\n-------    Security Finding    -------\nTitle: denial of service issue (resource consumption) using compressed packets\nSource: Trivy\nDescription: GnuPG can be made to spin on a relatively small input by (for example) crafting a public key with thousands of signatures attached, compressed down to just a few KB.\nLocation List:\n  - gpgv:, \nCWE IDs: CWE-787\nCVE IDs: CVE-2022-3219\nSeverity: 30\nPriority: 30\nCategory: PROGRAM\n\n[/DATA]"
       }
     }
-  }, {
-    "title": ["glibc: stack guard protection bypass"],
-    "source": ["Trivy"],
-    "location_list": ["libc-bin:, ", "libc-bin:, ", "libc-bin:, ", "libc-dev-bin:, ", "libc6:, ", "libc6:, ", "libc6:, ", "libc6-dev:, "],
-    "description": ["** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.\"", "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat."],
-    "cwe_ids": ["CWE-119"],
-    "cve_ids": ["CVE-2019-1010022"],
+  },
+  {
+    "title": [
+      "glibc: stack guard protection bypass"
+    ],
+    "source": [
+      "Trivy"
+    ],
+    "location_list": [
+      "libc-bin:, ",
+      "libc-bin:, ",
+      "libc-bin:, ",
+      "libc-dev-bin:, ",
+      "libc6:, ",
+      "libc6:, ",
+      "libc6:, ",
+      "libc6-dev:, "
+    ],
+    "description": [
+      "** DISPUTED ** GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat.\"",
+      "GNU Libc current is affected by: Mitigation bypass. The impact is: Attacker may bypass stack guard protection. The component is: nptl. The attack vector is: Exploit stack buffer overflow vulnerability and use this bypass vulnerability to bypass stack guard. NOTE: Upstream comments indicate \"this is being treated as a non-security bug and no real threat."
+    ],
+    "cwe_ids": [
+      "CWE-119"
+    ],
+    "cve_ids": [
+      "CVE-2019-1010022"
+    ],
     "severity": 30,
     "priority": 30,
     "category": "PROGRAM",
