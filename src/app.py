@@ -11,6 +11,7 @@ from data.helper import get_content_list
 from my_db import Session
 import models.models as db_models
 from data.Solution import Solution
+from data.Finding import FindingKind
 from data.types import Content
 import data.apischema as apischema
 from sqlalchemy import Date, cast
@@ -139,7 +140,9 @@ def status():
 
 
 @app.get("/recommendations")
-def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(...)]):
+def recommendations(
+    request: Annotated[apischema.GetRecommendationRequest, Body(...)]
+) -> apischema.GetRecommendationResponse:
     """
     This function returns the recommendations from the data.
     :return: 200 OK with the recommendations or 204 NO CONTENT if there are no recommendations with retry-after header.
@@ -165,6 +168,11 @@ def recommendations(request: Annotated[apischema.GetRecommendationRequest, Body(
         response = apischema.GetRecommendationResponse(
             items=[
                 apischema.GetRecommendationResponseItem(
+                    category=(
+                        FindingKind[find.recommendations[0].category]
+                        if find.recommendations
+                        else FindingKind.DEFAULT
+                    ),
                     solution=Solution(
                         short_description=(
                             find.recommendations[0].description_short

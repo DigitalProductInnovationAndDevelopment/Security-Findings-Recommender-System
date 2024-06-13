@@ -18,6 +18,7 @@ class StartRecommendationTaskResponse(BaseModel):
 
 
 class GetRecommendationFilter(BaseModel):
+    date: Optional[str]  # format: YYYY-MM-DD
     location: Optional[str]
     severity: Optional[str]
     cve_id: Optional[str]

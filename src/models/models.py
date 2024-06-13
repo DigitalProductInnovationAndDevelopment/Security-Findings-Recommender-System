@@ -15,6 +15,7 @@ class Recommendation(BaseModel):
     description_long = Column(String, nullable=True)
     search_terms = Column(String, nullable=True)
     meta = Column(JSON, default={}, nullable=True)
+    category = Column(String, nullable=True)
     finding_id: int = Column(Integer, ForeignKey("findings.id"), nullable=True)
     recommendation_task_id = Column(
         Integer,

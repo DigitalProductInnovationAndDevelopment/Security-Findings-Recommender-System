@@ -22,6 +22,10 @@ from ai.LLM.Stretegies.ollama_prompts import (
 logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(name)s | %(message)s")
 logger = logging.getLogger(__name__)
 
+import dotenv
+
+dotenv.load_dotenv()
+
 
 def singleton(cls):
     instances = {}
@@ -33,14 +37,17 @@ def singleton(cls):
 
     return wrapper
 
+
 def is_up() -> bool:
     # res = requests.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
-    res = httpx.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
+    res = httpx.post(
+        os.getenv("OLLAMA_URL") + "/api/show",
+        json={"name": os.getenv("OLLAMA_MODEL", "llama3")},
+    )
     if res.status_code == 200:
         return True
     else:
         return False
-
 
 
 @singleton
@@ -60,7 +67,7 @@ class OLLAMAService(BaseLLMService):
         """
         # Configure logging level for httpx
         logging.getLogger("httpx").setLevel(logging.WARNING)
-
+        print("model", os.getenv("OLLAMA_MODEL"))
         # Now, variables
         if model_url is None:
             model_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
@@ -198,7 +205,9 @@ class OLLAMAService(BaseLLMService):
         :return: The prompt for the long recommendation.
         """
         short_recommendation = finding.solution.short_description
-        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(finding=str(finding))
+        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(
+            finding=str(finding)
+        )
         meta_prompt_response = self.generate(meta_prompt_generator)
         meta_prompts = clean(
             meta_prompt_response.get("meta_prompts", ""), llm_service=self
