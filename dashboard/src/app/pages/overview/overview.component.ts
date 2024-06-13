@@ -26,7 +26,7 @@ export class OverviewComponent {
       case 'llama3':
         exampleFindings = example_llama3;
         break;
-      case 'claude':
+      case 'claude-opus':
         exampleFindings = example_claude;
         break;
       case 'gpt4o':
