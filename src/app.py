@@ -58,7 +58,9 @@ def health():
 
 
 @app.post("/upload")
-async def upload(data: Annotated[apischema.StartRecommendationTaskRequest, Body(...)]):
+async def upload(
+    data: Annotated[apischema.StartRecommendationTaskRequest, Body(...)]
+) -> apischema.StartRecommendationTaskResponse:
     """
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
@@ -119,7 +121,7 @@ async def upload(data: Annotated[apischema.StartRecommendationTaskRequest, Body(
 
 
 @app.get("/status")
-def status():
+def status() -> apischema.GetRecommendationTaskStatusResponse:
     """
     This function returns the status of the recommendation task.
     :return: 200 OK with the status of the task.
