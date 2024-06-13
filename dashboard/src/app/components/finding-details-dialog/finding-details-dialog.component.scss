@@ -18,11 +18,15 @@ header {
   }
 }
 
-.details-container {
+.mat-mdc-dialog-content {
+  max-height: none;
+}
+
+.details-content {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 30px;
+  padding: 20px 30px 0 30px;
   &__row {
     width: 100%;
     display: flex;

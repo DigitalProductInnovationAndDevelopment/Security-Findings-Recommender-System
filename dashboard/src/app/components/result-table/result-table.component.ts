@@ -76,8 +76,9 @@ export class ResultTableComponent implements OnInit {
 
   public openFindingDetails(finding: IFinding): void {
     const dialogRef = this.dialog.open(FindingDetailsDialogComponent, {
-      height: '700px',
-      width: '1100px',
+      height: '80vh',
+      width: '90%',
+      maxHeight: '80vh',
       data: finding,
     });
 
