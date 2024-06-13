@@ -1,12 +1,24 @@
 <div class="content">
   <div class="content__container">
     <div class="exampleFile">
-      Example file:
-      <button (click)="openExample()">
+      Example files:
+      <button (click)="openExample('llama3')">
         <i
           class="bi bi-filetype-json info-container__selectedFile__title__icon"
         ></i>
-        <span>example.json</span>
+        <span>llama3</span>
+      </button>
+      <button (click)="openExample('claude')">
+        <i
+          class="bi bi-filetype-json info-container__selectedFile__title__icon"
+        ></i>
+        <span>claude</span>
+      </button>
+      <button (click)="openExample('gpt4o')">
+        <i
+          class="bi bi-filetype-json info-container__selectedFile__title__icon"
+        ></i>
+        <span>gpt4o</span>
       </button>
     </div>
     @if({fileName: fileName$ | async}; as streams) {

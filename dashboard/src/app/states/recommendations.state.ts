@@ -52,7 +52,7 @@ export class RecommendationsState {
   ): void {
     context.patchState({
       findings: payload.data,
-      fileName: (payload.fileName = 'example.json'),
+      fileName: payload.fileName ? payload.fileName : 'example.json',
     });
   }
 
