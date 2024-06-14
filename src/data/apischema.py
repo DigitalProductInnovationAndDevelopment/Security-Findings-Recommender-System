@@ -18,16 +18,17 @@ class StartRecommendationTaskResponse(BaseModel):
 
 
 class GetRecommendationFilter(BaseModel):
-    date: Optional[str]  # format: YYYY-MM-DD
-    location: Optional[str]
-    severity: Optional[str]
-    cve_id: Optional[str]
-    source: Optional[str]
+    task_id: Optional[int] = None
+    date: Optional[str] = None
+    location: Optional[str] = None
+    severity: Optional[str] = None
+    cve_id: Optional[str] = None
+    source: Optional[str] = None
 
 
 class GetRecommendationRequest(BaseModel):
-    user_id: Optional[int]
-    filter: Optional[GetRecommendationFilter]
+    user_id: Optional[int] = None
+    filter: Optional[GetRecommendationFilter] = GetRecommendationFilter()
     pagination: Optional[PaginationInput] = PaginationInput(offset=0, limit=10)
 
 
