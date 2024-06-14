@@ -1,9 +1,8 @@
 import datetime
 import time
-from typing import Annotated
+from typing import Annotated, Optional
 from fastapi import Body, FastAPI, Query, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
-
 import ai.LLM.Stretegies.OLLAMAService
 
 from data.helper import get_content_list
@@ -121,7 +120,9 @@ async def upload(
 
 
 @app.get("/status")
-def status() -> apischema.GetRecommendationTaskStatusResponse:
+def status(
+    task_id: Optional[int] = None,
+) -> apischema.GetRecommendationTaskStatusResponse:
     """
     This function returns the status of the recommendation task.
     :return: 200 OK with the status of the task.
@@ -132,13 +133,35 @@ def status() -> apischema.GetRecommendationTaskStatusResponse:
 
         task = (
             s.query(db_models.RecommendationTask)
-            .filter(cast(db_models.RecommendationTask.created_at, Date) == today)
+            .filter(
+                db_models.RecommendationTask.id == task_id
+                if task_id
+                else cast(db_models.RecommendationTask.created_at, Date) == today
+            )
             .first()
         )
         if not task:
-            raise HTTPException(status_code=404, detail="Task not found")
+            raise HTTPException(
+                status_code=404,
+                detail=(
+                    "Task for today not found"
+                    if not task_id
+                    else f"Task with id {task_id} not found"
+                ),
+            )
 
         return apischema.GetRecommendationTaskStatusResponse(status=task.status)
+
+
+@app.get("/tasks")
+def tasks():
+    """
+    This function returns all the tasks.
+    :return: 200 OK with the tasks.
+    """
+    with Session() as s:
+        tasks = s.query(db_models.RecommendationTask).all()
+        return tasks
 
 
 @app.get("/recommendations")
@@ -149,19 +172,53 @@ def recommendations(
     This function returns the recommendations from the data.
     :return: 200 OK with the recommendations or 204 NO CONTENT if there are no recommendations with retry-after header.
     """
-
+    task_id = request.filter.task_id if request.filter else None
     # get the findings
     # ...
     with Session() as s:
         total_count = s.query(db_models.Finding).count()
+        today = datetime.datetime.now().date()
+        task = (
+            s.query(db_models.RecommendationTask)
+            .filter(
+                db_models.RecommendationTask.id == task_id
+                if task_id
+                else cast(db_models.RecommendationTask.created_at, Date) == today
+            )
+            .first()
+        )
+        if not task:
+            raise HTTPException(
+                status_code=404,
+                detail=(
+                    "Task for today not found"
+                    if not task_id
+                    else f"Task with id {task_id} not found"
+                ),
+            )
+
+        if task.status == db_models.TaskStatus.PENDING:
+            raise HTTPException(
+                status_code=400,
+                detail="Recommendation task is still processing",
+            )
+
+        if task.status == db_models.TaskStatus.FAILED:
+            raise HTTPException(
+                status_code=400,
+                detail="Recommendation task failed",
+            )
 
         findings = (
             s.query(db_models.Finding)
             .join(db_models.RecommendationTask)
             .where(
                 db_models.RecommendationTask.status == db_models.TaskStatus.COMPLETED,
-                cast(db_models.RecommendationTask.created_at, Date)
-                == datetime.datetime.now().date(),
+                (
+                    db_models.RecommendationTask.id == task_id
+                    if task_id
+                    else cast(db_models.RecommendationTask.created_at, Date) == today
+                ),
             )
             .offset(request.pagination.offset)
             .limit(request.pagination.limit)
