@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { Observable, take, tap } from 'rxjs';
-import { setFindings } from 'src/app/states/recommendations.actions';
+import { Observable } from 'rxjs';
+import { setInformation } from 'src/app/states/recommendations.actions';
 import { RecommendationsState } from 'src/app/states/recommendations.state';
 import {
   example_claude,
@@ -16,7 +16,9 @@ import {
   styleUrls: ['./overview.component.scss'],
 })
 export class OverviewComponent {
-  @Select(RecommendationsState.fileName) fileName$!: Observable<string>;
+  @Select(RecommendationsState.fileName) fileName$!: Observable<
+    string | undefined
+  >;
 
   constructor(private router: Router, private store: Store) {}
 
@@ -36,18 +38,15 @@ export class OverviewComponent {
         exampleFindings = example_llama3;
         break;
     }
-
     this.store
       .dispatch(
-        new setFindings({
+        new setInformation({
           data: exampleFindings,
           fileName: `${which}.json`,
+          exampleProcess: true,
         })
       )
-      .pipe(
-        take(1),
-        tap(() => this.router.navigate(['results']))
-      )
       .subscribe();
+    this.router.navigate(['results']);
   }
 }

@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { take, tap } from 'rxjs';
-import { UploadFile } from 'src/app/states/recommendations.actions';
+import { filter, take, tap } from 'rxjs';
+import {
+  setInformation,
+  UploadFile,
+} from 'src/app/states/recommendations.actions';
 
 @Component({
   selector: 'app-findings-input',
@@ -19,9 +22,16 @@ export class FindingsInputComponent {
       reader.onload = () => {
         const jsonData = JSON.parse(reader.result as string);
         this.store
-          .dispatch(new UploadFile({ data: jsonData, fileName: file.name }))
+          .dispatch([
+            new setInformation({
+              fileName: file.name,
+              exampleProcess: false,
+            }),
+            new UploadFile({ data: jsonData }),
+          ])
           .pipe(
             take(1),
+            filter((response) => !!response),
             tap(() => this.router.navigate(['results']))
           )
           .subscribe();

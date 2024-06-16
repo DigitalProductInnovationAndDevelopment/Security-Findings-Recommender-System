@@ -1,26 +1,23 @@
 import datetime
 import time
 from typing import Annotated, Optional
-from fastapi import Body, FastAPI, Query, HTTPException, Response
+
+from fastapi import Body, FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
-import ai.LLM.Stretegies.OLLAMAService
-
-from data.helper import get_content_list
-
-from my_db import Session
-import models.models as db_models
-from data.Solution import Solution
-from data.Finding import FindingKind
-from data.types import Content
-import data.apischema as apischema
 from sqlalchemy import Date, cast
 
-from task.worker import worker
-
-from data.VulnerabilityReport import create_from_flama_json
-
-from ai.LLM.Stretegies.OLLAMAService import OLLAMAService
+import ai.LLM.Stretegies.OLLAMAService
+import data.apischema as apischema
+import models.models as db_models
 from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
+from ai.LLM.Stretegies.OLLAMAService import OLLAMAService
+from data.Finding import FindingKind
+from data.helper import get_content_list
+from data.Solution import Solution
+from data.types import Content
+from data.VulnerabilityReport import create_from_flama_json
+from my_db import Session
+from task.worker import worker
 
 my_strategy = OLLAMAService()
 llm_service = LLMServiceStrategy(my_strategy)
@@ -164,7 +161,7 @@ def tasks():
         return tasks
 
 
-@app.get("/recommendations")
+@app.post("/recommendations")
 def recommendations(
     request: Annotated[apischema.GetRecommendationRequest, Body(...)]
 ) -> apischema.GetRecommendationResponse:

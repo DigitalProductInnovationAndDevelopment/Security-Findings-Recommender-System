@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { catchError, finalize, Observable, tap } from 'rxjs';
+import { filter, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
 import { RecommendationsService } from '../services/recommendations.service';
-import { setFindings, UploadFile } from './recommendations.actions';
+import {
+  clearFindings,
+  loadRecommendations,
+  setInformation,
+  UploadFile,
+} from './recommendations.actions';
 
 export interface RecommendationsStateModel {
   isLoading: boolean;
   hasError: boolean;
   findings: IFinding[];
-  fileName: string;
+  fileName: string | undefined;
+  exampleProcess: boolean;
 }
 
 @State<RecommendationsStateModel>({
@@ -18,7 +24,8 @@ export interface RecommendationsStateModel {
     isLoading: false,
     hasError: false,
     findings: [],
-    fileName: '',
+    fileName: undefined,
+    exampleProcess: false,
   },
 })
 @Injectable()
@@ -36,7 +43,7 @@ export class RecommendationsState {
   }
 
   @Selector()
-  static fileName(state: RecommendationsStateModel): string {
+  static fileName(state: RecommendationsStateModel): string | undefined {
     return state.fileName;
   }
 
@@ -44,15 +51,20 @@ export class RecommendationsState {
   static findings(state: RecommendationsStateModel): IFinding[] {
     return state.findings;
   }
+  @Selector()
+  static exampleProcess(state: RecommendationsStateModel): boolean {
+    return state.exampleProcess;
+  }
 
-  @Action(setFindings)
+  @Action(setInformation)
   setFindings(
     context: StateContext<RecommendationsStateModel>,
-    { payload }: setFindings
+    { payload }: setInformation
   ): void {
     context.patchState({
-      findings: payload.data,
-      fileName: payload.fileName ? payload.fileName : 'example.json',
+      ...(payload.data && { findings: payload.data }),
+      ...(payload.fileName && { fileName: payload.fileName }),
+      ...(payload.exampleProcess && { exampleProcess: payload.exampleProcess }),
     });
   }
 
@@ -60,18 +72,34 @@ export class RecommendationsState {
   uploadFile(
     context: StateContext<RecommendationsStateModel>,
     { payload }: UploadFile
-  ): Observable<void> {
+  ): Observable<number> {
     return this.recommendationService.uploadFindings(payload.data).pipe(
-      catchError<void, Observable<never>>((error) => {
-        context.patchState({ hasError: true });
-        throw error;
-      }),
-      tap(() => {
-        void context.patchState({
-          fileName: payload.fileName,
-        });
-      }),
+      filter((response) => response !== -1),
+      map((response) => response),
       finalize(() => void context.patchState({ isLoading: false }))
     );
   }
+
+  @Action(clearFindings)
+  clearFindings(context: StateContext<RecommendationsStateModel>): void {
+    context.patchState({
+      findings: [],
+      fileName: undefined,
+      exampleProcess: false,
+    });
+  }
+
+  @Action(loadRecommendations)
+  loadRecommendations(context: StateContext<RecommendationsStateModel>): void {
+    this.recommendationService
+      .getUploadStatus()
+      .pipe(
+        take(1),
+        filter((response) => response.status === 'completed'),
+        switchMap(() => this.recommendationService.getRecommendations()),
+        tap((findings) => context.patchState({ findings: findings.items }))
+      )
+      .subscribe();
+  }
 }
+

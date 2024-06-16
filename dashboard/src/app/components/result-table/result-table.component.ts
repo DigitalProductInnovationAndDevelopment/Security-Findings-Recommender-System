@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Select } from '@ngxs/store';
-import { Observable, take, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
 import { RecommendationsState } from 'src/app/states/recommendations.state';
 import { FindingDetailsDialogComponent } from '../finding-details-dialog/finding-details-dialog.component';
@@ -56,7 +56,6 @@ export class ResultTableComponent implements OnInit {
   private initFindings(): void {
     this.findings$
       .pipe(
-        take(1),
         tap((findings) => {
           this.dataSource = new MatTableDataSource(findings);
           this.totalRecords = this.dataSource.data.length;

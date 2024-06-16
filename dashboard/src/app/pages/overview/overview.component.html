@@ -22,9 +22,9 @@
       </button>
     </div>
     @if({fileName: fileName$ | async}; as streams) {
-    <div class="selectedFile" *ngIf="streams.fileName !== ''">
+    <div class="selectedFile" *ngIf="!!streams.fileName">
       Current selected file:
-      <a routerLink="/results">
+      <a [routerLink]="['/results', streams.fileName]">
         <i
           class="bi bi-filetype-json info-container__selectedFile__title__icon"
         ></i>
@@ -35,3 +35,4 @@
   </div>
   <app-findings-input></app-findings-input>
 </div>
+
