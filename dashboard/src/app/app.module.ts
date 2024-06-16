@@ -19,7 +19,9 @@ import { ResultsComponent } from './pages/results/results.component';
 import { RecommendationsState } from './states/recommendations.state';
 
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FindingDetailsDialogComponent } from './components/finding-details-dialog/finding-details-dialog.component';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { RiskScoreChartComponent } from './components/risk-score-chart/risk-score-chart.component';
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { RiskScoreChartComponent } from './components/risk-score-chart/risk-scor
     ResultTableComponent,
     FindingDetailsDialogComponent,
     RiskScoreChartComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +47,7 @@ import { RiskScoreChartComponent } from './components/risk-score-chart/risk-scor
     BrowserAnimationsModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

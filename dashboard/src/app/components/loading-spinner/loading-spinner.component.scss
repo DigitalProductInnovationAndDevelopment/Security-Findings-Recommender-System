@@ -1,0 +1,14 @@
+.loading-spinner {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 20px solid var(--bgColorTertiary);
+  animation: spin 1s ease-in-out infinite;
+  border-top-color: transparent;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
