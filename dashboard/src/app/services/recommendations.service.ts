@@ -41,20 +41,7 @@ export class RecommendationsService {
   public getRecommendations(): Observable<ReceivedRecommendations> {
     return this.http.post<ReceivedRecommendations>(
       environment.apiUrl + '/recommendations',
-      {
-        user_id: 1,
-        pagination: {
-          offset: 0,
-          limit: 1,
-        },
-        filter: {
-          date: '',
-          location: '',
-          severity: '',
-          cve_id: '',
-          source: '',
-        },
-      }
+      {}
     );
   }
 
