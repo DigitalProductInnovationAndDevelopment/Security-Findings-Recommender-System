@@ -30,6 +30,9 @@ class AnthropicService(BaseLLMService):
     def get_model_name(self) -> str:
         return "-".join(self.model.split('-')[:-1])
 
+    def get_url(self) -> str:
+        return "-"
+
     def generate(self, prompt: str) -> Dict[str, str]:
         message = self.client.messages.create(
             max_tokens=1024,

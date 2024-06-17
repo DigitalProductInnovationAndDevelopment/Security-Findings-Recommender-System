@@ -29,6 +29,9 @@ class OpenAIService(BaseLLMService):
     def get_model_name(self) -> str:
         return self.model
 
+    def get_url(self) -> str:
+        return "-"
+
     def generate(self, prompt: str) -> Dict[str, str]:
         response = openai.chat.completions.create(
             model=self.model,

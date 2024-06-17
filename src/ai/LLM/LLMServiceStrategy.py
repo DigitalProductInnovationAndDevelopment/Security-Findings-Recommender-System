@@ -11,6 +11,9 @@ class LLMServiceStrategy:
     def generate(self, prompt: str) -> Dict[str, str]:
         return self.llm_service.generate(prompt)
 
+    def get_url(self) -> str:
+        return self.llm_service.get_url()
+
     def classify_kind(self, finding: Finding, options: Optional[List[FindingKind]] = None) -> FindingKind:
         return self.llm_service.classify_kind(finding, options)
 

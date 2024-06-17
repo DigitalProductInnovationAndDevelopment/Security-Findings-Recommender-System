@@ -102,6 +102,13 @@ class OLLAMAService(BaseLLMService):
         """
         return self.model_name
 
+    def get_url(self) -> str:
+        """
+        Get the URL of the OLLAMA model.
+        :return: The URL of the OLLAMA model.
+        """
+        return self.generate_url
+
     @retry(
         stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=4, max=60)
     )

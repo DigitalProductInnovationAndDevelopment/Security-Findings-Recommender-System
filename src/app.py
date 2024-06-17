@@ -1,4 +1,5 @@
 import datetime
+import os
 import time
 from typing import Annotated, Optional
 
@@ -16,7 +17,7 @@ from data.helper import get_content_list
 from data.Solution import Solution
 from data.types import Content
 from data.VulnerabilityReport import create_from_flama_json
-from my_db import Session
+from my_db import Session, get_db_url
 from task.worker import worker
 
 my_strategy = OLLAMAService()
@@ -49,13 +50,19 @@ def health():
         "status": "UP",  # pretty trivial since it did answer if you see this. Let's still include it for further use.
         "uptime": round(time.time() - start_time, 2),
         "external_modules": {"ollama": ollama_health},
+        "urls": {
+            "llm": llm_service.get_url(),
+            "redis": os.getenv("REDIS_ENDPOINT"),
+            # this leaks the db user and password in dev mode
+            "postgres": get_db_url() if os.getenv("ENVIRONMENT") == 'development' else "retracted"
+        }
     }
     return system_info
 
 
 @app.post("/upload")
 async def upload(
-    data: Annotated[apischema.StartRecommendationTaskRequest, Body(...)]
+        data: Annotated[apischema.StartRecommendationTaskRequest, Body(...)]
 ) -> apischema.StartRecommendationTaskResponse:
     """
     This function takes the string from the request and converts it to a data object.
@@ -118,14 +125,13 @@ async def upload(
 
 @app.get("/status")
 def status(
-    task_id: Optional[int] = None,
+        task_id: Optional[int] = None,
 ) -> apischema.GetRecommendationTaskStatusResponse:
     """
     This function returns the status of the recommendation task.
     :return: 200 OK with the status of the task.
     """
     with Session() as s:
-
         today = datetime.datetime.now().date()
 
         task = (
@@ -175,7 +181,7 @@ def delete_tasks():
 
 @app.post("/recommendations")
 def recommendations(
-    request: Annotated[apischema.GetRecommendationRequest, Body(...)]
+        request: Annotated[apischema.GetRecommendationRequest, Body(...)]
 ) -> apischema.GetRecommendationResponse:
     """
     This function returns the recommendations from the data.
@@ -273,7 +279,6 @@ def recommendations(
         )
 
     if not response or len(response.items) == 0:
-
         return Response(status_code=204, headers={"Retry-After": "120"})
 
     return response

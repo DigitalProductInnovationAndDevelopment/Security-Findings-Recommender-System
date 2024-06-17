@@ -10,6 +10,10 @@ class BaseLLMService(ABC):
         pass
 
     @abstractmethod
+    def get_url(self) -> str:
+        pass
+
+    @abstractmethod
     def generate(self, prompt: str) -> Dict[str, str]:
         pass
 
