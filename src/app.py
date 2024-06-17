@@ -83,7 +83,7 @@ async def upload(
             .order_by(db_models.RecommendationTask.created_at)
             .first()
         )
-        if existing_task and data.force_update is False:
+        if existing_task and not data.force_update:
             raise HTTPException(
                 status_code=400, detail="Recommendation task already exists for today"
             )
