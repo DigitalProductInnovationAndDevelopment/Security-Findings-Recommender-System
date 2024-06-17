@@ -161,6 +161,18 @@ def tasks():
         return tasks
 
 
+@app.delete("/tasks")
+def delete_tasks():
+    """
+    This function deletes all the tasks.
+    :return: 200 OK with the tasks.
+    """
+    with Session() as s:
+        s.query(db_models.RecommendationTask).delete()
+        s.commit()
+        return "All tasks deleted"
+
+
 @app.post("/recommendations")
 def recommendations(
     request: Annotated[apischema.GetRecommendationRequest, Body(...)]
