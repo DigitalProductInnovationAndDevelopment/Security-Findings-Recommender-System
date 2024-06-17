@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { filter, finalize, map, Observable, switchMap, take, tap } from 'rxjs';
+import {
+  filter,
+  finalize,
+  interval,
+  map,
+  Observable,
+  switchMap,
+  takeWhile,
+  tap,
+} from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
 import { RecommendationsService } from '../services/recommendations.service';
 import {
@@ -91,10 +100,10 @@ export class RecommendationsState {
 
   @Action(loadRecommendations)
   loadRecommendations(context: StateContext<RecommendationsStateModel>): void {
-    this.recommendationService
-      .getUploadStatus()
+    interval(10000)
       .pipe(
-        take(1),
+        switchMap(() => this.recommendationService.getUploadStatus()),
+        takeWhile((response) => response.status !== 'completed', true),
         filter((response) => response.status === 'completed'),
         switchMap(() => this.recommendationService.getRecommendations()),
         tap((findings) => context.patchState({ findings: findings.items }))
