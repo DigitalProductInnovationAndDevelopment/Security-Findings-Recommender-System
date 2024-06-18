@@ -11,7 +11,7 @@ to be written
 To run the code within Docker, you should install Docker Desktop from [the official website](https://www.docker.com/products/docker-desktop).
 
 ### Local / Development
-
+If you plan to run this with 
 To run the code without Docker, follow these steps:
 
 - Install Python 3.9 or higher from [the official website](https://www.python.org/downloads/).
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 ### Environment
 
-Copy the `.env.example` file to `.env` and fill in the required values.
+Copy the `.env.docker.example` file to `.env` and fill in the required values.
 
 ## Usage
 
@@ -39,8 +39,8 @@ After starting the application, you can access the API at `http://localhost:8000
 
 ### Docker
 
-To run the code within Docker, run `docker-compose up` in the root directory of the project.
-Add the -d flag to run the containers in the background: `docker-compose up -d`.
+To run the code within Docker, run `docker compose up` in the root directory of the project.
+Add the -d flag to run the containers in the background: `docker compose up -d`.
 
 ### Database
 
