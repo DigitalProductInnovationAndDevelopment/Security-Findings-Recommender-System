@@ -6,6 +6,10 @@ This project aims to create a recommender system for security findings. The syst
 
 ## Prerequisites
 
+### Environment
+
+Copy the `.env.docker.example` file to `.env.docker` and fill in the required values.
+
 ### Docker
 
 To run the code within Docker, install Docker Desktop from [the official website](https://www.docker.com/products/docker-desktop).
@@ -28,9 +32,9 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Environment
-
-Copy the `.env.docker.example` file to `.env` and fill in the required values.
+#### Ollama
+When running outside of Docker, you need to install Ollama from [the official website](https://ollama.com/).
+Make sure to set the correct url for the Ollama API in the `.env` file (usually `http://localhost:11434`).
 
 ## Usage
 
@@ -46,7 +50,7 @@ docker compose up
 
 Add the `-d` flag to run the containers in the background: `docker compose up -d`.
 
-### Database
+#### Database
 
 Database models are constructed using SQLAlchemy and can be found in the `src/models` directory. You can make changes to the data types as needed.
 
@@ -62,21 +66,21 @@ After running the above command, migrate your changes to the database. Ensure th
 make db-migrate
 ```
 
-## Local Development
+### Local Development
 
-### Preparations
+#### Preparations
 
 If you plan to run this without Docker, e.g., because you want to run the Jupyter notebooks, copy the `.env.docker.example` file to `src/.env` and fill in the required values.
 
 Make sure to set the `src` folder as the working directory for Python to ensure the imports work correctly.
 
-### Running the App
+#### Running the App
 
 ```bash
 cd src && python app.py
 ```
 
-### Running the Jupyter Notebooks
+#### Running the Jupyter Notebooks
 
 We provide a set of Jupyter notebooks to help you get started with data analysis and model training. To run the notebooks, execute the following command:
 
