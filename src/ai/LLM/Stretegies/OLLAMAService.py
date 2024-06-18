@@ -92,8 +92,12 @@ class OLLAMAService(BaseLLMService):
         :return: None
         """
         payload = {"name": self.model_name}
-        response = httpx.post(self.pull_url, json=payload, timeout=60 * 10)  # 10 minutes timeout
-        response.raise_for_status()
+        try:
+            response = httpx.post(self.pull_url, json=payload, timeout=60 * 10)  # 10 minutes timeout
+            response.raise_for_status()
+        except httpx.ConnectError as e:
+            logger.error(f"Failed to connect to the OLLAMA server: {e}")
+            logger.info(f"Ollama URL is {self.pull_url}")
 
     def get_model_name(self) -> str:
         """
