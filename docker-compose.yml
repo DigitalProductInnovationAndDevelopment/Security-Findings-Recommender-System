@@ -1,6 +1,6 @@
 services:
   api:
-    build: 
+    build:
       dockerfile: ./Dockerfile.api
     ports:
       - "8000:8000"
@@ -18,7 +18,7 @@ services:
         - action: rebuild
           path: requirements.txt
   queue:
-    build: 
+    build:
       dockerfile: ./Dockerfile.queue
     volumes:
       - .:/app
@@ -36,37 +36,38 @@ services:
       - .env.docker
     ports:
       - "5432:5432"
-  # ollama:
-  #   container_name: ollama
-  #   build:
-  #     context: .
-  #     dockerfile: ./ollama/Dockerfile
-  #   volumes:
-  #     - ollama:/root/.ollama
-  #   ports:
-  #     - '11435:11435'
-  #   environment:
-  #     - OLLAMA_HOST=0.0.0.0:11435
-  #     - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
-  #     - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
-  #     - gpus=all
-  #   pull_policy: always
-  #   tty: true
-  #   restart: unless-stopped
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-#            - driver: nvidia
-#              count: 1
-#              capabilities: [gpu]
+
+  ollama:
+    container_name: ollama
+    build:
+      context: .
+      dockerfile: ./ollama/Dockerfile
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - '11435:11435'
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11435
+      - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
+      - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
+      - gpus=all
+    pull_policy: always
+    tty: true
+    restart: unless-stopped
+  #    deploy:
+  #      resources:
+  #        reservations:
+  #          devices:
+  #            - driver: nvidia
+  #              count: 1
+  #              capabilities: [gpu]
   dashboard:
     build:
       context: .
       dockerfile: ./dashboard/Dockerfile
     ports:
       - "3000:3000"
-    
+
   redis:
     image: redis:latest
     volumes:
