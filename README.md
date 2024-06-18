@@ -38,7 +38,7 @@ Make sure to set the correct url for the Ollama API in the `.env` file (usually 
 
 ## Usage
 
-After starting the application, you can access the API at `http://localhost:8000`.
+After starting the application, you can access the API at `http://localhost:8000` and the Dashboard on `http://localhost:3000`.
 
 ### Docker
 
