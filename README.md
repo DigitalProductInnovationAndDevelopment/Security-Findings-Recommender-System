@@ -82,13 +82,15 @@ cd src && python app.py
 
 #### Running the Jupyter Notebooks
 
-We provide a set of Jupyter notebooks to help you get started with data analysis and model training. To run the notebooks, execute the following command:
+We provide a set of Jupyter notebooks to help you get started. To run the notebooks, execute the following command:
 
 ```bash
 cd src && pip install jupyterlab && python -m jupyterlab
 ```
 
 Then, you can find the notebooks in the `notebooks` directory.
+
+To understand the notebooks, we recommencement you to skim through the [Documentation](https://github.com/DigitalProductInnovationAndDevelopment/Security-Findings-Recommender-System/blob/main/Documentation.md).
 
 ### Note
 
