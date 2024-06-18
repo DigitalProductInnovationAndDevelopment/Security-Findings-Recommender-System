@@ -1,5 +1,7 @@
 FROM ollama/ollama:latest
 
+EXPOSE 11434
+
 # Run ollama serve in the background, wait for 5 seconds, then pull the specified model
 RUN ollama serve & sleep 5 && \
     model_name=llama3:instruct && \
