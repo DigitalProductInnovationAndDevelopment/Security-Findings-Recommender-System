@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class AnthropicService(BaseLLMService):
-    def __init__(self, api_key: str = os.getenv("ANTHROPIC_API_KEY", None), model: str = "claude-3-opus-20240229"):
+    def __init__(self, api_key: str = os.getenv("ANTHROPIC_API_KEY", None), model: str = "claude-3-5-sonnet-20240620"):
         if api_key is None:
             raise ValueError("API key not provided and ANTHROPIC_API_KEY environment variable not set.")
         self.client = Anthropic(api_key=api_key)
