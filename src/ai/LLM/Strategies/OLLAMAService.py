@@ -9,7 +9,7 @@ from ai.LLM.BaseLLMService import BaseLLMService
 from utils.json_helper import parse_json
 from utils.text_tools import clean
 from data.Finding import Finding, FindingKind
-from ai.LLM.Stretegies.ollama_prompts import (
+from ai.LLM.Strategies.ollama_prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
     LONG_RECOMMENDATION_TEMPLATE,

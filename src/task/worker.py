@@ -1,5 +1,5 @@
 from celery import Celery
-from ai.LLM.Stretegies.OLLAMAService import OLLAMAService
+from ai.LLM.Strategies.OLLAMAService import OLLAMAService
 from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
 from data.VulnerabilityReport import create_from_flama_json
 import models.models as db_models

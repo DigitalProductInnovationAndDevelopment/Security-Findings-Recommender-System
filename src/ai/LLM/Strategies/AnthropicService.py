@@ -5,7 +5,7 @@ from anthropic import Anthropic
 
 from ai.LLM.BaseLLMService import BaseLLMService
 from data.Finding import FindingKind, Finding
-from ai.LLM.Stretegies.openai_prompts import (
+from ai.LLM.Strategies.openai_prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
