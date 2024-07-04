@@ -3,7 +3,8 @@ def answer_in_json_prompt(key: str) -> str:
 
 
 CLASSIFY_KIND_TEMPLATE = (
-    "You are a cybersecurity and IT expert. Classify the following security finding. The options are: {options}\n" +
+    "You are a cybersecurity and IT expert. Classify the following security finding in the category {field_name}. The options are: {options}, NotListed\n"
+    "Choose NotListed if none of the options fit." +
     f"{answer_in_json_prompt('selected_option')}" +
     "[DATA]\n{data}\n[/DATA]"
 )
