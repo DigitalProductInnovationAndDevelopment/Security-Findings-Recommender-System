@@ -7,15 +7,14 @@ from fastapi import Body, FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import Date, cast
 
-import ai.LLM.Stretegies.OLLAMAService
+import ai.LLM.Strategies.OLLAMAService
 import data.apischema as apischema
 import models.models as db_models
 from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
-from ai.LLM.Stretegies.OLLAMAService import OLLAMAService
+from ai.LLM.Strategies.OLLAMAService import OLLAMAService
 from data.Finding import FindingKind
 from data.helper import get_content_list
 from data.Solution import Solution
-from data.types import Content
 from data.VulnerabilityReport import create_from_flama_json
 from my_db import Session, get_db_url
 from task.worker import worker
@@ -41,7 +40,7 @@ def health():
     # check ollama health
     ollama_health = "DOWN"
     try:
-        if ai.LLM.Stretegies.OLLAMAService.is_up():
+        if ai.LLM.Strategies.OLLAMAService.is_up():
             ollama_health = "UP"
     except Exception as e:
         print(f"Error checking Ollama health, probably is down: {e}")
