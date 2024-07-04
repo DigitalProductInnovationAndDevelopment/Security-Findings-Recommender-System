@@ -15,7 +15,6 @@ from ai.LLM.Strategies.OLLAMAService import OLLAMAService
 from data.Finding import FindingKind
 from data.helper import get_content_list
 from data.Solution import Solution
-from data.types import Content
 from data.VulnerabilityReport import create_from_flama_json
 from my_db import Session, get_db_url
 from task.worker import worker
