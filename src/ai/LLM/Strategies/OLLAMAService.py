@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import List, Dict, Union, Optional
 import os
 import json
@@ -8,7 +9,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from ai.LLM.BaseLLMService import BaseLLMService
 from utils.json_helper import parse_json
 from utils.text_tools import clean
-from data.Finding import Finding, FindingKind
+from data.Finding import Finding
 from ai.LLM.Strategies.ollama_prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
@@ -139,33 +140,26 @@ class OLLAMAService(BaseLLMService):
             logger.warning(f"ReadTimeout occurred: {e}")
             return {}
 
-    def classify_kind(
-            self, finding: Finding, options: Optional[List[FindingKind]] = None
-    ) -> FindingKind:
-        """
-        Classify the kind of security finding.
-        :param finding: The finding to classify.
-        :param options: The options to choose from. If not provided, all options are available.
-        :return: The classified kind of finding.
-        """
+    def classify_kind(self, finding: Finding, field_name: str, options: Optional[List[Enum]] = None) -> Optional[Enum]:
         if options is None:
-            options = list(FindingKind)
+            logger.warning(f"No options provided for field {field_name}")
+            return None
 
-        options_str = ", ".join([kind.name for kind in options])
-        prompt = CLASSIFY_KIND_TEMPLATE.format(options=options_str, data=str(finding))
+        options_str = ", ".join([option.value for option in options])
+        prompt = CLASSIFY_KIND_TEMPLATE.format(options=options_str, field_name=field_name,  data=str(finding))
         response = self.generate(prompt)
-        if "selected_option" not in response:
-            logger.warning(f"Failed to classify the finding: {finding.title}")
-            return FindingKind.DEFAULT
-        try:
-            return FindingKind[response["selected_option"]]
-        except KeyError:
-            logger.error(
-                f"Failed to classify the finding: {finding.title}. "
-                f"Selected option: {response['selected_option']} does not exist in FindingKind."
-                f"Returning default kind."
-            )
-            return FindingKind.DEFAULT
+
+        if f"selected_option" not in response:
+            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}")
+            return None
+        if response["selected_option"] == "NotListed":
+            logger.info(f"Chose None for {field_name} for the finding: {finding.title}")
+            return None
+        if response["selected_option"] not in options_str:
+            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}")
+            return None
+
+        return next(option for option in options if option.value == response["selected_option"])
 
     def get_recommendation(self, finding: Finding, short: bool = True) -> str:
         """
