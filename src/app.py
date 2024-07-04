@@ -19,6 +19,8 @@ from data.types import Content
 from data.VulnerabilityReport import create_from_flama_json
 from my_db import Session, get_db_url
 from task.worker import worker
+from config import settings
+
 
 my_strategy = OLLAMAService()
 llm_service = LLMServiceStrategy(my_strategy)
@@ -54,21 +56,26 @@ def health():
             "llm": llm_service.get_url(),
             "redis": os.getenv("REDIS_ENDPOINT"),
             # this leaks the db user and password in dev mode
-            "postgres": get_db_url() if os.getenv("ENVIRONMENT") == 'development' else "retracted"
-        }
+            "postgres": (
+                get_db_url()
+                if os.getenv("ENVIRONMENT") == "development"
+                else "retracted"
+            ),
+        },
     }
     return system_info
 
 
 @app.post("/upload")
 async def upload(
-        data: Annotated[apischema.StartRecommendationTaskRequest, Body(...)]
+    data: Annotated[apischema.StartRecommendationTaskRequest, Body(...)]
 ) -> apischema.StartRecommendationTaskResponse:
     """
     This function takes the string from the request and converts it to a data object.
     :return: 200 OK if the data is valid, 400 BAD REQUEST otherwise.
     """
     # get the content list
+
     content_list = get_content_list(data.data)
 
     data2 = [x.dict() for x in content_list]
@@ -91,10 +98,17 @@ async def upload(
         if data.force_update and existing_task:
             # Will nuke old task with all its findings.
             if existing_task.status == db_models.TaskStatus.PENDING:
-                raise HTTPException(
-                    status_code=400,
-                    detail="Recommendation task is already processing, cannot exit",
+                revoked = worker.control.revoke(
+                    existing_task.celery_task_id, terminate=True
                 )
+                print(revoked)
+
+                # pass
+
+                # raise HTTPException(
+                #     status_code=400,
+                #     detail="Recommendation task is already processing, cannot exit",
+                # )
 
             s.query(db_models.RecommendationTask).filter(
                 db_models.RecommendationTask.id == existing_task.id
@@ -102,11 +116,18 @@ async def upload(
             s.commit()
 
         recommendation_task = db_models.RecommendationTask()
-
         s.add(recommendation_task)
         s.commit()
         s.flush()
         s.refresh(recommendation_task)
+        celery_result = worker.send_task(
+            "worker.generate_report", args=[recommendation_task.id]
+        )
+        print("taskid", celery_result.id)
+        print(celery_result)
+        recommendation_task.celery_task_id = celery_result.id
+        s.commit()
+        s.flush()
         for c in content_list:
             find = db_models.Finding().from_data(c)
             find.recommendation_task_id = recommendation_task.id
@@ -116,8 +137,6 @@ async def upload(
     # start subprocess for processing the data
     # ...
 
-    worker.send_task("worker.generate_report", args=[recommendation_task_id])
-
     response = apischema.StartRecommendationTaskResponse(task_id=recommendation_task_id)
 
     return response
@@ -125,7 +144,7 @@ async def upload(
 
 @app.get("/status")
 def status(
-        task_id: Optional[int] = None,
+    task_id: Optional[int] = None,
 ) -> apischema.GetRecommendationTaskStatusResponse:
     """
     This function returns the status of the recommendation task.
@@ -167,6 +186,29 @@ def tasks():
         return tasks
 
 
+@app.delete("/tasks/{task_id}")
+def delete_task(task_id: int):
+    """
+    This function deletes the task.
+    :return: 200 OK with the tasks.
+    """
+    with Session() as s:
+        task = (
+            s.query(db_models.RecommendationTask)
+            .filter(db_models.RecommendationTask.id == task_id)
+            .first()
+        )
+        print(task)
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+        if task.status == db_models.TaskStatus.PENDING:
+            worker.control.revoke(task.celery_task_id, terminate=True)
+
+        s.delete(task)
+        s.commit()
+        return task
+
+
 @app.delete("/tasks")
 def delete_tasks():
     """
@@ -181,7 +223,7 @@ def delete_tasks():
 
 @app.post("/recommendations")
 def recommendations(
-        request: Annotated[apischema.GetRecommendationRequest, Body(...)]
+    request: Annotated[apischema.GetRecommendationRequest, Body(...)]
 ) -> apischema.GetRecommendationResponse:
     """
     This function returns the recommendations from the data.

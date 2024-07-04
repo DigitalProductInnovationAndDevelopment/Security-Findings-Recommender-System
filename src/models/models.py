@@ -96,6 +96,7 @@ class RecommendationTask(BaseModel):
     status: TaskStatus = Column(
         Enum(TaskStatus), default=TaskStatus.PENDING, nullable=False
     )
+    celery_task_id = Column(String, nullable=True)
     findings: Mapped[List[Finding]] = relationship(
         "Finding", back_populates="recommendation_task"
     )

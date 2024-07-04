@@ -8,7 +8,7 @@ services:
       - .:/app
     depends_on:
       - db
-      - ollama
+      # - ollama
     env_file:
       - .env.docker
     develop:
@@ -26,7 +26,7 @@ services:
     depends_on:
       - db
       - redis
-      - ollama
+      # - ollama
     env_file:
       - .env.docker
 
@@ -39,23 +39,25 @@ services:
     ports:
       - "5432:5432"
 
-  ollama:
-    container_name: ollama
-    build:
-      context: .
-      dockerfile: ./ollama/Dockerfile
-    volumes:
-      - ollama:/root/.ollama
-    ports:
-      - '11435:11434'
-    environment:
-      - OLLAMA_HOST=0.0.0.0:11435
-      - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
-      - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
-      - gpus=all
-    pull_policy: always
-    tty: true
-    restart: unless-stopped
+  # ollama:
+  #   container_name: ollama
+  #   build:
+  #     context: .
+  #     dockerfile: ./ollama/Dockerfile
+  #     args:
+  #       - MODEL_NAME=phi3:mini
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   ports:
+  #     - '11435:11434'
+  #   environment:
+  #     - OLLAMA_HOST=0.0.0.0:11435
+  #     - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
+  #     - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
+  #     - gpus=all
+  #   pull_policy: always
+  #   tty: true
+  #   restart: unless-stopped
   #    deploy:
   #      resources:
   #        reservations:

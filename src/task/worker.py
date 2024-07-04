@@ -37,7 +37,6 @@ def generate_report(recommendation_task_id: int):
     if recommendation_task_id is None:
         logger.warning("Recommendation task id is None")
         return
-
     logger.info(f"Processing recommendation task with id {recommendation_task_id}")
     logger.info(f"Processing recommendation task with limit {limit}")
     logger.info(
