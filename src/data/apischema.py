@@ -1,14 +1,15 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Literal
 
 from data.pagination import Pagination, PaginationInput
 from data.types import InputData
 from data.Finding import Finding
-from models.models import TaskStatus
+from db.models import TaskStatus
 
 
 class StartRecommendationTaskRequest(BaseModel):
-    user_id: int
+    user_id: Optional[int] = None
+    strategy: Optional[Literal["OLLAMA", "ANTHROPIC", "OPENAI"]] = "OLLAMA"
     data: InputData
     force_update: Optional[bool] = False
 

@@ -27,4 +27,4 @@ dev:
 
 
 start-worker:
-	cd src && celery -A task.worker worker --loglevel=info --concurrency 1
+	cd src && celery -A worker.worker worker --loglevel=info --concurrency 1

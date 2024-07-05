@@ -1,4 +1,4 @@
-from models.models import Finding as DBFinding
+from db.models import Finding as DBFinding
 from data.Finding import Finding
 
 # def DBFindingToFindingWithSolution(db_finding: DBFinding,db_solution) -> Finding:
