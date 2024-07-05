@@ -4,8 +4,6 @@ from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
 from data.VulnerabilityReport import create_from_flama_json
 import db.models as db_models
 from db.my_db import Session
-from dotenv import load_dotenv
-import os
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,13 +14,16 @@ my_strategy = OLLAMAService()
 llm_service = LLMServiceStrategy(my_strategy)
 
 
-redis_url = os.getenv("REDIS_ENDPOINT")
+redis_url = config.redis_endpoint
 
-
+print(f"Redis URL: {redis_url}")
 limit = int(config.queue_processing_limit)  # default limit is 5 , -1 means no limit
 
 
 worker = Celery("worker", broker=redis_url, backend=redis_url)
+
+
+print(f"Worker: {worker}")
 
 
 def error(self, exc, task_id, args, kwargs, einfo):
@@ -50,7 +51,7 @@ def generate_report(recommendation_task_id: int, stragegy: str = "OLLAMA"):
             query = query.limit(limit)
 
         findings_from_db = query.all()
-
+        logger.info(f"Found {len(findings_from_db)} findings for recommendation task")
         if not findings_from_db:
             logger.warn(
                 f"No findings found for recommendation task {recommendation_task_id}"

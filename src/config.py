@@ -31,7 +31,7 @@ class Config(BaseSettings):
     postgres_user: str = Field(env="POSTGRES_USER", default="postgres")
     postgres_password: str = Field(env="POSTGRES_PASSWORD", default="postgres")
     queue_processing_limit: int = Field(env="QUEUE_PROCESSING_LIMIT", default=10)
-    redis_endpoint: RedisDsn = Field(
+    redis_endpoint: str = Field(
         env="REDIS_ENDPOINT", default="redis://localhost:6379/0"
     )
     environment: str = Field(env="ENVIRONMENT", default="development")

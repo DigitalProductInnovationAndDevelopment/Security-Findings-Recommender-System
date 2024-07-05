@@ -13,6 +13,7 @@ from data.helper import get_content_list
 from fastapi import Depends
 from db.my_db import get_db
 from worker.worker import worker
+from config import config
 
 router = APIRouter(prefix="/upload")
 
@@ -46,7 +47,8 @@ async def upload(
 
     if data.force_update and existing_task:
         # Will nuke old task with all its findingdb.
-        if existing_task.status == db_models.TaskStatudb.PENDING:
+        if existing_task.status == db_models.TaskStatus.PENDING:
+            print(config.redis_endpoint)
             revoked = worker.control.revoke(
                 existing_task.celery_task_id, terminate=True
             )
@@ -59,33 +61,32 @@ async def upload(
             #     detail="Recommendation task is already processing, cannot exit",
             # )
 
-        db.query(db_models.RecommendationTask).filter(
-            db_models.RecommendationTask.id == existing_task.id
-        ).delete()
+        db.delete(existing_task)
         db.commit()
+    recommendation_task = db_models.RecommendationTask()
+    db.add(recommendation_task)
+    db.commit()
+    db.flush()
+    db.refresh(recommendation_task)
 
-        recommendation_task = db_models.RecommendationTask()
-        db.add(recommendation_task)
-        db.commit()
-        db.flush()
-        db.refresh(recommendation_task)
-        celery_result = worker.send_task(
-            "worker.generate_report", args=[recommendation_task.id]
-        )
-        print("taskid", celery_result.id)
-        print(celery_result)
-        recommendation_task.celery_task_id = celery_result.id
-        db.commit()
-        db.flush()
-        for c in content_list:
-            find = db_models.Finding().from_data(c)
-            find.recommendation_task_id = recommendation_task.id
-            db.add(find)
-        db.commit()
-        recommendation_task_id = recommendation_task.id
+    for c in content_list:
+        find = db_models.Finding().from_data(c)
+        find.recommendation_task_id = recommendation_task.id
+        db.add(find)
+    db.commit()
+
+    celery_result = worker.send_task(
+        "worker.generate_report", args=[recommendation_task.id]
+    )
+
+    recommendation_task.celery_task_id = celery_result.id
+    db.commit()
+    db.flush()
+
+    recommendation_task_id = recommendation_task.id
     # start subprocess for processing the data
     # ...
-
+    print("data", recommendation_task_id)
     response = apischema.StartRecommendationTaskResponse(task_id=recommendation_task_id)
 
     return response
