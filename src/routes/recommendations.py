@@ -12,6 +12,9 @@ import data.apischema as apischema
 import db.models as db_models
 from data.Finding import FindingKind
 from data.Solution import Solution
+from dto.finding import db_finding_to_response_item
+from repository.finding import get_finding_repository
+from repository.task import TaskRepository, get_task_repository
 
 router = APIRouter(
     prefix="/recommendations",
@@ -22,6 +25,8 @@ router = APIRouter(
 def recommendations(
     request: Annotated[apischema.GetRecommendationRequest, Body(...)],
     db: Session = Depends(get_db),
+    task_repository: TaskRepository = Depends(get_task_repository),
+    finding_repository=Depends(get_finding_repository),
 ) -> apischema.GetRecommendationResponse:
     """
     This function returns the recommendations from the data.
@@ -31,17 +36,14 @@ def recommendations(
     # get the findings
     # ...
 
-    total_count = db.query(db_models.Finding).count()
     today = datetime.datetime.now().date()
+
     task = (
-        db.query(db_models.RecommendationTask)
-        .filter(
-            db_models.RecommendationTask.id == task_id
-            if task_id
-            else cast(db_models.RecommendationTask.created_at, Date) == today
-        )
-        .first()
+        task_repository.get_task_by_id(task_id)
+        if task_id
+        else task_repository.get_task_by_date(today)
     )
+
     if not task:
         raise HTTPException(
             status_code=404,
@@ -64,52 +66,12 @@ def recommendations(
             detail="Recommendation task failed",
         )
 
-    findings = (
-        db.query(db_models.Finding)
-        .join(db_models.RecommendationTask)
-        .where(
-            db_models.RecommendationTask.status == db_models.TaskStatus.COMPLETED,
-            (
-                db_models.RecommendationTask.id == task_id
-                if task_id
-                else cast(db_models.RecommendationTask.created_at, Date) == today
-            ),
-        )
-        .offset(request.pagination.offset)
-        .limit(request.pagination.limit)
-        .all()
-    )
+    findings = finding_repository.get_findings_by_task_id(task.id, request.pagination)
+
+    total_count = finding_repository.get_findings_count_by_task_id(task.id)
+
     response = apischema.GetRecommendationResponse(
-        items=[
-            apischema.GetRecommendationResponseItem(
-                category=(
-                    FindingKind[find.recommendations[0].category]
-                    if find.recommendations
-                    else FindingKind.DEFAULT
-                ),
-                solution=Solution(
-                    short_description=(
-                        find.recommendations[0].description_short
-                        if find.recommendations
-                        else None
-                    ),
-                    long_description=(
-                        find.recommendations[0].description_long
-                        if find.recommendations
-                        else None
-                    ),
-                    search_terms=(
-                        find.recommendations[0].search_terms
-                        if find.recommendations
-                        else None
-                    ),
-                    metadata=(
-                        find.recommendations[0].meta if find.recommendations else {}
-                    ),
-                ),
-            ).from_json(find.raw_data)
-            for find in findings
-        ],
+        items=[db_finding_to_response_item(find) for find in findings],
         pagination=apischema.Pagination(
             offset=request.pagination.offset,
             limit=request.pagination.limit,

@@ -1,16 +1,33 @@
+from data.Solution import Solution
+from data.apischema import GetRecommendationResponseItem
 from db.models import Finding as DBFinding
-from data.Finding import Finding
+from data.Finding import Finding, FindingKind
 
-# def DBFindingToFindingWithSolution(db_finding: DBFinding,db_solution) -> Finding:
-#     return Finding(
-#         title=[t for t in db_finding.title_list],
-#         source=db_finding.source,
-#         description=db_finding.description,
-#         cwe_ids=db_finding.cwe_ids,
-#         cve_ids=db_finding.cve_ids,
-#         severity=db_finding.severity,
-#         priority=db_finding.priority,
-#         location_list=db_finding.location_list,
-#         category=db_finding.category,
-#         solution=db_solution
-#     )
+
+def db_finding_to_response_item(
+    find: DBFinding,
+) -> GetRecommendationResponseItem:
+
+    return GetRecommendationResponseItem(
+        category=(
+            FindingKind[find.recommendations[0].category]
+            if find.recommendations
+            else FindingKind.DEFAULT
+        ),
+        solution=Solution(
+            short_description=(
+                find.recommendations[0].description_short
+                if find.recommendations
+                else None
+            ),
+            long_description=(
+                find.recommendations[0].description_long
+                if find.recommendations
+                else None
+            ),
+            search_terms=(
+                find.recommendations[0].search_terms if find.recommendations else None
+            ),
+            metadata=(find.recommendations[0].meta if find.recommendations else {}),
+        ),
+    ).from_json(find.raw_data)
