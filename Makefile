@@ -26,5 +26,8 @@ dev:
 	cd src && uvicorn app:app --host 0.0.0.0 --port 8001 --reload 
 
 
+test:
+	cd src && pytest
+
 start-worker:
 	cd src && celery -A worker.worker worker --loglevel=info --concurrency 1
