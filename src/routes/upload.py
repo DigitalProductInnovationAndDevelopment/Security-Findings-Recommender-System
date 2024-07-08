@@ -1,21 +1,19 @@
-from fastapi.routing import APIRouter
-from fastapi.routing import APIRouter
-
 import datetime
 from typing import Annotated
 
-from fastapi import Body, HTTPException
+from fastapi import Body, Depends, HTTPException
+from fastapi.routing import APIRouter
 from sqlalchemy import Date, cast
 from sqlalchemy.orm import Session
+
 import data.apischema as apischema
 import db.models as db_models
-from data.helper import get_content_list
-from fastapi import Depends
+from config import config
+from data.helper import filter_findings, get_content_list
 from db.my_db import get_db
 from repository.finding import get_finding_repository
 from repository.task import TaskRepository, get_task_repository
 from worker.worker import worker
-from config import config
 
 router = APIRouter(prefix="/upload")
 
@@ -33,7 +31,9 @@ async def upload(
     # get the content list
 
     content_list = get_content_list(data.data)
-
+    if data.filter:
+        content_list = filter_findings(content_list, data.filter)
+        
     today = datetime.datetime.now().date()
     existing_task = task_repository.get_task_by_date(today)
     if existing_task and not data.force_update:
