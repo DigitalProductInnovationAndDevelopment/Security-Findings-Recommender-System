@@ -14,11 +14,12 @@ export class RecommendationsService {
     return this.http.get<void>(environment.apiUrl + '/');
   }
 
-  public uploadFindings(inputData: string): Observable<number> {
+  public uploadFindings(inputData: string, filter: any): Observable<number> {
     return this.http
       .post<number>(environment.apiUrl + '/upload', {
         data: inputData,
         user_id: 1,
+        filter,
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
