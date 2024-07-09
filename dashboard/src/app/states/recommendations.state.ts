@@ -82,11 +82,14 @@ export class RecommendationsState {
     context: StateContext<RecommendationsStateModel>,
     { payload }: UploadFile
   ): Observable<number> {
-    return this.recommendationService.uploadFindings(payload.data).pipe(
-      filter((response) => response !== -1),
-      map((response) => response),
-      finalize(() => void context.patchState({ isLoading: false }))
-    );
+    console.log(payload.filter);
+    return this.recommendationService
+      .uploadFindings(payload.data, payload.filter)
+      .pipe(
+        filter((response) => response !== -1),
+        map((response) => response),
+        finalize(() => void context.patchState({ isLoading: false }))
+      );
   }
 
   @Action(clearFindings)

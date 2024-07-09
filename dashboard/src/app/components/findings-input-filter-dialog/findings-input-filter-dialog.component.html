@@ -1,0 +1,162 @@
+<header>
+  <p class="dialog-title">Filter Findings</p>
+  <button (click)="closeDialog()" class="close-btn">
+    <i class="bi bi-x-lg"></i>
+  </button>
+</header>
+<div mat-dialog-content class="mat-dialog-content">
+  <form class="details-content" [formGroup]="filterForm">
+    <section class="example-section">
+      <span class="example-list-section">
+        <mat-checkbox
+          class="example-margin"
+          [checked]="allComplete"
+          [indeterminate]="someComplete()"
+          (change)="setAll($event.checked)"
+        >
+          {{ task.name }}
+        </mat-checkbox>
+      </span>
+      <span class="example-list-section">
+        <ul>
+          @for (subtask of task.subtasks; track subtask; let index = $index) {
+          <li>
+            <mat-checkbox
+              [(ngModel)]="subtask.completed"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="updateAllComplete()"
+            >
+              {{ "All " + subtask.name }}
+            </mat-checkbox>
+            @if(!subtask.completed) {
+            <div class="exclude">
+              @switch (subtask.name) { 
+            @case ('Severities') {
+              <div class="slider">
+                <span>{{ rangeFilters.severities.minValue }}</span>
+                <mat-slider min="0" max="100" step="1">
+                  <input
+                    matSliderStartThumb
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="rangeFilters.severities.minValue"
+                  />
+                  <input
+                    matSliderEndThumb
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="rangeFilters.severities.maxValue"
+                  />
+                </mat-slider>
+                <span>{{ rangeFilters.severities.maxValue }}</span>
+              </div>
+              } 
+              @case ('Priorities') {
+              <div class="slider">
+                <span>{{ rangeFilters.priorities.minValue }}</span>
+                <mat-slider [min]="0" [max]="100" step="1">
+                  <input
+                    matSliderStartThumb
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="rangeFilters.priorities.minValue"
+                  />
+                  <input
+                    matSliderEndThumb
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="rangeFilters.priorities.maxValue"
+                  />
+                </mat-slider>
+                <span>{{ rangeFilters.priorities.maxValue }}</span>
+              </div>
+              } 
+              @case ('CVE_IDs') {
+                <div class="input-container">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Include Value</mat-label>
+                    <input
+                      matInput
+                      formControlName="cve_idsInput"
+                      (keydown.enter)="addCve()"
+                      />
+                  </mat-form-field>
+                  <button
+                    mat-fab
+                    color="primary"
+                    (click)="addCve()"
+                  >
+                    +
+                  </button>
+                </div>
+                <div class="chip-container">
+                  @for (value of filterForm.get('cve_ids')?.value; track value) {
+                      <div class="chip">
+                          {{value}}
+                          <button (click)="removeCve(value)"><i class="bi bi-x-circle-fill"></i></button>
+                      </div>
+                    }
+                </div>
+            }
+                @case ('CWE_IDs') {
+                    <div class="input-container">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Include Value</mat-label>
+                        <input
+                          matInput
+                          formControlName="cwe_idsInput"
+                          (keydown.enter)="addCwe()"
+                          />
+                      </mat-form-field>
+                      <button
+                        mat-fab
+                        color="primary"
+                        (click)="addCwe()"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div class="chip-container">
+                      @for (value of filterForm.get('cwe_ids')?.value; track value) {
+                          <div class="chip">
+                              {{value}}
+                              <button (click)="removeCwe(value)"><i class="bi bi-x-circle-fill"></i></button>
+                          </div>
+                        }
+                    </div>
+            }
+            @case ('Sources') {
+                <div class="input-container">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Include Value</mat-label>
+                    <input
+                      matInput
+                      formControlName="sourcesInput"
+                      (keydown.enter)="addSource()"
+                      />
+                  </mat-form-field>
+                  <button
+                    mat-fab
+                    color="primary"
+                    (click)="addSource()"
+                  >
+                    +
+                  </button>
+                </div>
+                <div class="chip-container">
+                  @for (value of filterForm.get('sources')?.value; track value) {
+                      <div class="chip">
+                          {{value}}
+                          <button (click)="removeSource(value)"><i class="bi bi-x-circle-fill"></i></button>
+                      </div>
+                    }
+                </div>
+                }
+            
+            }
+            </div>
+            }
+          </li>
+          }
+        </ul>
+      </span>
+    </section>
+    <button class="upload-btn" (click)="closeDialog()">Upload</button>
+  </form>
+</div>

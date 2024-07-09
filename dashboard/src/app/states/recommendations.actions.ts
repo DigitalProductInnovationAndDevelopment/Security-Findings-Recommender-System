@@ -4,6 +4,7 @@ export class UploadFile {
   constructor(
     public readonly payload: {
       data: any;
+      filter?: any;
     }
   ) {}
 }
