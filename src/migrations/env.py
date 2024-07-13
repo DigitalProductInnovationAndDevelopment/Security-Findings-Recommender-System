@@ -19,11 +19,10 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
 
-from models.base import Base
-import models
-from models.models import *
+from db.base import Base
+from db.models import *
 
-target_metadata =  Base.metadata
+target_metadata = Base.metadata
 
 
 # other values from the config, defined by the needs of env.py,
@@ -35,9 +34,9 @@ target_metadata =  Base.metadata
 def get_url():
     # load env from file
 
-    
-    from my_db import (get_db_url)
-    return get_db_url()
+    from config import config
+
+    return config.get_db_url()
 
 
 def run_migrations_offline():

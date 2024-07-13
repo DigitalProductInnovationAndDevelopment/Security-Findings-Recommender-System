@@ -32,6 +32,8 @@ class Recommendation(BaseModel):
 
 class Finding(BaseModel):
     __tablename__ = "findings"
+    title = Column(String, nullable=True)
+    description = Column(String, nullable=True)
     title_list = Column(JSON, default=None, nullable=True)
     description_list = Column(JSON, default=[], nullable=True)
     locations_list = Column(JSON, default=[], nullable=True)
@@ -96,6 +98,7 @@ class RecommendationTask(BaseModel):
     status: TaskStatus = Column(
         Enum(TaskStatus), default=TaskStatus.PENDING, nullable=False
     )
+    celery_task_id = Column(String, nullable=True)
     findings: Mapped[List[Finding]] = relationship(
-        "Finding", back_populates="recommendation_task"
+        "Finding", back_populates="recommendation_task", passive_deletes=True
     )

@@ -1,16 +1,37 @@
-from pydantic import BaseModel
-from typing import Optional
+from typing import List, Literal, Optional
 
+from pydantic import BaseModel, validator
+
+from data.Finding import Finding
 from data.pagination import Pagination, PaginationInput
 from data.types import InputData
-from data.Finding import Finding
-from models.models import TaskStatus
+from db.models import TaskStatus
 
 
+class FindingInputFilter(BaseModel):
+    severity: Optional[List[int]] = None # ['low', 'high']
+    priority: Optional[List[int]] = None # ['low', 'high']
+    cve_ids: Optional[List[str]] = None
+    cwe_ids: Optional[List[str]] = None
+    source: Optional[List[str]] = None
+
+    @validator('severity', pre=True, always=True)
+    def check_severity(cls, value):
+        if value is not None and len(value) != 2:
+            raise ValueError('severity must be an array with exactly 2 elements')
+        return value
+    @validator('priority', pre=True, always=True)
+    def check_priority(cls, value):
+        if value is not None and len(value) != 2:
+            raise ValueError('priority must be an array with exactly 2 elements')
+        return value  
+    
 class StartRecommendationTaskRequest(BaseModel):
-    user_id: int
+    user_id: Optional[int] = None
+    strategy: Optional[Literal["OLLAMA", "ANTHROPIC", "OPENAI"]] = "OLLAMA"
     data: InputData
     force_update: Optional[bool] = False
+    filter: Optional[FindingInputFilter] = None
 
 
 class StartRecommendationTaskResponse(BaseModel):

@@ -20,12 +20,10 @@ from ai.LLM.Strategies.ollama_prompts import (
     CONVERT_DICT_TO_STR_TEMPLATE,
 )
 
+from config import config
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(name)s | %(message)s")
 logger = logging.getLogger(__name__)
-
-import dotenv
-
-dotenv.load_dotenv()
 
 
 def singleton(cls):
@@ -42,8 +40,8 @@ def singleton(cls):
 def is_up() -> bool:
     # res = requests.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
     res = httpx.post(
-        os.getenv("OLLAMA_URL") + "/api/show",
-        json={"name": os.getenv("OLLAMA_MODEL", "llama3")},
+        config.ollama_url + "/api/show",
+        json={"name": config.ollama_model},
     )
     if res.status_code == 200:
         return True
@@ -59,7 +57,7 @@ class OLLAMAService(BaseLLMService):
     """
 
     def __init__(
-            self, model_url: Optional[str] = None, model_name: Optional[str] = None
+        self, model_url: Optional[str] = None, model_name: Optional[str] = None
     ):
         """
         Initialize the LLMService object.
@@ -68,15 +66,12 @@ class OLLAMAService(BaseLLMService):
         """
         # Configure logging level for httpx
         logging.getLogger("httpx").setLevel(logging.WARNING)
-        print("model", os.getenv("OLLAMA_MODEL"))
         # Now, variables
         if model_url is None:
-            model_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
+            model_url = config.ollama_url
         self.pull_url: str = model_url + "/api/pull"
         self.generate_url: str = model_url + "/api/generate"
-        self.model_name: str = model_name or os.getenv(
-            "OLLAMA_MODEL", "llama3:instruct"
-        )
+        self.model_name: str = model_name or config.ollama_model
 
         self.generate_payload: Dict[str, Union[str, bool]] = {
             "model": self.model_name,
@@ -94,7 +89,9 @@ class OLLAMAService(BaseLLMService):
         """
         payload = {"name": self.model_name}
         try:
-            response = httpx.post(self.pull_url, json=payload, timeout=60 * 10)  # 10 minutes timeout
+            response = httpx.post(
+                self.pull_url, json=payload, timeout=60 * 10
+            )  # 10 minutes timeout
             response.raise_for_status()
         except httpx.ConnectError as e:
             logger.error(f"Failed to connect to the OLLAMA server: {e}")
@@ -134,7 +131,9 @@ class OLLAMAService(BaseLLMService):
                 json_response = response.json()
                 return parse_json(json_response["response"], strict=False)
             except json.JSONDecodeError as e:
-                logger.error(f"LLM-Models JSON response is malformed, could not be parsed: {e}")
+                logger.error(
+                    f"LLM-Models JSON response is malformed, could not be parsed: {e}"
+                )
                 return {}
         except httpx.ReadTimeout as e:
             logger.warning(f"ReadTimeout occurred: {e}")

@@ -2,29 +2,28 @@ from celery import Celery
 from ai.LLM.Strategies.OLLAMAService import OLLAMAService
 from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
 from data.VulnerabilityReport import create_from_flama_json
-import models.models as db_models
-from my_db import Session
-from dotenv import load_dotenv
-import os
+import db.models as db_models
+from db.my_db import Session
 import logging
 
 logger = logging.getLogger(__name__)
 
-load_dotenv()
-
+from config import config
 
 my_strategy = OLLAMAService()
 llm_service = LLMServiceStrategy(my_strategy)
 
 
-redis_url = os.getenv("REDIS_ENDPOINT")
+redis_url = config.redis_endpoint
 
+print(f"Redis URL: {redis_url}")
+limit = int(config.queue_processing_limit)  # default limit is 5 , -1 means no limit
 
-limit = int(
-    os.getenv("QUEUE_PROCESSING_LIMIT", "5")
-)  # default limit is 5 , -1 means no limit
 
 worker = Celery("worker", broker=redis_url, backend=redis_url)
+
+
+print(f"Worker: {worker}")
 
 
 def error(self, exc, task_id, args, kwargs, einfo):
@@ -32,12 +31,11 @@ def error(self, exc, task_id, args, kwargs, einfo):
 
 
 @worker.task(name="worker.generate_report", on_failure=error)
-def generate_report(recommendation_task_id: int):
+def generate_report(recommendation_task_id: int, stragegy: str = "OLLAMA"):
 
     if recommendation_task_id is None:
         logger.warning("Recommendation task id is None")
         return
-
     logger.info(f"Processing recommendation task with id {recommendation_task_id}")
     logger.info(f"Processing recommendation task with limit {limit}")
     logger.info(
@@ -53,7 +51,7 @@ def generate_report(recommendation_task_id: int):
             query = query.limit(limit)
 
         findings_from_db = query.all()
-
+        logger.info(f"Found {len(findings_from_db)} findings for recommendation task")
         if not findings_from_db:
             logger.warn(
                 f"No findings found for recommendation task {recommendation_task_id}"
