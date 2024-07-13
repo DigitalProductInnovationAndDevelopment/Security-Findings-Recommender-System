@@ -21,6 +21,7 @@ class Finding(BaseModel):
     priority: Optional[int] = None
     location_list: List[str] = Field(default_factory=list)
     category: Category = None
+    unsupervised_cluster: Optional[int] = None
     solution: Optional["Solution"] = None
     _llm_service: Optional[Any] = PrivateAttr(default=None)
 
@@ -65,6 +66,10 @@ class Finding(BaseModel):
         self.category.environment = self.llm_service.classify_kind(self, "environment", environment_options)
 
 
+        return self
+
+    def set_unsupervised_cluster(self, cluster: int) -> "Finding":
+        self.unsupervised_cluster = cluster
         return self
 
     @property
@@ -147,6 +152,9 @@ class Finding(BaseModel):
         if self.category is not None:
             data["category"] = self.category.to_dict()
 
+        if self.unsupervised_cluster is not None:
+            data["unsupervised_cluster"] = int(self.unsupervised_cluster)
+
         if self.solution is not None:
             data["solution"] = self.solution.to_dict()
         return data
@@ -176,6 +184,8 @@ class Finding(BaseModel):
             result += f"Priority: {self.priority}\n"
         if self.category is not None:
             result += f"Category: {str(self.category)}\n"
+        if self.unsupervised_cluster is not None:
+            result += f"Unsupervised Cluster: {self.unsupervised_cluster}\n"
 
         # Solution
         if self.solution is not None:
@@ -203,6 +213,8 @@ class Finding(BaseModel):
             result += f"<tr><td>Priority</td><td>{self.priority}</td></tr>"
             if self.category is not None:
                 result += f"<tr><td>Category</td><td>{self.category}</td></tr>"
+            if self.unsupervised_cluster is not None:
+                result += f"<tr><td>Unsupervised Cluster</td><td>{self.unsupervised_cluster}</td></tr>"
             result += "</table>"
         else:
             result += "<h3>Finding</h3>"
@@ -219,6 +231,8 @@ class Finding(BaseModel):
             result += f"<p>Priority: {self.priority}</p>"
             if self.category is not None:
                 result += f"<p>Category: {self.category}</p>"
+            if self.unsupervised_cluster is not None:
+                result += f"<p>Unsupervised Cluster: {self.unsupervised_cluster}</p>"
 
         if self.solution is not None:
             result += f"{self.solution.to_html()}"
