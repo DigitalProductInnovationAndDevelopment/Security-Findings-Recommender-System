@@ -71,7 +71,7 @@ class Compliance(Enum):
 
 
 class Environment(Enum):
-    DOCKER = "Docker"`Ω
+    DOCKER = "Docker"
     KUBERNETES = "Kubernetes"
     SERVERLESS = "Serverless"
     VIRTUAL_MACHINE = "VirtualMachine"
