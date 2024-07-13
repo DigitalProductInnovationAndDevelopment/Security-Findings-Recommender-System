@@ -11,6 +11,11 @@ class TechnologyStack(Enum):
     SQL = "SQL"
     NOSQL = "NoSQL"
     CLOUD = "Cloud"
+    RUST = "Rust"
+    GO = "Go"
+    C_DIALECT = "CDialect"
+    RUBY = "Ruby"
+    PHP = "PHP"
     ON_PREMISE = "OnPremise"
 
 
@@ -22,6 +27,9 @@ class SecurityAspect(Enum):
     XSS = "CrossSiteScripting"
     SQL_INJECTION = "SQLInjection"
     CommandInjection = "CommandInjection"
+    CRYPTOGRAPHY = "Cryptography"
+    LOGGING = "Logging"
+    CONFIGURATION = "Configuration"
 
 
 class SeverityLevel(Enum):
@@ -29,6 +37,7 @@ class SeverityLevel(Enum):
     HIGH = "High"
     MEDIUM = "Medium"
     LOW = "Low"
+    INFORMATIONAL = "Informational"
 
 
 class RemediationType(Enum):
@@ -36,6 +45,8 @@ class RemediationType(Enum):
     CONFIGURATION_CHANGE = "ConfigurationChange"
     DEPENDENCY_UPDATE = "DependencyUpdate"
     ARCHITECTURE_CHANGE = "ArchitectureChange"
+    SECURITY_TRAINING = "SecurityTraining"
+    PROCESS_IMPROVEMENT = "ProcessImprovement"
 
 
 class AffectedComponent(Enum):
@@ -44,17 +55,28 @@ class AffectedComponent(Enum):
     DATABASE = "Database"
     NETWORK = "Network"
     THIRD_PARTY_INTEGRATION = "ThirdPartyIntegration"
+    AUTHENTICATION_SERVICE = "AuthenticationService"
+    LOGGING_SYSTEM = "LoggingSystem"
+    CACHING_LAYER = "CachingLayer"
+    ORCHESTRATION= "Orchestration"
 
 
 class Compliance(Enum):
     GDPR = "GDPR"
     PCI_DSS = "PCI_DSS"
     HIPAA = "HIPAA"
+    ISO27001 = "ISO27001"
+    SOC2 = "SOC2"
+    NIST = "NIST"
+
 
 class Environment(Enum):
-    DOCKER = "Docker"
+    DOCKER = "Docker"`Ω
     KUBERNETES = "Kubernetes"
-    DIRECT = "Direct"
+    SERVERLESS = "Serverless"
+    VIRTUAL_MACHINE = "VirtualMachine"
+    BARE_METAL = "BareMetal"
+
 
 # class Location # TODO: Add Location class
 
