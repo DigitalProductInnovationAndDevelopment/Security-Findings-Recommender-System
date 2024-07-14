@@ -32,12 +32,46 @@ jobs:
           . venv/bin/activate
           pip install pip-licenses
           pip-licenses --from=mixed --output-file=dependencies_licenses.txt
+          pip-licenses --from=mixed --output-file=dependency_licenses.json --format=json
 
       - name: Upload license reports
         uses: actions/upload-artifact@v3
         with:
           name: dependencies-license-reports
           path: dependencies_licenses.txt
+
+      - name: 'Parse Dependency licenses'
+        id: parse-dependency-licenses
+        run: |
+          dependency_licenses=$(cat dependency_licenses.json)
+          echo "::set-output name=dependency-licenses::${dependency_licenses}"
+
+      - name: 'Compare Dependency licenses'
+        run: |
+          dependency_licenses=${{ steps.parse-dependency-licenses.outputs.dependency-licenses }}
+          permitted_licenses="MIT,Apache-2.0,BSD,EPL1"
+          for package in $(echo "${dependency_licenses}" | jq -r '.[] | .Package')
+          do
+              license=$(echo "${dependency_licenses}" | jq -r --arg package "$package" '.[] | select(.Package == $package) | .License')
+              if [[ ! ",${permitted_licenses}," =~ ",${license}," ]]; then
+                  echo "Error: Package $package has an unrecognized license: $license"
+                  exit 1
+              fi
+          done
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2.2.0
+        if: always()
+        with:
+          junit_files: "**/*.json"
+          check_name: "Dependency License Compliance Check"
+
+      - name: 'Upload Dependency License Report'
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: dependency-license-report
+          path: dependency_licenses.json
 
       - name: License compliance summary
         run: echo "License compliance check completed. See artifacts for details."
