@@ -37,6 +37,7 @@ class Finding(BaseModel):
     title_list = Column(JSON, default=None, nullable=True)
     description_list = Column(JSON, default=[], nullable=True)
     locations_list = Column(JSON, default=[], nullable=True)
+    category = Column(String, nullable=True)
     cwe_id_list = Column(JSON, default=[], nullable=True)
     cve_id_list = Column(JSON, default=[], nullable=True)
     priority = Column(String, default=None, nullable=True)

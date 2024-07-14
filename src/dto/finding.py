@@ -1,18 +1,14 @@
 from data.Solution import Solution
 from data.apischema import GetRecommendationResponseItem
 from db.models import Finding as DBFinding
-from data.Finding import Finding, FindingKind
 
 
 def db_finding_to_response_item(
-    find: DBFinding,
+        find: DBFinding,
 ) -> GetRecommendationResponseItem:
-
     return GetRecommendationResponseItem(
         category=(
-            FindingKind[find.recommendations[0].category]
-            if find.recommendations
-            else FindingKind.DEFAULT
+            find.category
         ),
         solution=Solution(
             short_description=(
