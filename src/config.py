@@ -23,6 +23,8 @@ class Config(BaseSettings):
     anthropic_api_key: Optional[str] = Field(env="ANTHROPIC_API_KEY", default=None)
     openai_api_key: Optional[str] = Field(env="OPENAI_API_KEY", default=None)
 
+    max_context_length: int = Field(env="MAX_CONTEXT_LENGTH", default=8000)
+
     ai_strategy: Optional[str] = Field(env="AI_STRATEGY", default="OLLAMA")
 
     postgres_server: str = Field(env="POSTGRES_SERVER", default="localhost")
