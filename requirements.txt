@@ -16,6 +16,7 @@ openai~=1.33.0 # only if you plan to use the OpenAI Service
 anthropic~=0.28.0 # only if you plan to use the Anthropic Service
 pydantic-settings~=2.3.2
 
-sentence_transformers # only if you wanna use unsupervised clustering
-kneed # only if you wanna use unsupervised clustering
-scikit-learn # only if you wanna use unsupervised clustering
+sentence_transformers # only if you plan to use unsupervised clustering
+kneed # only if you plan to use unsupervised clustering
+scikit-learn # only if you plan to use unsupervised clustering
+plotly # only if you plan to use unsupervised clustering

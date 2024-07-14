@@ -58,7 +58,7 @@ class AffectedComponent(Enum):
     AUTHENTICATION_SERVICE = "AuthenticationService"
     LOGGING_SYSTEM = "LoggingSystem"
     CACHING_LAYER = "CachingLayer"
-    ORCHESTRATION= "Orchestration"
+    ORCHESTRATION = "Orchestration"
 
 
 class Compliance(Enum):
