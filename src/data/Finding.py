@@ -212,7 +212,7 @@ class Finding(BaseModel):
             result += f"<tr><td>Severity</td><td>{self.severity}</td></tr>"
             result += f"<tr><td>Priority</td><td>{self.priority}</td></tr>"
             if self.category is not None:
-                result += f"<tr><td>Category</td><td>{self.category}</td></tr>"
+                result += '<tr><td>Category</td><td>' + str(self.category).replace("\n", "<br />") + '</td></tr>'
             if self.unsupervised_cluster is not None:
                 result += f"<tr><td>Unsupervised Cluster</td><td>{self.unsupervised_cluster}</td></tr>"
             result += "</table>"
