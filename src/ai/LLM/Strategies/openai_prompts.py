@@ -1,5 +1,6 @@
 CLASSIFY_KIND_TEMPLATE = (
-    "You are a cybersecurity and IT expert. Classify the following security finding. The options are: {options}\n" +
+    "You are a cybersecurity and IT expert. Classify the following security finding in the category {field_name}. The options are: {options}, NotListed\n"
+    "Choose NotListed if none of the options fit." +
     f"Just answer with your selected Option, nothing else." +
     "[DATA]\n{data}\n[/DATA]"
 )

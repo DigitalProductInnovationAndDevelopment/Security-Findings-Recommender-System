@@ -1,7 +1,8 @@
+from enum import Enum
 from typing import Dict, Optional, List
 
 from ai.LLM.BaseLLMService import BaseLLMService
-from data.Finding import Finding, FindingKind
+from data.Finding import Finding
 
 
 class LLMServiceStrategy:
@@ -14,8 +15,8 @@ class LLMServiceStrategy:
     def get_url(self) -> str:
         return self.llm_service.get_url()
 
-    def classify_kind(self, finding: Finding, options: Optional[List[FindingKind]] = None) -> FindingKind:
-        return self.llm_service.classify_kind(finding, options)
+    def classify_kind(self, finding: Finding, field_name: str, options: List[Enum]) -> Optional[Enum]:
+        return self.llm_service.classify_kind(finding, field_name, options)
 
     def get_recommendation(self, finding: Finding, short: bool = True) -> str:
         return self.llm_service.get_recommendation(finding, short)

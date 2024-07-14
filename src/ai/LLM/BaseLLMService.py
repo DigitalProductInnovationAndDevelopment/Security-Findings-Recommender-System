@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+from enum import Enum
 from typing import Dict, Optional, List, Union
 
-from data.Finding import Finding, FindingKind
+from data.Finding import Finding
 
 
 class BaseLLMService(ABC):
@@ -18,7 +19,7 @@ class BaseLLMService(ABC):
         pass
 
     @abstractmethod
-    def classify_kind(self, finding: Finding, options: Optional[List[FindingKind]] = None) -> FindingKind:
+    def classify_kind(self, finding: Finding, field_name: str, options: List[Enum]) -> Optional[Enum]:
         pass
 
     @abstractmethod

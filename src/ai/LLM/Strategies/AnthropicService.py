@@ -1,9 +1,11 @@
+import os
+from enum import Enum
 from typing import Dict, List, Optional, Union
 
 from anthropic import Anthropic
 
 from ai.LLM.BaseLLMService import BaseLLMService
-from data.Finding import FindingKind, Finding
+from data.Finding import Finding
 from ai.LLM.Strategies.openai_prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
@@ -49,23 +51,28 @@ class AnthropicService(BaseLLMService):
         content = message.content[0].text
         return {"response": content}
 
-    def classify_kind(
-        self, finding: Finding, options: Optional[List[FindingKind]] = None
-    ) -> FindingKind:
+    def classify_kind(self, finding: Finding, field_name: str, options: Optional[List[Enum]] = None) -> Optional[Enum]:
         if options is None:
-            options = list(FindingKind)
+            logger.warning(f"No options provided for field {field_name}")
+            return None
 
-        options_str = ", ".join([kind.name for kind in options])
-        prompt = CLASSIFY_KIND_TEMPLATE.format(options=options_str, data=str(finding))
+        options_str = ", ".join([option.value for option in options])
+        prompt = CLASSIFY_KIND_TEMPLATE.format(options=options_str, field_name=field_name,  data=str(finding))
         response = self.generate(prompt)
-        if "response" not in response:
-            logger.warning(f"Failed to classify the finding: {finding.title}")
-            return FindingKind.DEFAULT
-        return FindingKind[response["response"].strip()]
 
-    def get_recommendation(
-        self, finding: Finding, short: bool = True
-    ) -> Union[str, List[str]]:
+        if f"selected_option" not in response:
+            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}")
+            return None
+        if response["selected_option"] == "NotListed":
+            logger.info(f"Chose None for {field_name} for the finding: {finding.title}")
+            return None
+        if response["selected_option"] not in options_str:
+            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}")
+            return None
+
+        return next(option for option in options if option.value == response["selected_option"])
+
+    def get_recommendation(self, finding: Finding, short: bool = True) -> Union[str, List[str]]:
         if short:
             prompt = SHORT_RECOMMENDATION_TEMPLATE.format(data=str(finding))
         else:  # long recommendation
