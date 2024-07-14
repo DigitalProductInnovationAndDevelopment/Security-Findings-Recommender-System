@@ -1,3 +1,4 @@
+import json
 from typing import Dict, List, Optional, Union
 from enum import Enum
 
@@ -12,7 +13,7 @@ from ai.LLM.Strategies.openai_prompts import (
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
     SEARCH_TERMS_TEMPLATE,
     META_PROMPT_GENERATOR_TEMPLATE,
-    LONG_RECOMMENDATION_TEMPLATE,
+    LONG_RECOMMENDATION_TEMPLATE, COMBINE_DESCRIPTIONS_TEMPLATE,
 )
 from utils.text_tools import clean
 from config import config
@@ -20,6 +21,7 @@ from config import config
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 class AnthropicService(BaseLLMService, LLMServiceMixin):
     """
@@ -30,9 +32,9 @@ class AnthropicService(BaseLLMService, LLMServiceMixin):
     """
 
     def __init__(
-        self,
-        api_key: Optional[str] = None,
-        model: str = "claude-3-5-sonnet-20240620"
+            self,
+            api_key: Optional[str] = None,
+            model: str = "claude-3-5-sonnet-20240620"
     ):
         """
         Initialize the AnthropicService.
@@ -98,10 +100,12 @@ class AnthropicService(BaseLLMService, LLMServiceMixin):
         else:
             return GENERIC_LONG_RECOMMENDATION_TEMPLATE
 
-    def _process_recommendation_response(self, response: Dict[str, str], finding: Finding, short: bool) -> Union[str, List[str]]:
+    def _process_recommendation_response(self, response: Dict[str, str], finding: Finding, short: bool) -> Union[
+        str, List[str]]:
         """Process the recommendation response from Anthropic."""
         if "response" not in response:
-            logger.warning(f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}")
+            logger.warning(
+                f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}")
             return "" if short else [""]
         return clean(response["response"], llm_service=self)
 
@@ -148,3 +152,23 @@ class AnthropicService(BaseLLMService, LLMServiceMixin):
             str: The string representation of the dictionary.
         """
         return LLMServiceMixin.convert_dict_to_str(self, data)
+
+    def combine_descriptions(self, descriptions: List[str]) -> str:
+        """
+        Combine multiple descriptions into a single, coherent description.
+
+        Args:
+            descriptions (List[str]): The list of descriptions to combine.
+
+        Returns:
+            str: The combined description.
+        """
+        if len(descriptions) <= 1:
+            return descriptions[0] if descriptions else ""
+
+        prompt = COMBINE_DESCRIPTIONS_TEMPLATE.format(data=descriptions)
+
+        response = self.generate(prompt)
+        if "response" not in response:
+            return descriptions[0]
+        return clean(response["response"], llm_service=self)

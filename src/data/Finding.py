@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 class Finding(BaseModel):
     title: List[str] = Field(default_factory=list)
     source: Set[str] = Field(default_factory=set)
-    description: List[str] = Field(default_factory=list)
+    descriptions: List[str] = Field(default_factory=list)
+    description: str = Field(default="")
     cwe_ids: List[str] = Field(default_factory=list)
     cve_ids: List[str] = Field(default_factory=list)
     severity: Optional[int] = None
@@ -25,12 +26,22 @@ class Finding(BaseModel):
     solution: Optional["Solution"] = None
     _llm_service: Optional[Any] = PrivateAttr(default=None)
 
-    from typing import get_args
+    def combine_descriptions(self) -> "Finding":
+        if len(self.descriptions) <= 1:
+            self.description = self.descriptions[0] if self.descriptions else ""
+            return self
+
+        if self.llm_service is None:
+            logger.error("LLM Service not set, cannot combine descriptions.")
+            return self
+
+        self.description = self.llm_service.combine_descriptions(self.descriptions)
+        return self
 
     def add_category(self) -> "Finding":
         if self.llm_service is None:
-            from ai.LLM.LLMServiceStrategy import LLMServiceStrategy  # Lazy import to avoid circular imports
-            self.llm_service = LLMServiceStrategy()
+            logger.error("LLM Service not set, cannot add category.")
+            return self
 
         self.category = Category()
 
@@ -64,7 +75,6 @@ class Finding(BaseModel):
         # Classify environment
         environment_options = list(Environment)
         self.category.environment = self.llm_service.classify_kind(self, "environment", environment_options)
-
 
         return self
 
@@ -126,7 +136,8 @@ class Finding(BaseModel):
         from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
 
         if self.llm_service is None:
-            self.llm_service = LLMServiceStrategy()
+            logger.error("LLM Service not set, cannot generate solution.")
+            return self
         self.solution = Solution()
         if short:
             short_solution = self.llm_service.get_recommendation(self, True)

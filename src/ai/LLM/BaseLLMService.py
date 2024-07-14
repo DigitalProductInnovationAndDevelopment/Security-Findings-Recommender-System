@@ -28,6 +28,10 @@ class BaseLLMService(ABC):
             logger.error(f"Error generating response: {str(e)}")
             return {"error": str(e)}
 
+    @abstractmethod
+    def combine_descriptions(self, descriptions: List[str]) -> str:
+        pass
+
     def classify_kind(self, finding: Finding, field_name: str, options: Optional[List[Enum]] = None) -> Optional[Enum]:
         if options is None:
             logger.warning(f"No options provided for field {field_name}")

@@ -1,3 +1,9 @@
+COMBINE_DESCRIPTIONS_TEMPLATE = (
+    "You are an expert in combining information. Combine the following descriptions into a single, coherent description that includes all relevant information.\n\n"
+    "Provide a single concise paragraph that summarizes all the important information from these descriptions.\n\n"
+    "[DATA]\n{data}\n[/DATA]"
+)
+
 CLASSIFY_KIND_TEMPLATE = (
     "You are a cybersecurity and IT expert. Classify the following security finding in the category {field_name}. The options are: {options}, NotListed\n"
     "Choose NotListed if none of the options fit." +

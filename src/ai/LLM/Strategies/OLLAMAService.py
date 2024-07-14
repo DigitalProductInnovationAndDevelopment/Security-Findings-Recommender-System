@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import List, Dict, Union, Optional
 import logging
 import httpx
@@ -15,17 +14,18 @@ from ai.LLM.Strategies.ollama_prompts import (
     LONG_RECOMMENDATION_TEMPLATE,
     META_PROMPT_GENERATOR_TEMPLATE,
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
-    SEARCH_TERMS_TEMPLATE,
+    SEARCH_TERMS_TEMPLATE, COMBINE_DESCRIPTIONS_TEMPLATE,
 )
 from config import config
 
 logger = logging.getLogger(__name__)
 
+
 class OLLAMAService(BaseLLMService, LLMServiceMixin):
     def __init__(
-        self,
-        model_url: Optional[str] = None,
-        model_name: Optional[str] = None
+            self,
+            model_url: Optional[str] = None,
+            model_name: Optional[str] = None
     ):
         """
         Initialize the OLLAMAService.
@@ -98,9 +98,11 @@ class OLLAMAService(BaseLLMService, LLMServiceMixin):
         else:
             return GENERIC_LONG_RECOMMENDATION_TEMPLATE
 
-    def _process_recommendation_response(self, response: Dict[str, str], finding: Finding, short: bool) -> Union[str, List[str]]:
+    def _process_recommendation_response(self, response: Dict[str, str], finding: Finding, short: bool) -> Union[
+        str, List[str]]:
         if "recommendation" not in response:
-            logger.warning(f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}")
+            logger.warning(
+                f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}")
             return "" if short else [""]
         return clean(response["recommendation"], llm_service=self)
 
@@ -131,7 +133,6 @@ class OLLAMAService(BaseLLMService, LLMServiceMixin):
             return ""
         return clean(response["search_terms"], llm_service=self)
 
-
     def convert_dict_to_str(self, data: Dict) -> str:
         """
         Convert a dictionary to a string representation.
@@ -145,3 +146,25 @@ class OLLAMAService(BaseLLMService, LLMServiceMixin):
             str: The string representation of the dictionary.
         """
         return LLMServiceMixin.convert_dict_to_str(self, data)
+
+    def combine_descriptions(self, descriptions: List[str]) -> str:
+        """
+        Combine multiple descriptions into a single, coherent description.
+
+        Args:
+            descriptions (List[str]): The list of descriptions to combine.
+
+        Returns:
+            str: The combined description.
+        """
+        if len(descriptions) <= 1:
+            return descriptions[0] if descriptions else ""
+
+        prompt = COMBINE_DESCRIPTIONS_TEMPLATE.format(data=descriptions)
+
+        response = self.generate(prompt)
+        if "combined_description" in response:
+            return self.clean_response(response["combined_description"])
+        else:
+            logger.warning("Failed to combine descriptions")
+            return " ".join(descriptions)

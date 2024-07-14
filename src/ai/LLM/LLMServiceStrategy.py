@@ -37,6 +37,18 @@ class LLMServiceStrategy:
         """
         return self.llm_service.generate(prompt)
 
+    def combine_descriptions(self,  descriptions: List[str]) -> str:
+        """
+        Combine multiple descriptions into a single, coherent description.
+
+        Args:
+            descriptions (List[str]): The list of descriptions to combine.
+
+        Returns:
+            str: The combined description.
+        """
+        return self.llm_service.combine_descriptions(descriptions)
+
     def classify_kind(self, finding: Finding, field_name: str, options: Optional[List[Enum]] = None) -> Optional[Enum]:
         """
         Classify the kind of finding.

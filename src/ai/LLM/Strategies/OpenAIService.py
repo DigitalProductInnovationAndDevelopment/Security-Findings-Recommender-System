@@ -13,7 +13,7 @@ from ai.LLM.Strategies.openai_prompts import (
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
     SEARCH_TERMS_TEMPLATE,
     META_PROMPT_GENERATOR_TEMPLATE,
-    LONG_RECOMMENDATION_TEMPLATE,
+    LONG_RECOMMENDATION_TEMPLATE, COMBINE_DESCRIPTIONS_TEMPLATE,
 )
 from utils.text_tools import clean
 
@@ -123,3 +123,23 @@ class OpenAIService(BaseLLMService, LLMServiceMixin):
             str: The string representation of the dictionary.
         """
         return LLMServiceMixin.convert_dict_to_str(self, data)
+
+    def combine_descriptions(self, descriptions: List[str]) -> str:
+        """
+        Combine multiple descriptions into a single, coherent description.
+
+        Args:
+            descriptions (List[str]): The list of descriptions to combine.
+
+        Returns:
+            str: The combined description.
+        """
+        if len(descriptions) <= 1:
+            return descriptions[0] if descriptions else ""
+
+        prompt = COMBINE_DESCRIPTIONS_TEMPLATE.format(data=descriptions)
+
+        response = self.generate(prompt)
+        if "response" not in response:
+            return descriptions[0]
+        return clean(response["response"], llm_service=self)
