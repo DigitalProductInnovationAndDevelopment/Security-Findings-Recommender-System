@@ -1,105 +1,114 @@
-import os
-from enum import Enum
 from typing import Dict, List, Optional, Union
+from enum import Enum
 
 from anthropic import Anthropic
 
 from ai.LLM.BaseLLMService import BaseLLMService
+from ai.LLM.LLMServiceMixin import LLMServiceMixin
 from data.Finding import Finding
 from ai.LLM.Strategies.openai_prompts import (
     CLASSIFY_KIND_TEMPLATE,
     SHORT_RECOMMENDATION_TEMPLATE,
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
     SEARCH_TERMS_TEMPLATE,
-    CONVERT_DICT_TO_STR_TEMPLATE,
     META_PROMPT_GENERATOR_TEMPLATE,
     LONG_RECOMMENDATION_TEMPLATE,
 )
 from utils.text_tools import clean
 from config import config
+
 import logging
-import json
 
 logger = logging.getLogger(__name__)
 
+class AnthropicService(BaseLLMService, LLMServiceMixin):
+    """
+    AnthropicService class for interacting with Anthropic's language models.
 
-class AnthropicService(BaseLLMService):
+    This class implements the BaseLLMService and uses the LLMServiceMixin
+    to provide Anthropic-specific functionality.
+    """
+
     def __init__(
         self,
-        api_key: str = config.anthropic_api_key,
-        model: str = "claude-3-5-sonnet-20240620",
+        api_key: Optional[str] = None,
+        model: str = "claude-3-5-sonnet-20240620"
     ):
-        if api_key is None:
+        """
+        Initialize the AnthropicService.
+
+        Args:
+            api_key (Optional[str]): Anthropic API key. If None, falls back to config.
+            model (str): Anthropic model name. Defaults to "claude-3-5-sonnet-20240620".
+        """
+        self.api_key = api_key or config.anthropic_api_key
+        self.model = model
+
+        if self.api_key is None:
             raise ValueError(
                 "API key not provided and ANTHROPIC_API_KEY environment variable not set."
             )
-        self.client = Anthropic(api_key=api_key)
-        self.model = model
+
+        LLMServiceMixin.__init__(self, {
+            'api_key': self.api_key,
+            'model': self.model
+        })
+        self.client = Anthropic(api_key=self.api_key)
 
     def get_model_name(self) -> str:
+        """Get the name of the Anthropic model being used."""
         return "-".join(self.model.split("-")[:-1])
 
     def get_url(self) -> str:
+        """Get the URL for the Anthropic API (placeholder method)."""
         return "-"
 
-    def generate(self, prompt: str) -> Dict[str, str]:
-        message = self.client.messages.create(
-            max_tokens=1024,
-            messages=[{"role": "user", "content": prompt}],
-            model=self.model,
-        )
-        content = message.content[0].text
-        return {"response": content}
+    def _generate(self, prompt: str) -> Dict[str, str]:
+        """
+        Generate a response using the Anthropic API.
 
-    def classify_kind(self, finding: Finding, field_name: str, options: Optional[List[Enum]] = None) -> Optional[Enum]:
-        if options is None:
-            logger.warning(f"No options provided for field {field_name}")
-            return None
+        Args:
+            prompt (str): The input prompt.
 
-        options_str = ", ".join([option.value for option in options])
-        prompt = CLASSIFY_KIND_TEMPLATE.format(options=options_str, field_name=field_name,  data=str(finding))
-        response = self.generate(prompt)
-
-        if f"selected_option" not in response:
-            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}")
-            return None
-        if response["selected_option"] == "NotListed":
-            logger.info(f"Chose None for {field_name} for the finding: {finding.title}")
-            return None
-        if response["selected_option"] not in options_str:
-            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}")
-            return None
-
-        return next(option for option in options if option.value == response["selected_option"])
-
-    def get_recommendation(self, finding: Finding, short: bool = True) -> Union[str, List[str]]:
-        if short:
-            prompt = SHORT_RECOMMENDATION_TEMPLATE.format(data=str(finding))
-        else:  # long recommendation
-            if finding.solution and finding.solution.short_description:
-                finding.solution.add_to_metadata("used_meta_prompt", True)
-                prompt = self._generate_prompt_with_meta_prompts(finding)
-            else:
-                prompt = GENERIC_LONG_RECOMMENDATION_TEMPLATE
-
-        finding.solution.add_to_metadata(
-            f"prompt_{'short' if short else 'long'}", prompt
-        )
-        response = self.generate(prompt)
-
-        if "response" not in response:
-            logger.warning(
-                f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}"
+        Returns:
+            Dict[str, str]: A dictionary containing the generated response.
+        """
+        try:
+            message = self.client.messages.create(
+                max_tokens=1024,
+                messages=[{"role": "user", "content": prompt}],
+                model=self.model,
             )
-            return "" if short else [""]
+            content = message.content[0].text
+            return {"response": content}
+        except Exception as e:
+            return self.handle_api_error(e)
 
+    def _get_classification_prompt(self, options: str, field_name: str, finding_str: str) -> str:
+        """Generate the classification prompt for Anthropic."""
+        return CLASSIFY_KIND_TEMPLATE.format(options=options, field_name=field_name, data=finding_str)
+
+    def _get_recommendation_prompt(self, finding: Finding, short: bool) -> str:
+        """Generate the recommendation prompt for Anthropic."""
+        if short:
+            return SHORT_RECOMMENDATION_TEMPLATE.format(data=str(finding))
+        elif finding.solution and finding.solution.short_description:
+            finding.solution.add_to_metadata("used_meta_prompt", True)
+            return self._generate_prompt_with_meta_prompts(finding)
+        else:
+            return GENERIC_LONG_RECOMMENDATION_TEMPLATE
+
+    def _process_recommendation_response(self, response: Dict[str, str], finding: Finding, short: bool) -> Union[str, List[str]]:
+        """Process the recommendation response from Anthropic."""
+        if "response" not in response:
+            logger.warning(f"Failed to generate a {'short' if short else 'long'} recommendation for the finding: {finding.title}")
+            return "" if short else [""]
         return clean(response["response"], llm_service=self)
 
     def _generate_prompt_with_meta_prompts(self, finding: Finding) -> str:
+        """Generate a prompt with meta-prompts for long recommendations."""
         short_recommendation = finding.solution.short_description
-        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(
-            finding=str(finding)
-        )
+        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(finding=str(finding))
         meta_prompt_response = self.generate(meta_prompt_generator)
         meta_prompts = clean(meta_prompt_response.get("response", ""), llm_service=self)
 
@@ -115,22 +124,27 @@ class AnthropicService(BaseLLMService):
 
         return long_prompt
 
-    def get_search_terms(self, finding: Finding) -> str:
-        prompt = SEARCH_TERMS_TEMPLATE.format(data=str(finding))
-        response = self.generate(prompt)
+    def _get_search_terms_prompt(self, finding: Finding) -> str:
+        """Generate the search terms prompt for Anthropic."""
+        return SEARCH_TERMS_TEMPLATE.format(data=str(finding))
+
+    def _process_search_terms_response(self, response: Dict[str, str], finding: Finding) -> str:
+        """Process the search terms response from Anthropic."""
         if "response" not in response:
-            logger.warning(
-                f"Failed to generate search terms for the finding: {finding.title}"
-            )
+            logger.warning(f"Failed to generate search terms for the finding: {finding.title}")
             return ""
         return clean(response["response"], llm_service=self)
 
-    def convert_dict_to_str(self, data) -> str:
-        prompt = CONVERT_DICT_TO_STR_TEMPLATE.format(data=json.dumps(data))
-        response = self.generate(prompt)
-        if "response" not in response:
-            logger.info(
-                f"Failed to convert dictionary to string, returning it as str conversion."
-            )
-            return str(data)
-        return clean(response["response"], llm_service=self)
+    def convert_dict_to_str(self, data: Dict) -> str:
+        """
+        Convert a dictionary to a string representation.
+
+        This method uses the implementation from LLMServiceMixin.
+
+        Args:
+            data (Dict): The dictionary to convert.
+
+        Returns:
+            str: The string representation of the dictionary.
+        """
+        return LLMServiceMixin.convert_dict_to_str(self, data)
