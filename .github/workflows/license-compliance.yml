@@ -31,14 +31,7 @@ jobs:
         run: |
           . venv/bin/activate
           pip install pip-licenses
-          pip-licenses --from=mixed --output-file=dependencies_licenses.txt
           pip-licenses --from=mixed --output-file=dependency_licenses.json --format=json
-
-      - name: Upload license reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: dependencies-license-reports
-          path: dependencies_licenses.txt
 
       - name: 'Parse Dependency licenses'
         id: parse-dependency-licenses
@@ -63,7 +56,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2.2.0
         if: always()
         with:
-          junit_files: "**/*.json"
+          junit_files: "dependency_licenses.json"
           check_name: "Dependency License Compliance Check"
 
       - name: 'Upload Dependency License Report'
