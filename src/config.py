@@ -19,11 +19,9 @@ class Config(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
     ollama_url: str = Field(env="OLLAMA_URL", default="http://localhost:11434")
-    ollama_model: str = Field(env="OLLAMA_MODEL", default="phi3:mini")
+    ollama_model: str = Field(env="OLLAMA_MODEL", default="llama3:instruct")
     anthropic_api_key: Optional[str] = Field(env="ANTHROPIC_API_KEY", default=None)
     openai_api_key: Optional[str] = Field(env="OPENAI_API_KEY", default=None)
-
-    max_context_length: int = Field(env="MAX_CONTEXT_LENGTH", default=8000)
 
     ai_strategy: Optional[str] = Field(env="AI_STRATEGY", default="OLLAMA")
 

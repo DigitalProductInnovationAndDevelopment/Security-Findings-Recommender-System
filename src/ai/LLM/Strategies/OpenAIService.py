@@ -35,6 +35,7 @@ class OpenAIService(BaseLLMService, LLMServiceMixin):
         """
         self.api_key = api_key or config.openai_api_key
         self.model = model
+        self.context_size = 128000
 
         if self.api_key is None:
             raise ValueError(
@@ -49,6 +50,9 @@ class OpenAIService(BaseLLMService, LLMServiceMixin):
 
     def get_model_name(self) -> str:
         return self.model
+
+    def get_context_size(self) -> int:
+        return self.context_size
 
     def get_url(self) -> str:
         return "-"

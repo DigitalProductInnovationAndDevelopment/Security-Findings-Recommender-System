@@ -36,6 +36,7 @@ class OLLAMAService(BaseLLMService, LLMServiceMixin):
         """
         self.model_url = model_url or config.ollama_url
         self.model_name = model_name or config.ollama_model
+        self.context_size = 8000
 
         LLMServiceMixin.__init__(self, {
             'model_url': self.model_url,
@@ -65,6 +66,9 @@ class OLLAMAService(BaseLLMService, LLMServiceMixin):
 
     def get_model_name(self) -> str:
         return self.model_name
+
+    def get_context_size(self) -> int:
+        return self.context_size
 
     def get_url(self) -> str:
         return self.generate_url

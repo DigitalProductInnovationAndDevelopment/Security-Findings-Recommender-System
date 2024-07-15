@@ -14,6 +14,10 @@ class BaseLLMService(ABC):
         pass
 
     @abstractmethod
+    def get_context_size(self) -> int:
+        pass
+
+    @abstractmethod
     def get_url(self) -> str:
         pass
 

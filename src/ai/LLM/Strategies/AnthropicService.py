@@ -45,6 +45,7 @@ class AnthropicService(BaseLLMService, LLMServiceMixin):
         """
         self.api_key = api_key or config.anthropic_api_key
         self.model = model
+        self.context_size = 200000
 
         if self.api_key is None:
             raise ValueError(
@@ -60,6 +61,10 @@ class AnthropicService(BaseLLMService, LLMServiceMixin):
     def get_model_name(self) -> str:
         """Get the name of the Anthropic model being used."""
         return "-".join(self.model.split("-")[:-1])
+
+    def get_context_size(self) -> int:
+        """Get the context size for the Anthropic API."""
+        return self.context_size
 
     def get_url(self) -> str:
         """Get the URL for the Anthropic API (placeholder method)."""
