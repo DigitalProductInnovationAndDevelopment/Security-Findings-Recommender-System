@@ -180,7 +180,7 @@ class Finding(BaseModel):
         if len(self.source) > 0:
             result += f"Source: {', '.join(self.source)}\n"
         if len(self.description) > 0:
-            result += f"Description: {', '.join(self.description)}\n"
+            result += f"Description: {self.description}\n"
         if len(self.location_list) > 0:
             result += f"Location List:\n"
             for location in self.location_list:
@@ -214,7 +214,7 @@ class Finding(BaseModel):
             result += f"<tr><td>Title</td><td>{', '.join(self.title)}</td></tr>"
             result += f"<tr><td>Source</td><td>{', '.join(self.source)}</td></tr>"
             result += (
-                f"<tr><td>Description</td><td>{', '.join(self.description)}</td></tr>"
+                f"<tr><td>Description</td><td>{self.description}</td></tr>"
             )
             if len(self.location_list) > 0:
                 result += f"<tr><td>Location List</td><td>{' & '.join(map(str, self.location_list))}</td></tr>"
@@ -231,7 +231,7 @@ class Finding(BaseModel):
             result += "<h3>Finding</h3>"
             result += f"<p>Title: {', '.join(self.title)}</p>"
             result += f"<p>Source: {', '.join(self.source)}</p>"
-            result += f"<p>Description: {', '.join(self.description)}</p>"
+            result += f"<p>Description: {self.description}</p>"
             if len(self.location_list) > 0:
                 result += (
                     f"<p>Location List: {' & '.join(map(str, self.location_list))}</p>"
