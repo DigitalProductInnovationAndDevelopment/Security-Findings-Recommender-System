@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Dict, Optional, List, Union, Tuple
+from tqdm import tqdm
 import logging
 
 from data.Finding import Finding
@@ -22,12 +23,12 @@ class BaseLLMService(ABC):
         pass
 
     @abstractmethod
-    def _generate(self, prompt: str) -> Dict[str, str]:
+    def _generate(self, prompt: str, json=False) -> Dict[str, str]:
         pass
 
-    def generate(self, prompt: str) -> Dict[str, str]:
+    def generate(self, prompt: str, json=False) -> Dict[str, str]:
         try:
-            return self._generate(prompt)
+            return self._generate(prompt, json)
         except Exception as e:
             logger.error(f"Error generating response: {str(e)}")
             return {"error": str(e)}
@@ -110,7 +111,7 @@ class BaseLLMService(ABC):
 
         results = []
 
-        for group, meta_info in finding_groups:
+        for group, meta_info in tqdm(finding_groups, desc="Generating aggregated solutions for group", unit="group"):
             prompt = self._get_aggregated_solution_prompt(group, meta_info)
             response = self.generate(prompt)
             solution = self._process_aggregated_solution_response(response)
@@ -134,7 +135,7 @@ class BaseLLMService(ABC):
 
     def _subdivide_finding_group(self, findings: List[Finding]) -> List[Tuple[List[Finding], Dict]]:
         prompt = self._get_subdivision_prompt(findings)
-        response = self.generate(prompt)
+        response = self.generate(prompt, json=True)
         return self._process_subdivision_response(response, findings)
 
     @abstractmethod

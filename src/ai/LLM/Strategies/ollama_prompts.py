@@ -95,7 +95,7 @@ AGGREGATED_SOLUTION_TEMPLATE = (
     "1. Summary: A brief overview of the core security challenges (1-2 sentences)\n"
     "2. Strategic Solution: A high-level approach to address the underlying issues (3-5 key points)\n"
     "3. Implementation Guidance: General steps for putting the strategy into action\n"
-    "4. Long-term Considerations: Suggestions for ongoing improvement and risk mitigation\n\n"
+    "4. Long-term Considerations: Suggestions for ongoing improvement and risk mitigation. Give first steps or initial research that could lay a foundation.\n\n"
     "You may use Markdown formatting in your response to improve readability.\n"
     f"{answer_in_json_prompt('aggregated_solution')}"
     "Findings:\n{data}"

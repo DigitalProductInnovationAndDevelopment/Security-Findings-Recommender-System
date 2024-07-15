@@ -79,7 +79,8 @@ class OLLAMAService(BaseLLMService, LLMServiceMixin):
     @retry(
         stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=4, max=60)
     )
-    def _generate(self, prompt: str) -> Dict[str, str]:
+    def _generate(self, prompt: str, json=True) -> Dict[str, str]:
+        # The JSON Param is ignored by the OLLAMA server, it always returns JSON
         payload = {"prompt": prompt, **self.generate_payload}
         try:
             timeout = httpx.Timeout(timeout=300.0)

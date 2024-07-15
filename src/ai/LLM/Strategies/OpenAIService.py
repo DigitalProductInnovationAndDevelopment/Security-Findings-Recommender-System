@@ -1,6 +1,7 @@
 import json
+import re
 from enum import Enum
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Tuple
 
 import openai
 
@@ -8,12 +9,14 @@ from ai.LLM.BaseLLMService import BaseLLMService
 from ai.LLM.LLMServiceMixin import LLMServiceMixin
 from data.Finding import Finding
 from ai.LLM.Strategies.openai_prompts import (
-    CLASSIFY_KIND_TEMPLATE,
-    SHORT_RECOMMENDATION_TEMPLATE,
-    GENERIC_LONG_RECOMMENDATION_TEMPLATE,
-    SEARCH_TERMS_TEMPLATE,
-    META_PROMPT_GENERATOR_TEMPLATE,
-    LONG_RECOMMENDATION_TEMPLATE, COMBINE_DESCRIPTIONS_TEMPLATE,
+    OPENAI_CLASSIFY_KIND_TEMPLATE,
+    OPENAI_SHORT_RECOMMENDATION_TEMPLATE,
+    OPENAI_GENERIC_LONG_RECOMMENDATION_TEMPLATE,
+    OPENAI_SEARCH_TERMS_TEMPLATE,
+    OPENAI_META_PROMPT_GENERATOR_TEMPLATE,
+    OPENAI_LONG_RECOMMENDATION_TEMPLATE,
+    OPENAI_COMBINE_DESCRIPTIONS_TEMPLATE,
+    OPENAI_AGGREGATED_SOLUTION_TEMPLATE, OPENAI_SUBDIVISION_PROMPT_TEMPLATE,
 )
 from utils.text_tools import clean
 
@@ -25,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 class OpenAIService(BaseLLMService, LLMServiceMixin):
-    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-4"):
+    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-4o"):
         """
         Initialize the OpenAIService.
 
@@ -57,27 +60,33 @@ class OpenAIService(BaseLLMService, LLMServiceMixin):
     def get_url(self) -> str:
         return "-"
 
-    def _generate(self, prompt: str) -> Dict[str, str]:
+    def _generate(self, prompt: str, json=False) -> Dict[str, str]:
         try:
-            response = openai.chat.completions.create(
-                model=self.model, messages=[{"role": "user", "content": prompt}]
-            )
+            params = {
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt}]
+            }
+
+            if json:
+                params["response_format"] = {"type": "json_object"}
+
+            response = openai.chat.completions.create(**params)
             content = response.choices[0].message.content
             return {"response": content}
         except Exception as e:
             return self.handle_api_error(e)
 
     def _get_classification_prompt(self, options: str, field_name: str, finding_str: str) -> str:
-        return CLASSIFY_KIND_TEMPLATE.format(options=options, field_name=field_name, data=finding_str)
+        return OPENAI_CLASSIFY_KIND_TEMPLATE.format(options=options, field_name=field_name, data=finding_str)
 
     def _get_recommendation_prompt(self, finding: Finding, short: bool) -> str:
         if short:
-            return SHORT_RECOMMENDATION_TEMPLATE.format(data=str(finding))
+            return OPENAI_SHORT_RECOMMENDATION_TEMPLATE.format(data=str(finding))
         elif finding.solution and finding.solution.short_description:
             finding.solution.add_to_metadata("used_meta_prompt", True)
             return self._generate_prompt_with_meta_prompts(finding)
         else:
-            return GENERIC_LONG_RECOMMENDATION_TEMPLATE
+            return OPENAI_GENERIC_LONG_RECOMMENDATION_TEMPLATE
 
     def _process_recommendation_response(self, response: Dict[str, str], finding: Finding, short: bool) -> Union[
         str, List[str]]:
@@ -89,11 +98,11 @@ class OpenAIService(BaseLLMService, LLMServiceMixin):
 
     def _generate_prompt_with_meta_prompts(self, finding: Finding) -> str:
         short_recommendation = finding.solution.short_description
-        meta_prompt_generator = META_PROMPT_GENERATOR_TEMPLATE.format(finding=str(finding))
+        meta_prompt_generator = OPENAI_META_PROMPT_GENERATOR_TEMPLATE.format(finding=str(finding))
         meta_prompt_response = self.generate(meta_prompt_generator)
         meta_prompts = clean(meta_prompt_response.get("response", ""), llm_service=self)
 
-        long_prompt = LONG_RECOMMENDATION_TEMPLATE.format(meta_prompts=meta_prompts)
+        long_prompt = OPENAI_LONG_RECOMMENDATION_TEMPLATE.format(meta_prompts=meta_prompts)
 
         finding.solution.add_to_metadata(
             "prompt_long_breakdown",
@@ -106,11 +115,64 @@ class OpenAIService(BaseLLMService, LLMServiceMixin):
         return long_prompt
 
     def _get_search_terms_prompt(self, finding: Finding) -> str:
-        return SEARCH_TERMS_TEMPLATE.format(data=str(finding))
+        return OPENAI_SEARCH_TERMS_TEMPLATE.format(data=str(finding))
 
     def _process_search_terms_response(self, response: Dict[str, str], finding: Finding) -> str:
         if "response" not in response:
             logger.warning(f"Failed to generate search terms for the finding: {finding.title}")
+            return ""
+        return clean(response["response"], llm_service=self)
+
+    def _get_subdivision_prompt(self, findings: List[Finding]) -> str:
+        findings_str = self._get_findings_str_for_aggregation(findings)
+        return OPENAI_SUBDIVISION_PROMPT_TEMPLATE.format(data=findings_str)
+
+    def _process_subdivision_response(self, response: Dict[str, str], findings: List[Finding]) -> List[Tuple[List[Finding], Dict]]:
+        if "response" not in response:
+            logger.warning("Failed to subdivide findings")
+            return [(findings, {})]  # Return all findings as a single group if subdivision fails
+
+        try:
+            response = response["response"]
+            # remove prefix ```json and suffix ```
+            response = re.sub(r'^```json', '', response)
+            response = re.sub(r'```$', '', response)
+            subdivisions = json.loads(response)["subdivisions"]
+        except json.JSONDecodeError:
+            logger.error("Failed to parse JSON response")
+            return [(findings, {})]
+        except KeyError:
+            logger.error("Unexpected JSON structure in response")
+            return [(findings, {})]
+
+        result = []
+        for subdivision in subdivisions:
+            try:
+                group_indices = [int(i.strip()) - 1 for i in subdivision["group"].split(',')]
+                group = [findings[i] for i in group_indices if i < len(findings)]
+                meta_info = {"reason": subdivision.get("reason", "")}
+                if len(group) == 1:
+                    continue  # Skip single-element groups for *aggregated* solutions
+                result.append((group, meta_info))
+            except ValueError:
+                logger.error(f"Failed to parse group indices: {subdivision['group']}")
+                continue
+            except KeyError:
+                logger.error("Unexpected subdivision structure")
+                continue
+
+        return result
+
+    def _get_aggregated_solution_prompt(self, findings: List[Finding], meta_info: Dict) -> str:
+        findings_str = self._get_findings_str_for_aggregation(findings, details=True)
+        return OPENAI_AGGREGATED_SOLUTION_TEMPLATE.format(
+            data=findings_str,
+            meta_info=meta_info.get("reason", "")
+        )
+
+    def _process_aggregated_solution_response(self, response: Dict[str, str]) -> str:
+        if "response" not in response:
+            logger.warning("Failed to generate an aggregated solution")
             return ""
         return clean(response["response"], llm_service=self)
 
@@ -141,7 +203,7 @@ class OpenAIService(BaseLLMService, LLMServiceMixin):
         if len(descriptions) <= 1:
             return descriptions[0] if descriptions else ""
 
-        prompt = COMBINE_DESCRIPTIONS_TEMPLATE.format(data=descriptions)
+        prompt = OPENAI_COMBINE_DESCRIPTIONS_TEMPLATE.format(data=descriptions)
 
         response = self.generate(prompt)
         if "response" not in response:
