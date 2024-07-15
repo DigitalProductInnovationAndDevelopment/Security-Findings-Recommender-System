@@ -66,6 +66,41 @@ SEARCH_TERMS_TEMPLATE = (
     "[DATA]\n{data}\n[/DATA]"
 )
 
+SUBDIVISION_PROMPT_TEMPLATE = (
+    "You are a cybersecurity expert tasked with grouping related security findings. "
+    "Analyze the following list of findings and group them based on their relationships or common themes. "
+    "For each group, provide a brief reason for grouping them together.\n\n"
+    "Provide your answer in the following JSON format:\n"
+    '{{"subdivisions": [\n'
+    '  {{"group": "<comma-separated list of finding numbers, e.g. 3,4,5,8>", "reason": "<brief reason for grouping>"}}\n'
+    ']}}\n\n'
+    "Findings:\n{data}"
+)
+
+AGGREGATED_SOLUTION_TEMPLATE = (
+    "As a senior cybersecurity strategist, your task is to provide a high-level, strategic solution for a group of related security findings. "
+    "Your goal is to synthesize the information and create a broad, actionable recommendation that addresses the root causes of multiple issues.\n\n"
+    "Group meta information: {meta_info}\n\n"
+    "Instructions:\n"
+    "1. Review the group of findings provided at the end of this prompt.\n"
+    "2. Identify common themes or root causes among the findings.\n"
+    "3. Generate a strategic, overarching solution that addresses these core issues.\n"
+    "4. Your solution should be:\n"
+    "   - High-level: Focus on broad strategies rather than specific technical fixes\n"
+    "   - Widely applicable: Address multiple findings with each recommendation\n"
+    "   - Proactive: Aim to prevent similar issues in the future\n"
+    "   - Actionable: Provide clear, general steps for implementation\n"
+    "   - Concise: Use clear and precise language\n\n"
+    "Your response should be structured as follows:\n"
+    "1. Summary: A brief overview of the core security challenges (1-2 sentences)\n"
+    "2. Strategic Solution: A high-level approach to address the underlying issues (3-5 key points)\n"
+    "3. Implementation Guidance: General steps for putting the strategy into action\n"
+    "4. Long-term Considerations: Suggestions for ongoing improvement and risk mitigation\n\n"
+    "You may use Markdown formatting in your response to improve readability.\n"
+    f"{answer_in_json_prompt('aggregated_solution')}"
+    "Findings:\n{data}"
+)
+
 CONVERT_DICT_TO_STR_TEMPLATE = (
     "You are a data formatting expert. Convert the following dictionary into a human-readable string. "
     f"{answer_in_json_prompt('converted_text')}"

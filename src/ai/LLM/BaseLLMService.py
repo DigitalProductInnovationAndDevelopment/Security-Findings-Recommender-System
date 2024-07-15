@@ -120,6 +120,17 @@ class BaseLLMService(ABC):
 
         return results
 
+    def _get_findings_str_for_aggregation(self, findings, details=False) -> str:
+        findings_str = ''
+        for id, finding in enumerate(findings):
+            findings_str += f"{id + 1}. \n"
+            findings_str += finding.description.replace('\n', ' ') + '\n'
+            if details:
+                findings_str += "Locations: " ",".join(finding.location_list)
+                findings_str += str(finding.category) + '\n'
+            if finding.solution:
+                findings_str += finding.solution.short_description.replace('\n', ' ') + '\n\n'
+        return findings_str
 
     def _subdivide_finding_group(self, findings: List[Finding]) -> List[Tuple[List[Finding], Dict]]:
         prompt = self._get_subdivision_prompt(findings)
@@ -131,7 +142,8 @@ class BaseLLMService(ABC):
         pass
 
     @abstractmethod
-    def _process_subdivision_response(self, response: Dict, findings: List[Finding]) -> List[Tuple[List[Finding], Dict]]:
+    def _process_subdivision_response(self, response: Dict, findings: List[Finding]) -> List[
+        Tuple[List[Finding], Dict]]:
         pass
 
     @abstractmethod

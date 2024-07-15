@@ -1,4 +1,4 @@
-from typing import List, Dict, Union, Optional
+from typing import List, Dict, Union, Optional, Tuple
 import logging
 import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -14,7 +14,10 @@ from ai.LLM.Strategies.ollama_prompts import (
     LONG_RECOMMENDATION_TEMPLATE,
     META_PROMPT_GENERATOR_TEMPLATE,
     GENERIC_LONG_RECOMMENDATION_TEMPLATE,
-    SEARCH_TERMS_TEMPLATE, COMBINE_DESCRIPTIONS_TEMPLATE,
+    SEARCH_TERMS_TEMPLATE,
+    COMBINE_DESCRIPTIONS_TEMPLATE,
+    AGGREGATED_SOLUTION_TEMPLATE,
+    SUBDIVISION_PROMPT_TEMPLATE
 )
 from config import config
 
@@ -136,6 +139,48 @@ class OLLAMAService(BaseLLMService, LLMServiceMixin):
             logger.warning(f"Failed to generate search terms for the finding: {finding.title}")
             return ""
         return clean(response["search_terms"], llm_service=self)
+
+    def _get_subdivision_prompt(self, findings: List[Finding]) -> str:
+        findings_str = self._get_findings_str_for_aggregation(findings)
+        return SUBDIVISION_PROMPT_TEMPLATE.format(data=findings_str)
+
+    def _process_subdivision_response(self, response: Dict, findings: List[Finding]) -> List[Tuple[List[Finding], Dict]]:
+        if "subdivisions" not in response:
+            logger.warning("Failed to subdivide findings")
+            return [(findings, {})]  # Return all findings as a single group if subdivision fails
+
+        subdivisions = response["subdivisions"]
+        result = []
+        for subdivision in subdivisions:
+            try:
+                if "-" in subdivision["group"]:  # Bro, the llm is trolling! I swear, I put in the prompt explicitly it should make it comma seperated!
+                    left = int(subdivision["group"].split("-")[0])
+                    right = int(subdivision["group"].split("-")[1])
+                    group_indices = [i for i in range(left, right+1)]
+                else:
+                    group_indices = [int(i) - 1 for i in subdivision["group"].split(',')]
+            except ValueError:
+                logger.error(f"Failed to parse group indices: {subdivision['group']}")
+                continue
+            group = [findings[i] for i in group_indices if i < len(findings)]
+            meta_info = {"reason": subdivision.get("reason", "")}
+            result.append((group, meta_info))
+
+        return result
+
+    def _get_aggregated_solution_prompt(self, findings: List[Finding], meta_info: Dict) -> str:
+        findings_str = self._get_findings_str_for_aggregation(findings, details=True)
+
+        return AGGREGATED_SOLUTION_TEMPLATE.format(
+            data=findings_str,
+            meta_info=meta_info.get("reason", "")
+        )
+
+    def _process_aggregated_solution_response(self, response: Dict[str, str]) -> str:
+        if "aggregated_solution" not in response:
+            logger.warning("Failed to generate an aggregated solution")
+            return ""
+        return clean(response["aggregated_solution"], llm_service=self)
 
     def convert_dict_to_str(self, data: Dict) -> str:
         """
