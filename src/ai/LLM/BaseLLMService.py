@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Dict, Optional, List, Union
+from typing import Dict, Optional, List, Union, Tuple
 import logging
 
 from data.Finding import Finding
@@ -92,6 +92,54 @@ class BaseLLMService(ABC):
 
     @abstractmethod
     def _process_search_terms_response(self, response: Dict[str, str], finding: Finding) -> str:
+        pass
+
+    def generate_aggregated_solution(self, findings: List[Finding]) -> List[Tuple[str, List[Finding], Dict]]:
+        """
+        Generate an aggregated solution for a group of findings.
+
+        Args:
+            findings (List[Finding]): The findings to generate a solution for.
+
+        Returns:
+            List[Tuple[str, List[Finding], Dict]]: The generated solution, the findings it applies to, and any additional metadata
+        """
+        finding_groups = self._subdivide_finding_group(findings)
+        if len(finding_groups) < 1:
+            return []  # No suitable groups found
+
+        results = []
+
+        for group, meta_info in finding_groups:
+            prompt = self._get_aggregated_solution_prompt(group, meta_info)
+            response = self.generate(prompt)
+            solution = self._process_aggregated_solution_response(response)
+
+            if solution:
+                results.append((solution, group, meta_info))
+
+        return results
+
+
+    def _subdivide_finding_group(self, findings: List[Finding]) -> List[Tuple[List[Finding], Dict]]:
+        prompt = self._get_subdivision_prompt(findings)
+        response = self.generate(prompt)
+        return self._process_subdivision_response(response, findings)
+
+    @abstractmethod
+    def _get_subdivision_prompt(self, findings: List[Finding]) -> str:
+        pass
+
+    @abstractmethod
+    def _process_subdivision_response(self, response: Dict, findings: List[Finding]) -> List[Tuple[List[Finding], Dict]]:
+        pass
+
+    @abstractmethod
+    def _get_aggregated_solution_prompt(self, findings: List[Finding], meta_info: Dict) -> str:
+        pass
+
+    @abstractmethod
+    def _process_aggregated_solution_response(self, response: Dict) -> str:
         pass
 
     @abstractmethod

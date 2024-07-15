@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Optional, List, Union
+from typing import Dict, Optional, List, Union, Tuple
 
 from ai.LLM.BaseLLMService import BaseLLMService
 from data.Finding import Finding
@@ -20,6 +20,10 @@ class LLMServiceStrategy:
     def get_model_name(self) -> str:
         """Get the name of the current LLM model."""
         return self.llm_service.get_model_name()
+
+    def get_context_size(self) -> int:
+        """Get the context size of the current LLM service."""
+        return self.llm_service.get_context_size()
 
     def get_url(self) -> str:
         """Get the URL associated with the current LLM service."""
@@ -87,6 +91,18 @@ class LLMServiceStrategy:
             str: The generated search terms.
         """
         return self.llm_service.get_search_terms(finding)
+
+    def generate_aggregated_solution(self, findings: List[Finding]) ->  List[Tuple[str, List[Finding], Dict]]:
+        """
+        Generate an aggregated solution for a group of findings.
+
+        Args:
+            findings (List[Finding]): The findings to generate a solution for.
+
+        Returns:
+            List[Tuple[str, List[Finding], Dict]]: The generated solution, the findings it applies to, and any additional metadata
+        """
+        return self.llm_service.generate_aggregated_solution(findings)
 
     def convert_dict_to_str(self, data: Dict) -> str:
         """

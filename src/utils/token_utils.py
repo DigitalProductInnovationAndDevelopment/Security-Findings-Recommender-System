@@ -1,4 +1,6 @@
 import re
+
+from ai.LLM.BaseLLMService import BaseLLMService
 from config import config
 
 
@@ -50,7 +52,7 @@ def estimate_tokens(text):
     return total_tokens
 
 
-def fits_in_context(text):
+def fits_in_context(text, llm_service: BaseLLMService = None):
     """
     Check if the given text fits within the maximum context size.
 
@@ -64,7 +66,7 @@ def fits_in_context(text):
     bool: True if the text fits within the context, False otherwise.
     """
     estimated_tokens = estimate_tokens(text)
-    return estimated_tokens <= config.max_context_length
+    return bool(llm_service) and estimated_tokens <= llm_service.get_context_size()
 
 
 # Example usage

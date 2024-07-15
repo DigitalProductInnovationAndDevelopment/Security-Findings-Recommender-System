@@ -84,13 +84,13 @@ class Environment(Enum):
 
 
 class Category(BaseModel):
-    technology_stack: Optional[List[TechnologyStack]] = None
-    security_aspect: Optional[List[SecurityAspect]] = None
+    technology_stack: Optional[TechnologyStack] = None
+    security_aspect: Optional[SecurityAspect] = None
     severity_level: Optional[SeverityLevel] = None
-    remediation_type: Optional[List[RemediationType]] = None
-    affected_component: Optional[List[AffectedComponent]] = None
-    compliance: Optional[List[Compliance]] = None
-    environment: Optional[List[Environment]] = None
+    remediation_type: Optional[RemediationType] = None
+    affected_component: Optional[AffectedComponent] = None
+    compliance: Optional[Compliance] = None
+    environment: Optional[Environment] = None
 
     def __str__(self):
         my_str = ""
