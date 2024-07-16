@@ -14,6 +14,7 @@ import { IFinding } from 'src/app/interfaces/IFinding';
 import { RecommendationsService } from '../services/recommendations.service';
 import {
   clearFindings,
+  filterRecs,
   loadRecommendations,
   setInformation,
   UploadFile,
@@ -104,7 +105,10 @@ export class RecommendationsState {
   }
 
   @Action(loadRecommendations)
-  loadRecommendations(context: StateContext<RecommendationsStateModel>): void {
+  loadRecommendations(
+    context: StateContext<RecommendationsStateModel>,
+    { payload }: loadRecommendations
+  ): void {
     const taskId = context.getState().taskId;
     if (typeof taskId === 'number') {
       interval(10000)
@@ -113,10 +117,28 @@ export class RecommendationsState {
           switchMap(() => this.recommendationService.getUploadStatus(taskId)),
           takeWhile((response) => response.status !== 'completed', true),
           filter((response) => response.status === 'completed'),
-          switchMap(() => this.recommendationService.getRecommendations()),
+          switchMap(() =>
+            this.recommendationService.getRecommendations(
+              taskId,
+              payload.severity
+            )
+          ),
           tap((findings) => context.patchState({ findings: findings.items }))
         )
         .subscribe();
     }
+  }
+  @Action(filterRecs)
+  filterRecs(
+    context: StateContext<RecommendationsStateModel>,
+    { payload }: filterRecs
+  ) {
+    let findings = context.getState().findings;
+    findings = findings.filter(
+      (finding) =>
+        finding.severity >= payload.severity[0] &&
+        finding.severity <= payload.severity[1]
+    );
+    context.patchState({ findings });
   }
 }

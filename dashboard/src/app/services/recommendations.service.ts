@@ -42,10 +42,21 @@ export class RecommendationsService {
       );
   }
 
-  public getRecommendations(): Observable<ReceivedRecommendations> {
+  public getRecommendations(
+    taskId?: number,
+    severity?: number[]
+  ): Observable<ReceivedRecommendations> {
+    const body: any = {};
+    if (taskId !== undefined) {
+      body.taskId = taskId;
+    }
+    if (severity !== undefined) {
+      body.severity = severity;
+    }
+
     return this.http.post<ReceivedRecommendations>(
       environment.apiUrl + '/recommendations',
-      {}
+      body
     );
   }
 
