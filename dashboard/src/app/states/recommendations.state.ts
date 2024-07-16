@@ -25,6 +25,7 @@ export interface RecommendationsStateModel {
   findings: IFinding[];
   fileName: string | undefined;
   exampleProcess: boolean;
+  taskId: number | undefined;
 }
 
 @State<RecommendationsStateModel>({
@@ -35,6 +36,7 @@ export interface RecommendationsStateModel {
     findings: [],
     fileName: undefined,
     exampleProcess: false,
+    taskId: undefined,
   },
 })
 @Injectable()
@@ -82,12 +84,12 @@ export class RecommendationsState {
     context: StateContext<RecommendationsStateModel>,
     { payload }: UploadFile
   ): Observable<number> {
-    console.log(payload.filter);
     return this.recommendationService
       .uploadFindings(payload.data, payload.filter)
       .pipe(
-        filter((response) => response !== -1),
-        map((response) => response),
+        filter((response) => response.task_id !== -1),
+        tap((response) => context.patchState({ taskId: response.task_id })),
+        map((response) => response.task_id),
         finalize(() => void context.patchState({ isLoading: false }))
       );
   }
@@ -103,15 +105,18 @@ export class RecommendationsState {
 
   @Action(loadRecommendations)
   loadRecommendations(context: StateContext<RecommendationsStateModel>): void {
-    interval(10000)
-      .pipe(
-        switchMap(() => this.recommendationService.getUploadStatus()),
-        takeWhile((response) => response.status !== 'completed', true),
-        filter((response) => response.status === 'completed'),
-        switchMap(() => this.recommendationService.getRecommendations()),
-        tap((findings) => context.patchState({ findings: findings.items }))
-      )
-      .subscribe();
+    const taskId = context.getState().taskId;
+    if (typeof taskId === 'number') {
+      interval(10000)
+        .pipe(
+          filter(() => taskId !== undefined),
+          switchMap(() => this.recommendationService.getUploadStatus(taskId)),
+          takeWhile((response) => response.status !== 'completed', true),
+          filter((response) => response.status === 'completed'),
+          switchMap(() => this.recommendationService.getRecommendations()),
+          tap((findings) => context.patchState({ findings: findings.items }))
+        )
+        .subscribe();
+    }
   }
 }
-

@@ -14,9 +14,12 @@ export class RecommendationsService {
     return this.http.get<void>(environment.apiUrl + '/');
   }
 
-  public uploadFindings(inputData: string, filter: any): Observable<number> {
+  public uploadFindings(
+    inputData: string,
+    filter: any
+  ): Observable<{ task_id: number }> {
     return this.http
-      .post<number>(environment.apiUrl + '/upload', {
+      .post<any>(environment.apiUrl + '/upload', {
         data: inputData,
         user_id: 1,
         filter,
@@ -28,12 +31,12 @@ export class RecommendationsService {
             error.error.detail ===
               'Recommendation task already exists for today'
           ) {
-            return new Observable<number>((observer) => {
-              observer.next(100);
+            return new Observable<{ task_id: number }>((observer) => {
+              observer.next({ task_id: 100 });
               observer.complete();
             });
           } else {
-            return of(-1);
+            return of({ task_id: -1 });
           }
         })
       );
@@ -46,7 +49,9 @@ export class RecommendationsService {
     );
   }
 
-  public getUploadStatus(): Observable<{ status: string }> {
-    return this.http.get<{ status: string }>(environment.apiUrl + '/status');
+  public getUploadStatus(taskId: number): Observable<{ status: string }> {
+    return this.http.get<{ status: string }>(
+      environment.apiUrl + `/tasks/${taskId}/status`
+    );
   }
 }
