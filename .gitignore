@@ -12,7 +12,7 @@
 # CVE Search plugin data
 
 .cve_search_data/
-
+.docs/
 .DS_Store
 
 .env.docker

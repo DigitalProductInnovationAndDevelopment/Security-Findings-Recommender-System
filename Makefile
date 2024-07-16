@@ -29,5 +29,9 @@ dev:
 test:
 	cd src && pytest
 
+
+docs:
+	cd src && python3 extract-docs.py
+
 start-worker:
 	cd src && celery -A worker.worker worker --loglevel=info --concurrency 1

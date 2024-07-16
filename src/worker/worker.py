@@ -10,8 +10,10 @@ logger = logging.getLogger(__name__)
 
 from config import config
 
-my_strategy = OLLAMAService()
-llm_service = LLMServiceStrategy(my_strategy)
+ollama_strategy = OLLAMAService()
+
+
+llm_service = LLMServiceStrategy(ollama_strategy)
 
 
 redis_url = config.redis_endpoint
