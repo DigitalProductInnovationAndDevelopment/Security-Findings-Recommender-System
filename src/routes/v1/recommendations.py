@@ -10,8 +10,6 @@ from fastapi import Depends
 from db.my_db import get_db
 import data.apischema as apischema
 import db.models as db_models
-from data.Finding import FindingKind
-from data.Solution import Solution
 from dto.finding import db_finding_to_response_item
 from repository.finding import get_finding_repository
 from repository.task import TaskRepository, get_task_repository
