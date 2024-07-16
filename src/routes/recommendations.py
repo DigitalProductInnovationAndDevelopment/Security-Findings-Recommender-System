@@ -1,15 +1,14 @@
-from fastapi.routing import APIRouter
-
 import datetime
 from typing import Annotated
 
-from fastapi import Body, HTTPException, Response
+from fastapi import Body, Depends, HTTPException, Response
+from fastapi.routing import APIRouter
 from sqlalchemy import Date, cast
 from sqlalchemy.orm import Session
-from fastapi import Depends
-from db.my_db import get_db
+
 import data.apischema as apischema
 import db.models as db_models
+from db.my_db import get_db
 from dto.finding import db_finding_to_response_item
 from repository.finding import get_finding_repository
 from repository.task import TaskRepository, get_task_repository
@@ -31,6 +30,7 @@ def recommendations(
     :return: 200 OK with the recommendations or 204 NO CONTENT if there are no recommendations with retry-after header.
     """
     task_id = request.filter.task_id if request.filter else None
+    severity_range = request.filter.severity if request.filter.severity else None
     # get the findings
     # ...
 
@@ -67,14 +67,26 @@ def recommendations(
     findings = finding_repository.get_findings_by_task_id(task.id, request.pagination)
 
     total_count = finding_repository.get_findings_count_by_task_id(task.id)
+    
+    recommendations = [
+    db_finding_to_response_item(find)
+    for find in findings
+    if severity_range is None or (
+        (response_item := db_finding_to_response_item(find)).severity is not None and
+        len(severity_range) == 2 and
+        severity_range[0] <= response_item.severity <= severity_range[1]
+    )
+    ]
 
+
+    
     response = apischema.GetRecommendationResponse(
-        items=[db_finding_to_response_item(find) for find in findings],
+        items=recommendations,
         pagination=apischema.Pagination(
             offset=request.pagination.offset,
             limit=request.pagination.limit,
             total=total_count,
-            count=len(findings),
+            count=len(recommendations),
         ),
     )
 
