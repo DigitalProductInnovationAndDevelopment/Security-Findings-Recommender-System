@@ -74,6 +74,8 @@ class Finding(BaseModel):
             [x.dict() for x in data.location_list] if data.location_list else []
         )
         self.raw_data = data.dict()
+        self.severity = data.severity
+        self.priority = data.priority
         self.report_amount = data.report_amount
         return self
 
