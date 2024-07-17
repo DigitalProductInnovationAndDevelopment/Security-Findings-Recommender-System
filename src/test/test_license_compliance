@@ -1,6 +1,7 @@
 import unittest
 import subprocess
 import json
+import os
 
 class TestLicenseCompliance(unittest.TestCase):
     ALLOWED_LICENSES = {
@@ -30,15 +31,24 @@ class TestLicenseCompliance(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # Print out a report after all tests have run
-        print("\nLicense Compliance Report:")
-        print("="*40)
+        # Generate report content
+        report = "\nLicense Compliance Report:\n"
+        report += "="*40 + "\n"
         result = subprocess.run(['pip-licenses', '--format=json'], capture_output=True, text=True)
         packages = json.loads(result.stdout)
         for pkg in packages:
             status = "Compliant" if pkg['License'] in cls.ALLOWED_LICENSES else "Non-compliant"
-            print(f"{pkg['Name']} (Version: {pkg['Version']}) - {pkg['License']} - {status}")
-        print("="*40)
+            report += f"{pkg['Name']} (Version: {pkg['Version']}) - {pkg['License']} - {status}\n"
+        report += "="*40 + "\n"
+
+        # Write report to a file
+        report_file_path = os.path.join(os.getcwd(), 'license_compliance_report.txt')
+        with open(report_file_path, 'w') as report_file:
+            report_file.write(report)
+
+        # Print path to the report file (for verification)
+        print(f"License Compliance Report saved to: {report_file_path}")
 
 if __name__ == '__main__':
     unittest.main()
+
