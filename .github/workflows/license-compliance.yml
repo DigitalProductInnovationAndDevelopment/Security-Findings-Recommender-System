@@ -40,17 +40,23 @@ jobs:
           echo "::set-output name=dependency-licenses::${dependency_licenses}"
 
       - name: 'Compare Dependency licenses'
+        id: compare-dependency-licenses
         run: |
           dependency_licenses=${{ steps.parse-dependency-licenses.outputs.dependency-licenses }}
           permitted_licenses="MIT,Apache-2.0,BSD,EPL1"
+          non_compliant_packages=""
           for package in $(echo "${dependency_licenses}" | jq -r '.[] | .Package')
           do
               license=$(echo "${dependency_licenses}" | jq -r --arg package "$package" '.[] | select(.Package == $package) | .License')
               if [[ ! ",${permitted_licenses}," =~ ",${license}," ]]; then
                   echo "Error: Package $package has an unrecognized license: $license"
-                  exit 1
+                  non_compliant_packages+="Package $package has an unrecognized license: $license\n"
               fi
           done
+          echo "::set-output name=non-compliant-packages::${non_compliant_packages}"
+          if [ -n "${non_compliant_packages}" ]; then
+              exit 1
+          fi
 
       - name: 'Upload Dependency License Report'
         if: always()
@@ -58,6 +64,13 @@ jobs:
         with:
           name: dependency-license-report
           path: dependency_licenses.json
+
+      - name: 'Upload License Compliance Results'
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: license-compliance-results
+          path: license_compliance_results.txt
 
       - name: License compliance summary
         run: echo "License compliance check completed. See artifacts for details."
