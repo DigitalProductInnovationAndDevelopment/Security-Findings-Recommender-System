@@ -27,4 +27,4 @@ jobs:
           pip install pip-licenses
 
       - name: Run license compliance tests
-        run: python -m unittest discover -s tests -p 'test_license_compliance.py'
+        run: python -m unittest discover -s test -p 'test_license_compliance.py'
