@@ -55,16 +55,16 @@ export class FindingsInputFilterDialogComponent {
     const priMaxValue = this.rangeFilters.priorities.maxValue;
     this.dialogRef.close({
       ...((sevMinValue !== 0 || sevMaxValue !== 100) && {
-        severity: [
-          this.rangeFilters.severities.minValue,
-          this.rangeFilters.severities.maxValue,
-        ],
+        severity: {
+          minValue: this.rangeFilters.severities.minValue,
+          maxValue: this.rangeFilters.severities.maxValue,
+        },
       }),
       ...((priMinValue !== 0 || priMaxValue !== 100) && {
-        priority: [
-          this.rangeFilters.priorities.minValue,
-          this.rangeFilters.priorities.maxValue,
-        ],
+        priority: {
+          minValue: this.rangeFilters.priorities.minValue,
+          maxValue: this.rangeFilters.priorities.maxValue,
+        },
       }),
       ...(source && source.length > 0 && { source }),
       ...(cve_ids && cve_ids.length > 0 && { cve_ids }),

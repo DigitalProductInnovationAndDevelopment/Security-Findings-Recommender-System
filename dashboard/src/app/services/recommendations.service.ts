@@ -51,7 +51,7 @@ export class RecommendationsService {
       body.taskId = taskId;
     }
     if (severity !== undefined) {
-      body.severity = severity;
+      body.severity = { minValue: severity[0], maxValue: severity[1] };
     }
 
     return this.http.post<ReceivedRecommendations>(
