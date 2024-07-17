@@ -1,0 +1,23 @@
+import unittest
+import subprocess
+import json
+
+class TestLicenseCompliance(unittest.TestCase):
+    ALLOWED_LICENSES = {
+        'MIT',
+        'BSD',
+        'Apache 2.0',
+        'BSD-2-Clause',
+        'BSD-3-Clause',
+        'ISC',
+    }
+
+    def test_license_compliance(self):
+        result = subprocess.run(['pip-licenses', '--format=json'], capture_output=True, text=True)
+        packages = json.loads(result.stdout)
+        for pkg in packages:
+            with self.subTest(pkg=pkg['Name']):
+                self.assertIn(pkg['License'], self.ALLOWED_LICENSES, f"{pkg['Name']} has a disallowed license: {pkg['License']}")
+
+if __name__ == '__main__':
+    unittest.main()

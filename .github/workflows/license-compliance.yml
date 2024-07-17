@@ -9,68 +9,22 @@ on:
       - main
 
 jobs:
-  license-compliance:
+  license-check:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |
-          python -m venv venv
-          . venv/bin/activate
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Check licenses
-        run: |
-          . venv/bin/activate
           pip install pip-licenses
-          pip-licenses --from=mixed --output-file=dependency_licenses.json --format=json
 
-      - name: 'Parse Dependency licenses'
-        id: parse-dependency-licenses
-        run: |
-          dependency_licenses=$(cat dependency_licenses.json)
-          echo "::set-output name=dependency-licenses::${dependency_licenses}"
-
-      - name: 'Compare Dependency licenses'
-        id: compare-dependency-licenses
-        run: |
-          dependency_licenses=$(cat dependency_licenses.json)
-          echo "Dependency licenses content:"
-          echo "${dependency_licenses}"
-
-          permitted_licenses="MIT License,Apache-2.0,BSD,EPL1"  # Updated permitted licenses list
-
-          for package_info in $(echo "${dependency_licenses}" | jq -c '.[]'); do
-              package_name=$(echo "${package_info}" | jq -r '.Name')
-              license=$(echo "${package_info}" | jq -r '.License')
-              
-              if [[ ! ",${permitted_licenses}," =~ ",${license}," ]]; then
-                  echo "Error: Package ${package_name} has an unrecognized license: ${license}"
-                  exit 1
-              fi
-          done
-
-      - name: 'Upload Dependency License Report'
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: dependency-license-report
-          path: dependency_licenses.json
-
-      - name: 'Upload License Compliance Results'
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: license-compliance-results
-          path: license_compliance_results.txt
-
-      - name: License compliance summary
-        run: echo "License compliance check completed. See artifacts for details."
+      - name: Run license compliance tests
+        run: python -m unittest discover -s tests -p 'test_license_compliance.py'
