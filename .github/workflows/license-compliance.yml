@@ -52,13 +52,6 @@ jobs:
               fi
           done
 
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.2.0
-        if: always()
-        with:
-          junit_files: "dependency_licenses.json"
-          check_name: "Dependency License Compliance Check"
-
       - name: 'Upload Dependency License Report'
         if: always()
         uses: actions/upload-artifact@v2
