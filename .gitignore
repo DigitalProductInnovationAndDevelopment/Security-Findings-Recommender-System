@@ -13,6 +13,7 @@
 
 .cve_search_data/
 .docs/
+.idea
 .DS_Store
 
 .env.docker
