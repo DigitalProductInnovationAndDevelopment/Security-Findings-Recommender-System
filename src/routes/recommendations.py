@@ -30,7 +30,7 @@ def recommendations(
     :return: 200 OK with the recommendations or 204 NO CONTENT if there are no recommendations with retry-after header.
     """
     task_id = request.filter.task_id if request.filter else None
-    severity_range = request.filter.severity if request.filter.severity else None
+    severityFilter = request.filter.severity if request.filter.severity else None
     # get the findings
     # ...
 
@@ -63,30 +63,20 @@ def recommendations(
             status_code=400,
             detail="Recommendation task failed",
         )
-
-    findings = finding_repository.get_findings_by_task_id(task.id, request.pagination)
+    if severityFilter:
+        findings = finding_repository.get_findings_by_task_id_and_severity(task.id, severityFilter, request.pagination)
+    else:
+        findings = finding_repository.get_findings_by_task_id(task.id, request.pagination)
 
     total_count = finding_repository.get_findings_count_by_task_id(task.id)
     
-    recommendations = [
-    db_finding_to_response_item(find)
-    for find in findings
-    if severity_range is None or (
-        (response_item := db_finding_to_response_item(find)).severity is not None and
-        len(severity_range) == 2 and
-        severity_range[0] <= response_item.severity <= severity_range[1]
-    )
-    ]
-
-
-    
     response = apischema.GetRecommendationResponse(
-        items=recommendations,
+        items=[db_finding_to_response_item(find) for find in findings],
         pagination=apischema.Pagination(
             offset=request.pagination.offset,
             limit=request.pagination.limit,
             total=total_count,
-            count=len(recommendations),
+            count=len(findings),
         ),
     )
 
