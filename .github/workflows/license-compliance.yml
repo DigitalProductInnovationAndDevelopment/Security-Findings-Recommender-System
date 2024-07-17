@@ -46,21 +46,17 @@ jobs:
           echo "Dependency licenses content:"
           echo "${dependency_licenses}"
 
-          permitted_licenses="MIT,Apache-2.0,BSD,EPL1"
-          non_compliant_packages=""
-          for package in $(echo "${dependency_licenses}" | jq -r '.[] | .Package')
-          do
-              license=$(echo "${dependency_licenses}" | jq -r --arg package "$package" '.[] | select(.Package == $package) | .License')
+          permitted_licenses="MIT License,Apache-2.0,BSD,EPL1"  # Updated permitted licenses list
+
+          for package_info in $(echo "${dependency_licenses}" | jq -c '.[]'); do
+              package_name=$(echo "${package_info}" | jq -r '.Name')
+              license=$(echo "${package_info}" | jq -r '.License')
+              
               if [[ ! ",${permitted_licenses}," =~ ",${license}," ]]; then
-                  echo "Error: Package $package has an unrecognized license: $license"
-                  non_compliant_packages+="Package $package has an unrecognized license: $license\n"
+                  echo "Error: Package ${package_name} has an unrecognized license: ${license}"
+                  exit 1
               fi
           done
-          echo "::set-output name=non-compliant-packages::${non_compliant_packages}"
-          if [ -n "${non_compliant_packages}" ]; then
-              exit 1
-          fi
-
 
       - name: 'Upload Dependency License Report'
         if: always()
