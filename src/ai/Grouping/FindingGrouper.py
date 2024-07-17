@@ -20,5 +20,5 @@ class FindingGrouper:
         for batch in tqdm(self.batches, desc="Generating Aggregated Solutions"):
             result_list = self.llm_service.generate_aggregated_solution(batch)
             for result in result_list:
-                self.aggregated_solutions.append(AggregatedSolution(result[1], result[0], result[2]))
+                self.aggregated_solutions.append(AggregatedSolution(result[1], result[0], result[2])) # Solution, Findings, Metadata
         self.vulnerability_report.set_aggregated_solutions(self.aggregated_solutions)

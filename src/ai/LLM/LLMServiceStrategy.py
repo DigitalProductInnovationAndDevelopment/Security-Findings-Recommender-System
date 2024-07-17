@@ -41,17 +41,20 @@ class LLMServiceStrategy:
         """
         return self.llm_service.generate(prompt)
 
-    def combine_descriptions(self,  descriptions: List[str]) -> str:
+    def combine_descriptions(self, descriptions: List[str], cve_ids, cwe_ids) -> str:
         """
         Combine multiple descriptions into a single, coherent description.
 
         Args:
             descriptions (List[str]): The list of descriptions to combine.
+            cve_ids (List[str]): The list of CVE IDs.
+            cwe_ids (List[str]): The list of CWE IDs.
 
         Returns:
             str: The combined description.
         """
-        return self.llm_service.combine_descriptions(descriptions)
+        return self.llm_service.combine_descriptions(
+            descriptions + [f" CVE IDs: {cve_ids} CWE IDs: {cwe_ids}"])  # I apologize for this, it's a hack
 
     def classify_kind(self, finding: Finding, field_name: str, options: Optional[List[Enum]] = None) -> Optional[Enum]:
         """
@@ -92,7 +95,7 @@ class LLMServiceStrategy:
         """
         return self.llm_service.get_search_terms(finding)
 
-    def generate_aggregated_solution(self, findings: List[Finding]) ->  List[Tuple[str, List[Finding], Dict]]:
+    def generate_aggregated_solution(self, findings: List[Finding]) -> List[Tuple[str, List[Finding], Dict]]:
         """
         Generate an aggregated solution for a group of findings.
 

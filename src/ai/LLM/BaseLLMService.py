@@ -55,16 +55,16 @@ class BaseLLMService(ABC):
     def _process_classification_response(self, response: Dict[str, str], field_name: str, finding: Finding,
                                          options_str: str, options: List[Enum]) -> Optional[Enum]:
         if "selected_option" not in response:
-            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}")
+            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}. No option selected.")
             return None
         if response["selected_option"] in ["None", "NotListed"]:
             logger.info(f"Chose None for {field_name} for the finding: {finding.title}")
             return None
         if response["selected_option"] not in options_str:
-            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}")
+            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}. Selected option not in response.")
             return None
 
-        return next(option for option in options if option.value == response["selected_option"])
+        return next((option for option in options if option.value == response["selected_option"]), None)
 
     def get_recommendation(self, finding: Finding, short: bool = True) -> Union[str, List[str]]:
         prompt = self._get_recommendation_prompt(finding, short)
