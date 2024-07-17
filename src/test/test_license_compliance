@@ -15,9 +15,26 @@ class TestLicenseCompliance(unittest.TestCase):
     def test_license_compliance(self):
         result = subprocess.run(['pip-licenses', '--format=json'], capture_output=True, text=True)
         packages = json.loads(result.stdout)
+
+        non_compliant_packages = []
+
         for pkg in packages:
+            if pkg['License'] not in self.ALLOWED_LICENSES:
+                non_compliant_packages.append(pkg)
             with self.subTest(pkg=pkg['Name']):
                 self.assertIn(pkg['License'], self.ALLOWED_LICENSES, f"{pkg['Name']} has a disallowed license: {pkg['License']}")
+
+        # Print out a report
+        print("\nLicense Compliance Report:")
+        print("="*40)
+        for pkg in packages:
+            status = "Compliant" if pkg not in non_compliant_packages else "Non-compliant"
+            print(f"{pkg['Name']} (Version: {pkg['Version']}) - {pkg['License']} - {status}")
+        print("="*40)
+
+        # Fail the test if there are any non-compliant packages
+        if non_compliant_packages:
+            self.fail(f"Found non-compliant licenses in packages: {[pkg['Name'] for pkg in non_compliant_packages]}")
 
 if __name__ == '__main__':
     unittest.main()
