@@ -30,11 +30,12 @@ async def lifespan(app_: FastAPI):
     log.info("Starting up...")
     log.info("run alembic upgrade head...")
     run_migrations()
+    log.info("alembic upgrade head done")
     yield
     log.info("Shutting down...")
 
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 
 app.add_middleware(
