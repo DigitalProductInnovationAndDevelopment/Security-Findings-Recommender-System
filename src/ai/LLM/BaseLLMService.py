@@ -55,7 +55,7 @@ class BaseLLMService(ABC):
     def _process_classification_response(self, response: Dict[str, str], field_name: str, finding: Finding,
                                          options_str: str, options: List[Enum]) -> Optional[Enum]:
         if "selected_option" not in response:
-            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}. No option selected.")
+            logger.warning(f"Failed to classify the {field_name} for the finding: {finding.title}. Missing JSON Key 'selected option' in response.")
             return None
         if response["selected_option"] in ["None", "NotListed"]:
             logger.info(f"Chose None for {field_name} for the finding: {finding.title}")
