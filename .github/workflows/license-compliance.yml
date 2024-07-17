@@ -42,7 +42,10 @@ jobs:
       - name: 'Compare Dependency licenses'
         id: compare-dependency-licenses
         run: |
-          dependency_licenses=${{ steps.parse-dependency-licenses.outputs.dependency-licenses }}
+          dependency_licenses=$(cat dependency_licenses.json)
+          echo "Dependency licenses content:"
+          echo "${dependency_licenses}"
+
           permitted_licenses="MIT,Apache-2.0,BSD,EPL1"
           non_compliant_packages=""
           for package in $(echo "${dependency_licenses}" | jq -r '.[] | .Package')
@@ -57,6 +60,7 @@ jobs:
           if [ -n "${non_compliant_packages}" ]; then
               exit 1
           fi
+
 
       - name: 'Upload Dependency License Report'
         if: always()
