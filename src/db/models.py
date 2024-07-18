@@ -1,12 +1,12 @@
-from .base import Column, BaseModel
-
-from typing import List, Optional
-from sqlalchemy import JSON, ForeignKey, Integer, String, Enum
-from sqlalchemy.orm import Mapped, relationship
 from enum import Enum as PyEnum
+from typing import List, Optional
 
+from sqlalchemy import JSON, Enum, ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, relationship
 
 from data.types import Content
+
+from .base import BaseModel, Column
 
 
 class Recommendation(BaseModel):
@@ -40,8 +40,8 @@ class Finding(BaseModel):
     category = Column(String, nullable=True)
     cwe_id_list = Column(JSON, default=[], nullable=True)
     cve_id_list = Column(JSON, default=[], nullable=True)
-    priority = Column(String, default=None, nullable=True)
-    severity = Column(String, default=None, nullable=True)
+    priority = Column(Integer, default=None, nullable=True)
+    severity = Column(Integer, default=None, nullable=True)
     language = Column(String, default=None, nullable=True)
     source = Column(String, default=None, nullable=True)  #
     report_amount = Column(Integer, default=1, nullable=False)
@@ -74,6 +74,8 @@ class Finding(BaseModel):
             [x.dict() for x in data.location_list] if data.location_list else []
         )
         self.raw_data = data.dict()
+        self.severity = data.severity
+        self.priority = data.priority
         self.report_amount = data.report_amount
         return self
 

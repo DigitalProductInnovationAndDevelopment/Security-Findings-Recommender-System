@@ -27,10 +27,10 @@ def filter_findings(findings: List[Content], filter: FindingInputFilter) -> List
         if filter.source and not any(title.source in filter.source for title in content.title_list):
             return False
 
-        if filter.severity and not (filter.severity[0] <= content.severity <= filter.severity[1]):
+        if filter.severity and not (filter.severity.minValue <= content.severity <= filter.severity.maxValue):
             return False
 
-        if filter.priority and not (filter.priority[0] <= content.priority <= filter.priority[1]):
+        if filter.priority and not (filter.priority.minValue <= content.priority <= filter.priority.maxValue):
             return False
 
         if filter.cve_ids and not any(cve.element in filter.cve_ids for cve in content.cve_id_list):

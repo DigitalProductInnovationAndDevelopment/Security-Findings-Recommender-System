@@ -1,30 +1,24 @@
-from typing import List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, validator
 
+from data.Categories import Category
 from data.Finding import Finding
 from data.pagination import Pagination, PaginationInput
+from data.Solution import Solution
 from data.types import InputData
 from db.models import TaskStatus
 
 
+class SeverityFilter(BaseModel):
+    minValue: int
+    maxValue: int
 class FindingInputFilter(BaseModel):
-    severity: Optional[List[int]] = None # ['low', 'high']
-    priority: Optional[List[int]] = None # ['low', 'high']
+    severity: Optional[SeverityFilter] = None # ['low', 'high']
+    priority: Optional[SeverityFilter] = None # ['low', 'high']
     cve_ids: Optional[List[str]] = None
     cwe_ids: Optional[List[str]] = None
     source: Optional[List[str]] = None
-
-    @validator('severity', pre=True, always=True)
-    def check_severity(cls, value):
-        if value is not None and len(value) != 2:
-            raise ValueError('severity must be an array with exactly 2 elements')
-        return value
-    @validator('priority', pre=True, always=True)
-    def check_priority(cls, value):
-        if value is not None and len(value) != 2:
-            raise ValueError('priority must be an array with exactly 2 elements')
-        return value  
     
 class StartRecommendationTaskRequest(BaseModel):
     user_id: Optional[int] = None
@@ -42,7 +36,7 @@ class GetRecommendationFilter(BaseModel):
     task_id: Optional[int] = None
     date: Optional[str] = None
     location: Optional[str] = None
-    severity: Optional[str] = None
+    severity: Optional[SeverityFilter] = None # ['low', 'high']
     cve_id: Optional[str] = None
     source: Optional[str] = None
 

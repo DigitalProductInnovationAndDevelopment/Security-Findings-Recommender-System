@@ -28,6 +28,25 @@
     justify-content: space-between;
     margin-bottom: 20px;
 
+    &__right {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      .slider {
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        ::ng-deep {
+          &.mat-mdc-slider {
+            .mdc-slider__thumb-knob,
+            .mdc-slider__track--active_fill {
+              border-color: var(--textColorSecondary) !important;
+            }
+          }
+        }
+      }
+    }
     &__selectedFile {
       display: flex;
       flex-direction: column;
