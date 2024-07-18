@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        app: [system, dashboard]
+        app: [recommender, dashboard]
 
     steps:
       - name: Checkout repository
