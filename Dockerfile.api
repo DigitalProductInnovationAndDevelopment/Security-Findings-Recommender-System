@@ -3,15 +3,20 @@
 FROM python:3.11
 
 # Set the working directory in the container to /app
+COPY Pipfile  /app/
+COPY Pipfile.lock /app/
+# install pipenv
+RUN pip install pipenv
+
+RUN pipenv install --system --deploy
+
+# Set the working directory in the container to /app
 WORKDIR /app
 
 # Add the current directory contents into the container at /app
 ADD . /app
 
-# install pipenv
-RUN pip install pipenv
 
-RUN pipenv install --system --deploy
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 

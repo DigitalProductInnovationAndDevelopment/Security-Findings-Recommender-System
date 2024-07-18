@@ -1,4 +1,4 @@
-version: '2.0'
+version: '3.8'
 services:
   api:
     build:
@@ -10,6 +10,7 @@ services:
       - .:/app
     depends_on:
       - db
+    restart: on-failure:10
       # - ollama
     env_file:
       - .env.docker
@@ -29,6 +30,8 @@ services:
     depends_on:
       - db
       - redis
+    restart: on-failure:10
+
       # - ollama
     env_file:
       - .env.docker

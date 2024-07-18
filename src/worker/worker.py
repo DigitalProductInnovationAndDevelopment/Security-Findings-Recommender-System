@@ -43,7 +43,7 @@ def generate_report(recommendation_task_id: int, stragegy: str = "OLLAMA"):
     logger.info(f"Processing recommendation task with id {recommendation_task_id}")
     logger.info(f"Processing recommendation task with limit {limit}")
     logger.info(
-        f"Processing recommendation task with model_name {my_strategy.model_name}"
+        f"Processing recommendation task with model_name {ollama_strategy.model_name}"
     )
     with Session() as session:
         query = (
@@ -96,9 +96,11 @@ def generate_report(recommendation_task_id: int, stragegy: str = "OLLAMA"):
                 finding_id=finding_id,
                 recommendation_task_id=recommendation_task_id,
                 # TODO: fix category changes
-                category=f.category.affected_component.value 
-                if f.category and f.category.affected_component 
-                else None
+                category=(
+                    f.category.affected_component.value
+                    if f.category and f.category.affected_component
+                    else None
+                ),
             )
             session.add(recommendation)
             ## updat recommendation task status

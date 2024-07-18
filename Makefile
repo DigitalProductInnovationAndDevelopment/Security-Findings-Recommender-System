@@ -22,6 +22,9 @@ db-migrate-down-base:
 	cd src && alembic downgrade base
 
 
+docker-nuke:
+	. ./bin/nuke.sh
+
 dev:
 	cd src && uvicorn app:app --host 0.0.0.0 --port 8001 --reload 
 
