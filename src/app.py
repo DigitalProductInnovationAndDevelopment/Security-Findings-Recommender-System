@@ -34,7 +34,7 @@ async def lifespan(app_: FastAPI):
     log.info("Shutting down...")
 
 
-app = FastAPI(root_path="/api")
+app = FastAPI(root_path="/api", lifespan=lifespan)
 
 
 app.add_middleware(
