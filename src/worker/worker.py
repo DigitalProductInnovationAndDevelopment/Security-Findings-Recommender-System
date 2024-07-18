@@ -1,10 +1,12 @@
-from celery import Celery
-from ai.LLM.Strategies.OLLAMAService import OLLAMAService
-from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
-from data.VulnerabilityReport import create_from_flama_json
-import db.models as db_models
-from db.my_db import Session
 import logging
+
+from celery import Celery
+
+import db.models as db_models
+from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
+from ai.LLM.Strategies.OLLAMAService import OLLAMAService
+from data.VulnerabilityReport import create_from_flama_json
+from db.my_db import Session
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +94,9 @@ def generate_report(recommendation_task_id: int, stragegy: str = "OLLAMA"):
                 finding_id=finding_id,
                 recommendation_task_id=recommendation_task_id,
                 # TODO: fix category changes
-                category=f.category.affected_component.value if f.category else None,
+                category=f.category.affected_component.value 
+                if f.category and f.category.affected_component 
+                else None
             )
             session.add(recommendation)
             ## updat recommendation task status
