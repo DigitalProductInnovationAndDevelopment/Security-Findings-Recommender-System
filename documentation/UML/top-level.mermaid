@@ -1,0 +1,45 @@
+classDiagram
+    class VulnerabilityReport {
+        -findings: List[Finding]
+        -aggregated_solutions: List[AggregatedSolution]
+        +add_finding(finding: Finding)
+        +get_findings() List[Finding]
+        +add_unsupervised_category(use_solution: bool)
+        +set_aggregated_solutions(aggregated_solutions: List[AggregatedSolution])
+        +get_aggregated_solutions() List[AggregatedSolution]
+    }
+
+    class FindingBatcher {
+        -llm_service: BaseLLMService
+        -category_attributes: List[str]
+        +create_batches(findings: List[Finding]) List[List[Finding]]
+    }
+
+    class FindingGrouper {
+        -vulnerability_report: VulnerabilityReport
+        -llm_service: BaseLLMService
+        -batcher: FindingBatcher
+        -batches: List[List[Finding]]
+        -aggregated_solutions: List[AggregatedSolution]
+        +generate_aggregated_solutions()
+    }
+
+    class AgglomerativeClusterer {
+        -vulnerability_report: VulnerabilityReport
+        -model: SentenceTransformer
+        +add_unsupervised_category(use_solution: bool)
+        +get_cluster_graph()
+    }
+
+    class BaseLLMService {
+        <<abstract>>
+        +generate(prompt: str, json: bool) Dict[str, str]
+        +generate_aggregated_solution(findings: List[Finding]) List[Tuple[str, List[Finding], Dict]]
+    }
+
+    VulnerabilityReport "1" -- "1" FindingGrouper : uses >
+    VulnerabilityReport "1" -- "1" AgglomerativeClusterer : uses >
+    FindingGrouper "1" -- "1" FindingBatcher : uses >
+    FindingGrouper -- BaseLLMService : uses >
+    FindingBatcher -- BaseLLMService : uses >
+    VulnerabilityReport -- BaseLLMService : uses >

@@ -1,0 +1,57 @@
+classDiagram
+    class FindingBatcher {
+        -llm_service
+        -category_attributes: List[str]
+        +create_batches(findings: List[Finding]) List[List[Finding]]
+        -_recursive_batch(findings: List[Finding], depth: int) List[List[Finding]]
+        -_group_by_attribute(findings: List[Finding], attribute: str) dict
+        -_final_split(findings: List[Finding]) List[List[Finding]]
+        -_fits_in_context(findings: List[Finding], include_solution: bool) bool
+        -_finding_to_string(finding: Finding, include_solution: bool) str
+        -_strip_solutions(findings: List[Finding]) List[Finding]
+    }
+
+    class FindingGrouper {
+        -vulnerability_report: VulnerabilityReport
+        -llm_service: BaseLLMService
+        -batcher: FindingBatcher
+        -batches: List[List[Finding]]
+        -aggregated_solutions: List[AggregatedSolution]
+        +generate_aggregated_solutions()
+    }
+
+    class AgglomerativeClusterer {
+        -vulnerability_report: VulnerabilityReport
+        -model: SentenceTransformer
+        +add_unsupervised_category(use_solution: bool)
+        +get_cluster_graph()
+        -_find_optimal_clusters(embeddings)
+    }
+
+    class VulnerabilityReport {
+        +get_findings() List[Finding]
+        +set_aggregated_solutions(solutions: List[AggregatedSolution])
+    }
+
+    class Finding {
+        +description: str
+        +solution: Solution
+        +severity: str
+        +unsupervised_cluster: int
+        +set_unsupervised_cluster(label: int)
+    }
+
+    class AggregatedSolution {
+        +findings: List[Finding]
+        +solution: str
+        +metadata: Dict
+    }
+
+    FindingBatcher --> BaseLLMService
+    FindingGrouper --> VulnerabilityReport
+    FindingGrouper --> BaseLLMService
+    FindingGrouper --> FindingBatcher
+    FindingGrouper --> AggregatedSolution
+    AgglomerativeClusterer --> VulnerabilityReport
+    VulnerabilityReport --> Finding
+    VulnerabilityReport --> AggregatedSolution

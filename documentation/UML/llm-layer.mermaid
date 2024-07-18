@@ -1,0 +1,62 @@
+classDiagram
+    class BaseLLMService {
+        <<abstract>>
+        +get_model_name()* str
+        +get_context_size()* int
+        +get_url()* str
+        +generate(prompt: str, json: bool) Dict[str, str]
+        +combine_descriptions(descriptions: List[str]) str
+        +classify_kind(finding: Finding, field_name: str, options: List[Enum]) Optional[Enum]
+        +get_recommendation(finding: Finding, short: bool) Union[str, List[str]]
+        +get_search_terms(finding: Finding) str
+        +generate_aggregated_solution(findings: List[Finding]) List[Tuple[str, List[Finding], Dict]]
+    }
+
+    class LLMServiceMixin {
+        -config: Dict[str, Any]
+        +get_api_key() str
+        +get_model() str
+        +clean_response(response: str) str
+        +parse_json_response(response: str) Dict[str, Any]
+        +format_prompt(template: str, **kwargs) str
+        +handle_api_error(e: Exception) Dict[str, str]
+        +convert_dict_to_str(data: Dict[str, Any]) str
+    }
+
+    class LLMServiceStrategy {
+        -llm_service: BaseLLMService
+        +get_model_name() str
+        +get_context_size() int
+        +get_url() str
+        +generate(prompt: str) Dict[str, str]
+        +combine_descriptions(descriptions: List[str], cve_ids, cwe_ids) str
+        +classify_kind(finding: Finding, field_name: str, options: Optional[List[Enum]]) Optional[Enum]
+        +get_recommendation(finding: Finding, short: bool) Union[str, List[str]]
+        +get_search_terms(finding: Finding) str
+        +generate_aggregated_solution(findings: List[Finding]) List[Tuple[str, List[Finding], Dict]]
+        +convert_dict_to_str(data: Dict) str
+    }
+
+    class OLLAMAService {
+        -model_url: str
+        -model_name: str
+        -context_size: int
+        -pull_url: str
+        -generate_url: str
+        -generate_payload: Dict[str, Union[str, bool]]
+        +init_pull_model()
+        +_generate(prompt: str, json: bool) Dict[str, str]
+    }
+
+    class OpenAIService {
+        -api_key: str
+        -model: str
+        -context_size: int
+        +_generate(prompt: str, json: bool) Dict[str, str]
+    }
+
+    BaseLLMService <|-- OLLAMAService
+    BaseLLMService <|-- OpenAIService
+    LLMServiceMixin <|-- OLLAMAService
+    LLMServiceMixin <|-- OpenAIService
+    LLMServiceStrategy o-- BaseLLMService
