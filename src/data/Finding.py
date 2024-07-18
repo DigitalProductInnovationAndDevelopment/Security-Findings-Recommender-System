@@ -35,7 +35,7 @@ class Finding(BaseModel):
             logger.error("LLM Service not set, cannot combine descriptions.")
             return self
 
-        self.description = self.llm_service.combine_descriptions(self.descriptions)
+        self.description = self.llm_service.combine_descriptions(self.descriptions, self.cve_ids, self.cwe_ids)
         return self
 
     def add_category(self) -> "Finding":

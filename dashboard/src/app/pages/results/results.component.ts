@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
-import { RecommendationsService } from 'src/app/services/recommendations.service';
 import {
   clearFindings,
+  filterRecs,
   loadRecommendations,
 } from 'src/app/states/recommendations.actions';
 import { RecommendationsState } from 'src/app/states/recommendations.state';
@@ -31,13 +31,10 @@ export class ResultsComponent implements OnInit, OnDestroy {
   @Select(RecommendationsState.exampleProcess)
   exampleProcess$!: Observable<boolean>;
   public loading: boolean = false;
-  private subscription!: Subscription;
+  public severityMinValue = 0;
+  public severityMaxValue = 100;
 
-  constructor(
-    private router: Router,
-    private recommendationService: RecommendationsService,
-    private store: Store
-  ) {}
+  constructor(private router: Router, private store: Store) {}
 
   ngOnInit(): void {
     this.getRecommendations();
@@ -57,7 +54,16 @@ export class ResultsComponent implements OnInit, OnDestroy {
     if (!fileName) {
       this.router.navigate(['home']);
     } else if (!exampleProcess) {
-      this.store.dispatch(new loadRecommendations()).subscribe();
+      this.store.dispatch(new loadRecommendations({})).subscribe();
     }
+  }
+
+  public filterRecommendations(): void {
+    console.log(this.severityMinValue, this.severityMaxValue);
+    this.store.dispatch(
+      new filterRecs({
+        severity: [this.severityMinValue, this.severityMaxValue],
+      })
+    );
   }
 }

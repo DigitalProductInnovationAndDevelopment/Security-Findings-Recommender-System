@@ -1,14 +1,17 @@
 from data.Solution import Solution
 from data.apischema import GetRecommendationResponseItem
 from db.models import Finding as DBFinding
+from data.Finding import Category, AffectedComponent
 
 
 def db_finding_to_response_item(
-        find: DBFinding,
+    find: DBFinding,
 ) -> GetRecommendationResponseItem:
     return GetRecommendationResponseItem(
-        category=(
-            find.category
+        category=Category(
+            affected_component=(
+                AffectedComponent(find.category) if find.category else None
+            )
         ),
         solution=Solution(
             short_description=(

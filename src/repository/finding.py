@@ -1,9 +1,10 @@
-from sqlalchemy import Date, cast
-from data.pagination import PaginationInput
-import db.models as db_models
-
-from sqlalchemy.orm import Session
 from fastapi import Depends
+from sqlalchemy import Date, Integer, cast, func
+from sqlalchemy.orm import Session
+
+import db.models as db_models
+from data.apischema import SeverityFilter
+from data.pagination import PaginationInput
 from db.my_db import get_db
 
 
@@ -26,6 +27,25 @@ class FindingRepository:
             .where(
                 db_models.RecommendationTask.status == db_models.TaskStatus.COMPLETED,
                 (db_models.RecommendationTask.id == task_id),
+            )
+            .offset(pagination.offset)
+            .limit(pagination.limit)
+            .all()
+        )
+
+        return findings
+    
+    def get_findings_by_task_id_and_severity(
+        self, task_id: int, severity: SeverityFilter, pagination: PaginationInput
+    ) -> list[db_models.Finding]:
+        findings = (
+            self.session.query(db_models.Finding)
+            .join(db_models.RecommendationTask)
+            .where(
+                db_models.RecommendationTask.status == db_models.TaskStatus.COMPLETED,
+                (db_models.RecommendationTask.id == task_id),
+                db_models.Finding.severity >= severity.minValue,
+                db_models.Finding.severity <= severity.maxValue,
             )
             .offset(pagination.offset)
             .limit(pagination.limit)

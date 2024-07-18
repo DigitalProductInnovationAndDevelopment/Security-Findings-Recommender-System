@@ -27,4 +27,20 @@ export class clearFindings {
 
 export class loadRecommendations {
   static readonly type = '[] load recommendations';
+
+  constructor(
+    public readonly payload: {
+      severity?: number[];
+    }
+  ) {}
+}
+
+export class filterRecs {
+  static readonly type = '[severity] filter recommendations';
+
+  constructor(
+    public readonly payload: {
+      severity: number[];
+    }
+  ) {}
 }

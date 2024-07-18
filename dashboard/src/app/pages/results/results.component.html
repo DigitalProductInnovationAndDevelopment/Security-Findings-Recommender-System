@@ -18,10 +18,20 @@
         <span *ngIf="fileName$ | async as fileName">{{ fileName }}</span>
       </div>
     </div>
-    <div class="info-container__numberFindings">
-      <span>{{ findings?.length }}</span>
-      <p>Vulnerabilities</p>
-      <i class="bi bi-shield-exclamation"></i>
+    <div class="info-container__right">
+      <div class="slider">
+        <span>{{ severityMinValue }}</span>
+        <mat-slider min="0" max="100" step="1" (input)="filterRecommendations()">
+          <input matSliderStartThumb [(ngModel)]="severityMinValue" />
+          <input matSliderEndThumb [(ngModel)]="severityMaxValue" />
+        </mat-slider>
+        <span>{{ severityMaxValue }}</span>
+      </div>
+      <div class="info-container__numberFindings">
+        <span>{{ findings?.length }}</span>
+        <p>Vulnerabilities</p>
+        <i class="bi bi-shield-exclamation"></i>
+      </div>
     </div>
   </div>
 

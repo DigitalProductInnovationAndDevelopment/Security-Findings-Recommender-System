@@ -1,0 +1,119 @@
+classDiagram
+    class VulnerabilityReport {
+        -findings: List[Finding]
+        -aggregated_solutions: List[AggregatedSolution]
+        +set_llm_service(llm_service: LLMServiceStrategy)
+        +add_finding(finding: Finding)
+        +get_findings() List[Finding]
+        +add_category()
+        +add_unsupervised_category(use_solution: bool)
+        +add_solution(long: bool, short: bool, search_term: bool)
+        +set_aggregated_solutions(aggregated_solutions: List[AggregatedSolution])
+        +get_aggregated_solutions() List[AggregatedSolution]
+        +sort(by: str, reverse: bool)
+        +to_dict()
+        +to_html(table: bool)
+        +export_to_json(filename: str)
+        +import_from_json(filename: str)$
+    }
+
+    class Finding {
+        +title: List[str]
+        +source: Set[str]
+        +descriptions: List[str]
+        +description: str
+        +cwe_ids: List[str]
+        +cve_ids: List[str]
+        +severity: Optional[int]
+        +priority: Optional[int]
+        +location_list: List[str]
+        +category: Category
+        +unsupervised_cluster: Optional[int]
+        +solution: Optional[Solution]
+        -_llm_service: Optional[Any]
+        +combine_descriptions()
+        +add_category()
+        +set_unsupervised_cluster(cluster: int)
+        +generate_solution(long: bool, short: bool, search_term: bool)
+        +to_dict()
+        +to_html(table: bool)
+    }
+
+    class Solution {
+        +short_description: Optional[str]
+        +long_description: Optional[str]
+        +search_terms: Optional[str]
+        +metadata: Dict
+        +set_short_description(short_description: str)
+        +set_long_description(long_description: str)
+        +set_search_terms(search_terms: str)
+        +add_to_metadata(key: str, value: Any)
+        +to_dict()
+        +to_html(table: bool)
+    }
+
+    class AggregatedSolution {
+        +findings: List[Finding]
+        +solution: str
+        +metadata: dict
+        +to_dict()
+        +to_html()
+    }
+
+    class Category {
+        +technology_stack: Optional[TechnologyStack]
+        +security_aspect: Optional[SecurityAspect]
+        +severity_level: Optional[SeverityLevel]
+        +remediation_type: Optional[RemediationType]
+        +affected_component: Optional[AffectedComponent]
+        +compliance: Optional[Compliance]
+        +environment: Optional[Environment]
+        +to_dict()
+    }
+
+    class FindingBatcher {
+        -llm_service: BaseLLMService
+        -category_attributes: List[str]
+        +create_batches(findings: List[Finding]) List[List[Finding]]
+    }
+
+    class FindingGrouper {
+        -vulnerability_report: VulnerabilityReport
+        -llm_service: BaseLLMService
+        -batcher: FindingBatcher
+        -batches: List[List[Finding]]
+        -aggregated_solutions: List[AggregatedSolution]
+        +generate_aggregated_solutions()
+    }
+
+    class AgglomerativeClusterer {
+        -vulnerability_report: VulnerabilityReport
+        -model: SentenceTransformer
+        +add_unsupervised_category(use_solution: bool)
+        +get_cluster_graph()
+    }
+
+    class BaseLLMService {
+        <<abstract>>
+        +get_model_name()* str
+        +get_context_size()* int
+        +get_url()* str
+        +generate(prompt: str, json: bool) Dict[str, str]
+        +combine_descriptions(descriptions: List[str]) str
+        +classify_kind(finding: Finding, field_name: str, options: List[Enum]) Optional[Enum]
+        +get_recommendation(finding: Finding, short: bool) Union[str, List[str]]
+        +get_search_terms(finding: Finding) str
+        +generate_aggregated_solution(findings: List[Finding]) List[Tuple[str, List[Finding], Dict]]
+    }
+
+    VulnerabilityReport "1" *-- "*" Finding
+    VulnerabilityReport "1" *-- "*" AggregatedSolution
+    Finding "1" *-- "1" Solution
+    Finding "1" *-- "1" Category
+    FindingGrouper --> VulnerabilityReport
+    FindingGrouper --> BaseLLMService
+    FindingGrouper --> FindingBatcher
+    FindingBatcher --> BaseLLMService
+    AgglomerativeClusterer --> VulnerabilityReport
+    VulnerabilityReport ..> LLMServiceStrategy
+    Finding ..> BaseLLMService
