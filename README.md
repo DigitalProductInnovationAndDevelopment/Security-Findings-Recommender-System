@@ -18,21 +18,32 @@ To run the code within Docker, install Docker Desktop from [the official website
 
 To run the code without Docker, follow these steps:
 
-1. Install Python 3.9 or higher from [the official website](https://www.python.org/downloads/).
-2. (Optional) Create a virtual environment to isolate the dependencies:
+1. Install Python 3.11 or higher from [the official website](https://www.python.org/downloads/).
+2. We are using pipenv for creating vurtual environments and managing packages, You can go to vitualenv shell for the project by simply calling
 
 ```bash
-python -m venv venv
-source venv/bin/activate
+pipenv shell
 ```
+
+You can run commands directly If you don't want interactive shell with virtual environment
+For eg:
+
+```bash
+pipenv run make dev
+```
+
+If you run `make dev` normally it wouldn't work as the packages are not installed globally.
 
 3. Install the required packages:
 
 ```bash
-pip install -r requirements.txt
+pipenv install
+# if using pytest and mypy
+pipenv install --dev
 ```
 
 #### Ollama
+
 When running outside of Docker, you need to install Ollama from [the official website](https://ollama.com/).
 Make sure to set the correct url for the Ollama API in the `.env` file (usually `http://localhost:11434`).
 

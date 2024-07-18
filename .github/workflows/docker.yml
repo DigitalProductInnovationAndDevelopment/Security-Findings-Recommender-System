@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        app: [api, queue, dashboard]
+        app: [system, dashboard]
 
     steps:
       - name: Checkout repository
@@ -37,7 +37,7 @@ jobs:
 
       - name: GET DockerFile Path
         run: |
-          DOCKERFILE_PATH=$(if [ "${{ matrix.app }}" == "dashboard" ]; then echo "./dashboard/Dockerfile"; else echo "Dockerfile.${{ matrix.app }}"; fi)
+          DOCKERFILE_PATH=$(if [ "${{ matrix.app }}" == "dashboard" ]; then echo "./dashboard/Dockerfile"; else echo "Dockerfile.base"; fi)
           echo "DOCKERFILE_PATH=$DOCKERFILE_PATH" >> $GITHUB_ENV
       - name: Build and push Docker image
         uses: docker/build-push-action@v5

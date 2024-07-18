@@ -26,6 +26,10 @@ dev:
 	cd src && uvicorn app:app --host 0.0.0.0 --port 8001 --reload 
 
 
+start:
+	cd src && uvicorn app:app --host 0.0.0.0 --port 8000 --reload 
+
+
 test:
 	cd src && pytest
 

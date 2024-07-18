@@ -1,3 +1,5 @@
+#DEPRECATED
+
 FROM python:3.11
 
 # Set the working directory in the container to /app
@@ -6,12 +8,11 @@ WORKDIR /app
 # Add the current directory contents into the container at /app
 ADD . /app
 
-# Install any needed packages specified in requirements.txt
-RUN pip install -r requirements.txt
+# install pipenv
+RUN pip install pipenv
 
-#install uvicorn
-RUN pip install uvicorn
+RUN pipenv install --system --deploy
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-CMD ["/bin/bash", "-c", "cd src && uvicorn app:app --host 0.0.0.0 --port 8000"]
+CMD ["/bin/bash", "-c", "make db-migrate && cd src && uvicorn app:app --host 0.0.0.0 --port 8000"]

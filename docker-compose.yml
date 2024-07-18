@@ -2,7 +2,8 @@ version: '2.0'
 services:
   api:
     build:
-      dockerfile: ./Dockerfile.api
+      dockerfile: ./Dockerfile.base
+    command: ["/bin/bash", "-c", "make db-migrate && make start"]
     ports:
       - "8000:8000"
     volumes:
@@ -21,7 +22,8 @@ services:
           path: requirements.txt
   queue:
     build:
-      dockerfile: ./Dockerfile.queue
+      dockerfile: ./Dockerfile.base
+    command: make start-worker
     volumes:
       - .:/app
     depends_on:
@@ -40,25 +42,25 @@ services:
     ports:
       - "5432:5432"
 
-  ollama:
-    container_name: ollama
-    build:
-      context: .
-      dockerfile: ./ollama/Dockerfile
-      args:
-        - MODEL_NAME=phi3:mini
-    volumes:
-      - ollama:/root/.ollama
-    ports:
-      - '11435:11434'
-    environment:
-      - OLLAMA_HOST=0.0.0.0:11435
-      - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
-      - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
-      - gpus=all
-    pull_policy: always
-    tty: true
-    restart: unless-stopped
+  # ollama:
+  #   container_name: ollama
+  #   build:
+  #     context: .
+  #     dockerfile: ./ollama/Dockerfile
+  #     args:
+  #       - MODEL_NAME=phi3:mini
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #   ports:
+  #     - '11435:11434'
+  #   environment:
+  #     - OLLAMA_HOST=0.0.0.0:11435
+  #     - OLLAMA_NUM_PARALLEL=10 # Number of max allowed requests simultaneously
+  #     - OLLAMA_MAX_LOADED_MODELS=4 # Number of max allowed models loaded simultaneously
+  #     - gpus=all
+  #   pull_policy: always
+  #   tty: true
+  #   restart: unless-stopped
   #    deploy:
   #      resources:
   #        reservations:

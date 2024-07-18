@@ -1,0 +1,35 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pydantic = "*"
+pandas = "*"
+sqlmodel = "~=0.0.18"
+alembic = "~=1.13.1"
+psycopg = "*"
+psycopg-binary = "*"
+fastapi = "==0.109.1"
+uvicorn = "==0.15.0"
+python-dotenv = "*"
+jsonschema = "==4.22.0"
+sqlalchemy = "~=2.0.30"
+tqdm = "~=4.66.4"
+httpx = "~=0.27.0"
+tenacity = "~=8.3.0"
+celery = {extras = ["redis"], version = "==5.2.2"}
+openai = "~=1.33.0"
+anthropic = "~=0.28.0"
+pydantic-settings = "~=2.3.2"
+sentence-transformers = "*"
+kneed = "*"
+scikit-learn = "*"
+plotly = "*"
+
+[dev-packages]
+mypy = "*"
+pytest = "*"
+
+[requires]
+python_version = "3.11"

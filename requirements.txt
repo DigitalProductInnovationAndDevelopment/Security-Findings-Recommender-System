@@ -1,3 +1,5 @@
+#LEGACY : use pipfile instead
+
 pydantic
 pandas
 sqlmodel~=0.0.18

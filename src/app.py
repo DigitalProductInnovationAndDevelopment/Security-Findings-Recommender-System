@@ -20,22 +20,7 @@ from alembic import command
 import logging as log
 
 
-def run_migrations():
-    alembic_cfg = Config("alembic.ini")
-    command.upgrade(alembic_cfg, "head")
-
-
-@asynccontextmanager
-async def lifespan(app_: FastAPI):
-    log.info("Starting up...")
-    log.info("run alembic upgrade head...")
-    # run_migrations()
-    log.info("alembic upgrade head done")
-    yield
-    log.info("Shutting down...")
-
-
-app = FastAPI(root_path="/api", lifespan=lifespan)
+app = FastAPI(root_path="/api")
 
 
 app.add_middleware(
