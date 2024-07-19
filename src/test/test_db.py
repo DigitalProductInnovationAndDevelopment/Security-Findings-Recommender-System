@@ -64,7 +64,7 @@ def test_create_get_task_integration():
         task_repo.get_task_by_id
 
     response = client.get(
-        "tasks/",
+        "api/v1/tasks/",
     )
     assert response.status_code == 200
     assert len(response.json()) == 1

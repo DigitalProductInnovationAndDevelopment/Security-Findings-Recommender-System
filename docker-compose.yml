@@ -1,13 +1,16 @@
+version: '3.8'
 services:
   api:
     build:
-      dockerfile: ./Dockerfile.api
+      dockerfile: ./Dockerfile.base
+    command: ["/bin/bash", "-c", "make db-migrate && make start"]
     ports:
       - "8000:8000"
     volumes:
       - .:/app
     depends_on:
       - db
+    restart: on-failure:10
       # - ollama
     env_file:
       - .env.docker
@@ -20,12 +23,15 @@ services:
           path: requirements.txt
   queue:
     build:
-      dockerfile: ./Dockerfile.queue
+      dockerfile: ./Dockerfile.base
+    command: make start-worker
     volumes:
       - .:/app
     depends_on:
       - db
       - redis
+    restart: on-failure:10
+
       # - ollama
     env_file:
       - .env.docker

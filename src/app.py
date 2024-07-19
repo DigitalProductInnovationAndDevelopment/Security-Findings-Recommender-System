@@ -1,41 +1,19 @@
-import os
 import time
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from contextlib import asynccontextmanager
 
 import ai.LLM.Strategies.OLLAMAService
 from config import config
 
-import routes as routes
-import routes.recommendations
-import routes.task
-import routes.upload
-
-from alembic.config import Config
-from alembic import command
-
-import logging as log
+import routes
+import routes.v1.recommendations
+import routes.v1.task
+import routes.v1.upload
 
 
-def run_migrations():
-    alembic_cfg = Config("alembic.ini")
-    command.upgrade(alembic_cfg, "head")
-
-
-@asynccontextmanager
-async def lifespan(app_: FastAPI):
-    log.info("Starting up...")
-    log.info("run alembic upgrade head...")
-    # run_migrations()
-    log.info("alembic upgrade head done")
-    yield
-    log.info("Shutting down...")
-
-
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 
 app.add_middleware(
@@ -46,9 +24,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(routes.task.router)
-app.include_router(routes.recommendations.router)
-app.include_router(routes.upload.router)
+
+app.include_router(routes.v1.task.router, prefix="/api/v1")
+app.include_router(routes.v1.recommendations.router, prefix="/api/v1")
+app.include_router(routes.v1.upload.router, prefix="/api/v1")
 
 start_time = time.time()
 

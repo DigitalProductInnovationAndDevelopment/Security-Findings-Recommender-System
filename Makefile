@@ -22,12 +22,23 @@ db-migrate-down-base:
 	cd src && alembic downgrade base
 
 
+docker-nuke:
+	. ./scripts/nuke.sh
+
 dev:
 	cd src && uvicorn app:app --host 0.0.0.0 --port 8001 --reload 
 
 
+start:
+	cd src && uvicorn app:app --host 0.0.0.0 --port 8000 --reload 
+
+
 test:
 	cd src && pytest
+
+
+docs:
+	cd src && python3 extract-docs.py
 
 start-worker:
 	cd src && celery -A worker.worker worker --loglevel=info --concurrency 1

@@ -3,17 +3,12 @@ import logging
 from celery import Celery
 
 import db.models as db_models
-from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
-from ai.LLM.Strategies.OLLAMAService import OLLAMAService
-from data.VulnerabilityReport import create_from_flama_json
+
 from db.my_db import Session
 
 logger = logging.getLogger(__name__)
 
 from config import config
-
-my_strategy = OLLAMAService()
-llm_service = LLMServiceStrategy(my_strategy)
 
 
 redis_url = config.redis_endpoint
@@ -25,23 +20,24 @@ limit = int(config.queue_processing_limit)  # default limit is 5 , -1 means no l
 worker = Celery("worker", broker=redis_url, backend=redis_url)
 
 
-print(f"Worker: {worker}")
-
-
 def error(self, exc, task_id, args, kwargs, einfo):
     logger.error(f"Task {task_id} raised exception: {exc}")
 
 
 @worker.task(name="worker.generate_report", on_failure=error)
 def generate_report(recommendation_task_id: int, stragegy: str = "OLLAMA"):
+    # importing here so importing worker does not import all the dependencies
+    from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
+    from ai.LLM.Strategies.OLLAMAService import OLLAMAService
+    from data.VulnerabilityReport import create_from_flama_json
 
-    if recommendation_task_id is None:
-        logger.warning("Recommendation task id is None")
-        return
+    ollama_strategy = OLLAMAService()
+    llm_service = LLMServiceStrategy(ollama_strategy)
+
     logger.info(f"Processing recommendation task with id {recommendation_task_id}")
     logger.info(f"Processing recommendation task with limit {limit}")
     logger.info(
-        f"Processing recommendation task with model_name {my_strategy.model_name}"
+        f"Processing recommendation task with model_name {ollama_strategy.model_name}"
     )
     with Session() as session:
         query = (
@@ -94,9 +90,11 @@ def generate_report(recommendation_task_id: int, stragegy: str = "OLLAMA"):
                 finding_id=finding_id,
                 recommendation_task_id=recommendation_task_id,
                 # TODO: fix category changes
-                category=f.category.affected_component.value 
-                if f.category and f.category.affected_component 
-                else None
+                category=(
+                    f.category.affected_component.value
+                    if f.category and f.category.affected_component
+                    else None
+                ),
             )
             session.add(recommendation)
             ## updat recommendation task status
