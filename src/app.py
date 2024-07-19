@@ -13,7 +13,7 @@ import routes.v1.task
 import routes.v1.upload
 
 
-app = FastAPI(root_path="/api")
+app = FastAPI()
 
 
 app.add_middleware(
@@ -25,9 +25,9 @@ app.add_middleware(
 )
 
 
-app.include_router(routes.v1.task.router, prefix="/v1")
-app.include_router(routes.v1.recommendations.router, prefix="/v1")
-app.include_router(routes.v1.upload.router, prefix="/v1")
+app.include_router(routes.v1.task.router, prefix="/api/v1")
+app.include_router(routes.v1.recommendations.router, prefix="/api/v1")
+app.include_router(routes.v1.upload.router, prefix="/api/v1")
 
 start_time = time.time()
 
