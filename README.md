@@ -53,13 +53,23 @@ After starting the application, you can access the API at `http://localhost:8000
 
 ### Docker
 
+building the images
+```bash
+docker compose build
+```
+
 To run the code within Docker, use the following command in the root directory of the project:
 
 ```bash
 docker compose up
 ```
 
+
+
 Add the `-d` flag to run the containers in the background: `docker compose up -d`.
+
+
+
 
 ### Available Routes
 
