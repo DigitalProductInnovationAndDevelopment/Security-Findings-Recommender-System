@@ -1,10 +1,8 @@
-import os
 import time
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from contextlib import asynccontextmanager
 
 import ai.LLM.Strategies.OLLAMAService
 from config import config
@@ -13,11 +11,6 @@ import routes
 import routes.v1.recommendations
 import routes.v1.task
 import routes.v1.upload
-
-from alembic.config import Config
-from alembic import command
-
-import logging as log
 
 
 app = FastAPI(root_path="/api")

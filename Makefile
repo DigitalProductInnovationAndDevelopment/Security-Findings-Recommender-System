@@ -23,7 +23,7 @@ db-migrate-down-base:
 
 
 docker-nuke:
-	. ./bin/nuke.sh
+	. ./scripts/nuke.sh
 
 dev:
 	cd src && uvicorn app:app --host 0.0.0.0 --port 8001 --reload 
