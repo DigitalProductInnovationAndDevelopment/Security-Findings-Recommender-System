@@ -1,0 +1,16 @@
+<header>
+  <p class="dialog-title">Aggregated Solutions  - Details</p>
+  <button (click)="closeDialog()" class="close-btn">
+    <i class="bi bi-x-lg"></i>
+  </button>
+</header>
+<div mat-dialog-content class="mat-dialog-content">
+  <div class="details-content">
+    <h4>{{data.metadata.reason}}</h4>
+    <app-result-table [findings]="data.findings"></app-result-table>
+
+    <div class="details-content__solution"
+          [innerHTML]="convertMarkdown(data.solution)"
+        ></div>
+  </div>
+</div>

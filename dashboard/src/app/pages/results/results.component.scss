@@ -16,10 +16,9 @@
 }
 
 .content {
-  padding-top: 50px;
+  padding: 50px 3%;
   width: 100%;
   height: 100%;
-  padding-inline: 3%;
   @media only screen and (max-width: 1600px) {
     padding-top: 0px;
   }
@@ -102,6 +101,8 @@
       width: 100%;
       display: flex;
       justify-content: center;
+      flex-direction: column;
+      gap: 40px;
     }
   }
 }

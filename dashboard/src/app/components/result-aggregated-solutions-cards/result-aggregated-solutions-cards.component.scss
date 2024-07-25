@@ -1,0 +1,28 @@
+.aggregatedRecommendations {
+  &__container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    width: 100%;
+    background-color: transparent;
+  }
+  &__innerContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+  &__card {
+    border-radius: 10px;
+    border: 1px solid var(--bgColorTertiary);
+    overflow: hidden !important;
+    padding: 10px;
+    width: 250px;
+    display: inline-block;
+    flex: 0 0 auto; /* Prevent shrinking or growing */
+    background-color: var(--bgColorTertiary);
+    color: #ffffff;
+    height: 75px;
+    text-wrap:wrap;
+    cursor: pointer;
+  }
+}

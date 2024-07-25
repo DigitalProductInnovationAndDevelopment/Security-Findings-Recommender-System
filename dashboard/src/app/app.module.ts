@@ -25,9 +25,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSliderModule } from '@angular/material/slider';
+import { AggregatedSolutionsDialogComponent } from './components/aggregated-solutions-dialog/aggregated-solutions-dialog.component';
 import { FindingDetailsDialogComponent } from './components/finding-details-dialog/finding-details-dialog.component';
 import { FindingsInputFilterDialogComponent } from './components/findings-input-filter-dialog/findings-input-filter-dialog.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { ResultAggregatedSolutionsCardsComponent } from './components/result-aggregated-solutions-cards/result-aggregated-solutions-cards.component';
 import { RiskScoreChartComponent } from './components/risk-score-chart/risk-score-chart.component';
 
 export const MaterialModules = [
@@ -56,6 +58,8 @@ export const MaterialModules = [
     RiskScoreChartComponent,
     LoadingSpinnerComponent,
     FindingsInputFilterDialogComponent,
+    ResultAggregatedSolutionsCardsComponent,
+    AggregatedSolutionsDialogComponent,
   ],
   imports: [
     CommonModule,

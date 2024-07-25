@@ -2,6 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { IFinding } from '../interfaces/IFinding';
+import { IAggregatedSolution } from '../interfaces/ISolution';
 import { ReceivedRecommendations } from './../pages/results/results.component';
 
 @Injectable({
@@ -63,6 +65,17 @@ export class RecommendationsService {
   public getUploadStatus(taskId: number): Observable<{ status: string }> {
     return this.http.get<{ status: string }>(
       environment.apiUrl + `/tasks/${taskId}/status`
+    );
+  }
+
+  public getExampleData(
+    exampleName: string
+  ): Observable<{
+    findings: IFinding[];
+    aggregated_solutions: IAggregatedSolution[];
+  }> {
+    return this.http.get<any>(
+      `../../assets/vulnerabilityReport-${exampleName}.json`
     );
   }
 }
