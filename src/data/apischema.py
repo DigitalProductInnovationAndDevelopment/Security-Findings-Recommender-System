@@ -57,9 +57,12 @@ class SolutionItem(BaseModel):
 class GetRecommendationResponseItem(Finding):  # TODO adapt needed fields
     pass
 
+class GetRecommendationResponseItems(BaseModel):
+    findings: list[GetRecommendationResponseItem]
+    aggregated_solutions: list[GetRecommendationResponseItem]
 
 class GetRecommendationResponse(BaseModel):
-    items: list[GetRecommendationResponseItem]
+    items: GetRecommendationResponseItems
     pagination: Pagination
 
 

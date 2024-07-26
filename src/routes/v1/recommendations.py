@@ -71,7 +71,9 @@ def recommendations(
     total_count = finding_repository.get_findings_count_by_task_id(task.id)
     
     response = apischema.GetRecommendationResponse(
-        items=[db_finding_to_response_item(find) for find in findings],
+        items=apischema.GetRecommendationResponseItems(
+            findings= [db_finding_to_response_item(find) for find in findings],
+            aggregated_solutions= []),
         pagination=apischema.Pagination(
             offset=request.pagination.offset,
             limit=request.pagination.limit,
@@ -80,7 +82,7 @@ def recommendations(
         ),
     )
 
-    if not response or len(response.items) == 0:
+    if not response or len(response.items.findings) == 0:
         return Response(status_code=204, headers={"Retry-After": "120"})
 
     return response
