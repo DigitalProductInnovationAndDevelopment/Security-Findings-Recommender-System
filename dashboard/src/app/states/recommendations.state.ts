@@ -165,7 +165,12 @@ export class RecommendationsState {
           f.severity >= payload.severity.minValue &&
           f.severity <= payload.severity.maxValue
       );
-      vulnerabilityReport = { ...vulnerabilityReport, findings };
+      const aggregated_solutions =
+        vulnerabilityReport.aggregated_solutions.sort(
+          (a: IAggregatedSolution, b: IAggregatedSolution) =>
+            b.findings.length - a.findings.length
+        );
+      vulnerabilityReport = { findings, aggregated_solutions };
       context.patchState({ vulnerabilityReport });
     } else {
       const taskId = context.getState().taskId;
@@ -174,6 +179,12 @@ export class RecommendationsState {
         this.recommendationService.getRecommendations(taskId, severity)
       );
       vulnerabilityReport = recommendations.items;
+      const aggregated_solutions =
+        vulnerabilityReport.aggregated_solutions.sort(
+          (a: IAggregatedSolution, b: IAggregatedSolution) =>
+            b.findings.length - a.findings.length
+        );
+      vulnerabilityReport = { ...vulnerabilityReport, aggregated_solutions };
       context.patchState({ vulnerabilityReport });
     }
   }
