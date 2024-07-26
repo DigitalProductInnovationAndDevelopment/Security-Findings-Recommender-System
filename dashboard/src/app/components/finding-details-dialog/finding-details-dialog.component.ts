@@ -19,6 +19,6 @@ export class FindingDetailsDialogComponent {
   }
 
   convertMarkdown(text: string) {
-    return marked(text);
+    return text ? marked(text) : '';
   }
 }

@@ -35,12 +35,17 @@
         color: #ffffff;
         display: flex;
         align-items: center;
-        gap: 10px;
-        ::ng-deep {
-          &.mat-mdc-slider {
-            .mdc-slider__thumb-knob,
-            .mdc-slider__track--active_fill {
-              border-color: var(--textColorSecondary) !important;
+        flex-direction: column;
+        .slide {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          ::ng-deep {
+            &.mat-mdc-slider {
+              .mdc-slider__thumb-knob,
+              .mdc-slider__track--active_fill {
+                border-color: var(--textColorSecondary) !important;
+              }
             }
           }
         }
@@ -91,7 +96,7 @@
     }
   }
   .selectedFile {
-    color: var(--bgColorTertiary);
+    // color: var(--bgColorTertiary);
     display: flex;
     flex-direction: column;
     gap: 20px;

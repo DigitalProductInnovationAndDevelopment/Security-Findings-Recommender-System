@@ -4,6 +4,7 @@ import {
   filter,
   finalize,
   interval,
+  lastValueFrom,
   map,
   Observable,
   switchMap,
@@ -145,16 +146,35 @@ export class RecommendationsState {
     }
   }
   @Action(filterRecs)
-  filterRecs(
+  async filterRecs(
     context: StateContext<RecommendationsStateModel>,
     { payload }: filterRecs
   ) {
-    // let findings = context.getState().findings;
-    // findings = findings.filter(
-    //   (finding) =>
-    //     finding.severity >= payload.severity[0] &&
-    //     finding.severity <= payload.severity[1]
-    // );
-    // context.patchState({ findings });
+    const exampleProcess = context.getState().exampleProcess;
+    let vulnerabilityReport = context.getState().vulnerabilityReport;
+    let findings;
+    console.log(exampleProcess);
+    console.log(vulnerabilityReport);
+    if (exampleProcess) {
+      const aiModel = context.getState().fileName?.split('.json')[0] || '';
+      vulnerabilityReport = await lastValueFrom(
+        this.recommendationService.getExampleData(aiModel)
+      );
+      findings = vulnerabilityReport.findings.filter(
+        (f) =>
+          f.severity >= payload.severity.minValue &&
+          f.severity <= payload.severity.maxValue
+      );
+      vulnerabilityReport = { ...vulnerabilityReport, findings };
+      context.patchState({ vulnerabilityReport });
+    } else {
+      const taskId = context.getState().taskId;
+      const severity = payload.severity;
+      const recommendations = await lastValueFrom(
+        this.recommendationService.getRecommendations(taskId, severity)
+      );
+      vulnerabilityReport = recommendations.items;
+      context.patchState({ vulnerabilityReport });
+    }
   }
 }

@@ -9,7 +9,10 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Select } from '@ngxs/store';
+import { Observable, tap } from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
+import { RecommendationsState } from 'src/app/states/recommendations.state';
 import { FindingDetailsDialogComponent } from '../finding-details-dialog/finding-details-dialog.component';
 
 /**
@@ -31,7 +34,9 @@ import { FindingDetailsDialogComponent } from '../finding-details-dialog/finding
   ],
 })
 export class ResultTableComponent implements OnInit {
-  @Input() findings!: IFinding[];
+  @Select(RecommendationsState.vulnerabilityReport)
+  vulnerabilityReport$!: Observable<any | null>;
+  @Input() findings?: IFinding[];
   @Input() title: string = '';
   columnsToDisplay = ['title', 'severity', 'priority', 'source'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
@@ -50,9 +55,24 @@ export class ResultTableComponent implements OnInit {
   }
 
   private initFindings(): void {
-    this.dataSource = new MatTableDataSource(this.findings);
-    this.totalRecords = this.dataSource.data.length;
-    this.dataSource.paginator = this.paginator;
+    console.log(this.findings);
+    if (this.findings) {
+      this.dataSource = new MatTableDataSource(this.findings);
+      this.totalRecords = this.dataSource.data.length;
+      this.dataSource.paginator = this.paginator;
+    } else {
+      this.vulnerabilityReport$
+        .pipe(
+          tap((vulnerabilityReport) => {
+            this.dataSource = new MatTableDataSource(
+              vulnerabilityReport.findings
+            );
+            this.totalRecords = this.dataSource.data.length;
+            this.dataSource.paginator = this.paginator;
+          })
+        )
+        .subscribe();
+    }
   }
 
   public formatColumn(col: string): string {

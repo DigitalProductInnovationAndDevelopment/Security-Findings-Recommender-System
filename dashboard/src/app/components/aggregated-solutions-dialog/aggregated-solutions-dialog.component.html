@@ -7,7 +7,7 @@
 <div mat-dialog-content class="mat-dialog-content">
   <div class="details-content">
     <h4>{{data.metadata.reason}}</h4>
-    <app-result-table [findings]="data.findings"></app-result-table>
+    <app-result-table [findings]="data.findings" [title]="data.findings.length + ' Findings'"></app-result-table>
 
     <div class="details-content__solution"
           [innerHTML]="convertMarkdown(data.solution)"

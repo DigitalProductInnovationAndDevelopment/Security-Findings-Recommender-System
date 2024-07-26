@@ -46,14 +46,14 @@ export class RecommendationsService {
 
   public getRecommendations(
     taskId?: number,
-    severity?: number[]
+    severity?: { minValue: number; maxValue: number }
   ): Observable<ReceivedRecommendations> {
     const body: any = {};
     if (taskId !== undefined) {
       body.taskId = taskId;
     }
     if (severity !== undefined) {
-      body.severity = { minValue: severity[0], maxValue: severity[1] };
+      body.severity = severity;
     }
 
     return this.http.post<ReceivedRecommendations>(
@@ -68,9 +68,7 @@ export class RecommendationsService {
     );
   }
 
-  public getExampleData(
-    exampleName: string
-  ): Observable<{
+  public getExampleData(exampleName: string): Observable<{
     findings: IFinding[];
     aggregated_solutions: IAggregatedSolution[];
   }> {

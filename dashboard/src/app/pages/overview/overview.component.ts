@@ -5,7 +5,6 @@ import { lastValueFrom, Observable } from 'rxjs';
 import { RecommendationsService } from 'src/app/services/recommendations.service';
 import { setInformation } from 'src/app/states/recommendations.actions';
 import { RecommendationsState } from 'src/app/states/recommendations.state';
-import { example_gpt4o, example_llama3 } from 'src/assets/example';
 
 @Component({
   selector: 'app-overview',
@@ -24,23 +23,9 @@ export class OverviewComponent {
   ) {}
 
   async openExample(which = 'llama3') {
-    let exampleFindings;
-    switch (which) {
-      case 'llama3':
-        exampleFindings = example_llama3;
-        break;
-      case 'claude-opus':
-        exampleFindings = await lastValueFrom(
-          this.recommendationsService.getExampleData('claude')
-        );
-        break;
-      case 'gpt4o':
-        exampleFindings = example_gpt4o;
-        break;
-      default:
-        exampleFindings = example_llama3;
-        break;
-    }
+    const exampleFindings = await lastValueFrom(
+      this.recommendationsService.getExampleData(which)
+    );
     this.store
       .dispatch(
         new setInformation({

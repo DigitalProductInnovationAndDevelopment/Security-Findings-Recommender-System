@@ -21,8 +21,20 @@
     flex: 0 0 auto; /* Prevent shrinking or growing */
     background-color: var(--bgColorTertiary);
     color: #ffffff;
-    height: 75px;
-    text-wrap:wrap;
+    height: 140px;
+    text-wrap: wrap;
+    text-overflow: ellipsis;
     cursor: pointer;
+  }
+
+  &__container::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.numberFindings {
+  margin-bottom: 5px;
+  &__number {
+    font-size: 3rem;
   }
 }

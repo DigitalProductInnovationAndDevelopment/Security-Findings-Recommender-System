@@ -20,12 +20,15 @@
     </div>
     <div class="info-container__right">
       <div class="slider">
-        <span>{{ severityMinValue }}</span>
+        <span>Severity</span>
+        <div class="slide">
+          <span>{{ severityMinValue }}</span>
         <mat-slider min="0" max="100" step="1" (input)="filterRecommendations()">
           <input matSliderStartThumb [(ngModel)]="severityMinValue" />
           <input matSliderEndThumb [(ngModel)]="severityMaxValue" />
         </mat-slider>
         <span>{{ severityMaxValue }}</span>
+        </div>
       </div>
       <div class="info-container__numberFindings">
         <span>{{ vulnerabilityReport?.findings?.length }}</span>
@@ -39,7 +42,7 @@
     <div class="selectedFile__content">
       @if (!!vulnerabilityReport?.findings?.length) {
       <app-result-aggregated-solutions-cards></app-result-aggregated-solutions-cards>
-      <app-result-table [findings]="vulnerabilityReport.findings" title="Individual Recommendations"></app-result-table>
+      <app-result-table title="Individual Recommendations"></app-result-table>
       } @else {
       <app-loading-spinner></app-loading-spinner>
       }

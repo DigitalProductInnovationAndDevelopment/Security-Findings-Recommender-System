@@ -61,10 +61,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   public filterRecommendations(): void {
-    console.log(this.severityMinValue, this.severityMaxValue);
     this.store.dispatch(
       new filterRecs({
-        severity: [this.severityMinValue, this.severityMaxValue],
+        severity: {
+          minValue: this.severityMinValue,
+          maxValue: this.severityMaxValue,
+        },
       })
     );
   }

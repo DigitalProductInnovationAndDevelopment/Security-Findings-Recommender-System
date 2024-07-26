@@ -6,6 +6,7 @@ header {
     background-color: #ffffff;
     padding: 24px;
     display: flex;
+    z-index: 99;
     justify-content: space-between;
     .close-btn {
       border: none;

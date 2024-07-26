@@ -3,7 +3,10 @@
     <div class="aggregatedRecommendations__innerContainer">
     @for(aggregatedSolution of vulnerabilityReport?.aggregated_solutions; track aggregatedSolution) {
         <div class="aggregatedRecommendations__card" (click)="openAggregatedSolutionDetails(aggregatedSolution)">
-            {{aggregatedSolution?.findings.length}}
+            <div class="numberFindings">
+                <span class="numberFindings__number">{{aggregatedSolution?.findings.length}}</span>
+                Findings
+            </div>
             {{aggregatedSolution?.metadata.reason}}
         </div>
     }
