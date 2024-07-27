@@ -7,12 +7,15 @@ from data.Finding import Category, AffectedComponent
 def db_finding_to_response_item(
     find: DBFinding,
 ) -> GetRecommendationResponseItem:
+    category = None
+    try:
+        recommendation = find.recommendations[0]
+        category = Category.model_validate_json(recommendation.category)
+    except Exception as e:
+        category = Category()
+
     return GetRecommendationResponseItem(
-        category=Category(
-            affected_component=(
-                AffectedComponent(find.category) if find.category else None
-            )
-        ),
+        category=category,
         solution=Solution(
             short_description=(
                 find.recommendations[0].description_short
