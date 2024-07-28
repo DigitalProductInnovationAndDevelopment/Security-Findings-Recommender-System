@@ -33,3 +33,4 @@ jobs:
         with:
           name: docs
           path: src/.docs
+          if-no-files-found: error

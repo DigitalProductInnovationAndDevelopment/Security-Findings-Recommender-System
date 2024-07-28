@@ -1,10 +1,20 @@
 import app as app
 from fastapi.openapi.docs import get_swagger_ui_html
 import os
+import argparse
 
 if __name__ == "__main__":
-    output_path = os.path.join(os.getcwd(), ".docs")
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="Output path for documentation",
+        required=False,
+        default=os.path.join(os.getcwd(), ".docs"),
+    )
+    args = parser.parse_args()
+    output_path = args.output
+    print(f"Generating documentation in {output_path}")
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
