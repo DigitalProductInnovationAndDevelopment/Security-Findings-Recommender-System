@@ -1,9 +1,19 @@
 from typing import List, Set, Optional, Any, get_args
 from enum import Enum, auto
+import uuid
+
 from pydantic import BaseModel, Field, PrivateAttr
 from data.Solution import Solution
-from data.Categories import Category, TechnologyStack, SecurityAspect, SeverityLevel, RemediationType, \
-    AffectedComponent, Compliance, Environment
+from data.Categories import (
+    Category,
+    TechnologyStack,
+    SecurityAspect,
+    SeverityLevel,
+    RemediationType,
+    AffectedComponent,
+    Compliance,
+    Environment,
+)
 import json
 
 import logging
@@ -12,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class Finding(BaseModel):
+    id: str = Field(default_factory=lambda: f"{str(uuid.uuid4())}")
     title: List[str] = Field(default_factory=list)
     source: Set[str] = Field(default_factory=set)
     descriptions: List[str] = Field(default_factory=list)
@@ -21,7 +32,7 @@ class Finding(BaseModel):
     severity: Optional[int] = None
     priority: Optional[int] = None
     location_list: List[str] = Field(default_factory=list)
-    category: Category = None
+    category: Optional[Category] = None
     unsupervised_cluster: Optional[int] = None
     solution: Optional["Solution"] = None
     _llm_service: Optional[Any] = PrivateAttr(default=None)
@@ -35,7 +46,9 @@ class Finding(BaseModel):
             logger.error("LLM Service not set, cannot combine descriptions.")
             return self
 
-        self.description = self.llm_service.combine_descriptions(self.descriptions, self.cve_ids, self.cwe_ids)
+        self.description = self.llm_service.combine_descriptions(
+            self.descriptions, self.cve_ids, self.cwe_ids
+        )
         return self
 
     def add_category(self) -> "Finding":
@@ -47,34 +60,45 @@ class Finding(BaseModel):
 
         # Classify technology stack
         technology_stack_options = list(TechnologyStack)
-        self.category.technology_stack = self.llm_service.classify_kind(self, "technology_stack",
-                                                                        technology_stack_options)
+        self.category.technology_stack = self.llm_service.classify_kind(
+            self, "technology_stack", technology_stack_options
+        )
 
         # Classify security aspect
         security_aspect_options = list(SecurityAspect)
-        self.category.security_aspect = self.llm_service.classify_kind(self, "security_aspect", security_aspect_options)
+        self.category.security_aspect = self.llm_service.classify_kind(
+            self, "security_aspect", security_aspect_options
+        )
 
         # Classify severity level
         severity_level_options = list(SeverityLevel)
-        self.category.severity_level = self.llm_service.classify_kind(self, "severity_level", severity_level_options)
+        self.category.severity_level = self.llm_service.classify_kind(
+            self, "severity_level", severity_level_options
+        )
 
         # Classify remediation type
         remediation_type_options = list(RemediationType)
-        self.category.remediation_type = self.llm_service.classify_kind(self, "remediation_type",
-                                                                        remediation_type_options)
+        self.category.remediation_type = self.llm_service.classify_kind(
+            self, "remediation_type", remediation_type_options
+        )
 
         # Classify affected component
         affected_component_options = list(AffectedComponent)
-        self.category.affected_component = self.llm_service.classify_kind(self, "affected_component",
-                                                                          affected_component_options)
+        self.category.affected_component = self.llm_service.classify_kind(
+            self, "affected_component", affected_component_options
+        )
 
         # Classify compliance
         compliance_options = list(Compliance)
-        self.category.compliance = self.llm_service.classify_kind(self, "compliance", compliance_options)
+        self.category.compliance = self.llm_service.classify_kind(
+            self, "compliance", compliance_options
+        )
 
         # Classify environment
         environment_options = list(Environment)
-        self.category.environment = self.llm_service.classify_kind(self, "environment", environment_options)
+        self.category.environment = self.llm_service.classify_kind(
+            self, "environment", environment_options
+        )
 
         return self
 
@@ -213,9 +237,7 @@ class Finding(BaseModel):
             result += "<tr><th>Name</th><th>Value</th></tr>"
             result += f"<tr><td>Title</td><td>{', '.join(self.title)}</td></tr>"
             result += f"<tr><td>Source</td><td>{', '.join(self.source)}</td></tr>"
-            result += (
-                f"<tr><td>Description</td><td>{self.description}</td></tr>"
-            )
+            result += f"<tr><td>Description</td><td>{self.description}</td></tr>"
             if len(self.location_list) > 0:
                 result += f"<tr><td>Location List</td><td>{' & '.join(map(str, self.location_list))}</td></tr>"
             result += f"<tr><td>CWE IDs</td><td>{', '.join(self.cwe_ids)}</td></tr>"
@@ -223,7 +245,11 @@ class Finding(BaseModel):
             result += f"<tr><td>Severity</td><td>{self.severity}</td></tr>"
             result += f"<tr><td>Priority</td><td>{self.priority}</td></tr>"
             if self.category is not None:
-                result += '<tr><td>Category</td><td>' + str(self.category).replace("\n", "<br />") + '</td></tr>'
+                result += (
+                    "<tr><td>Category</td><td>"
+                    + str(self.category).replace("\n", "<br />")
+                    + "</td></tr>"
+                )
             if self.unsupervised_cluster is not None:
                 result += f"<tr><td>Unsupervised Cluster</td><td>{self.unsupervised_cluster}</td></tr>"
             result += "</table>"

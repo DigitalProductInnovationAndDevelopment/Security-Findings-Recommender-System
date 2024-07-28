@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import ai.LLM.Strategies.OLLAMAService
 from config import config
 
+
 import routes
 import routes.v1.recommendations
 import routes.v1.task

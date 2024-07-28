@@ -29,15 +29,23 @@ class TaskRepository:
         self.session.refresh(task)
         return task
 
+    def update_task_completed(self, task_id: int):
+        status = db_models.TaskStatus.COMPLETED
+        self.session.query(db_models.RecommendationTask).filter(
+            db_models.RecommendationTask.id == task_id
+        ).update({db_models.RecommendationTask.status: status})
+
+        self.session.commit()
+        self.session.flush()
+
     def get_tasks(
         self,
     ) -> list[db_models.RecommendationTask]:
-
+        print("get_tasks")
         tasks = self.session.query(db_models.RecommendationTask).all()
         return tasks
 
     def get_task_by_id(self, task_id: int) -> db_models.RecommendationTask | None:
-
         task = (
             self.session.query(db_models.RecommendationTask)
             .where(db_models.RecommendationTask.id == task_id)
