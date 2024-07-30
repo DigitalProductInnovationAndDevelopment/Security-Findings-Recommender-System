@@ -28,7 +28,6 @@ from config import config
 Session = sessionmaker(engine)
 redis_url = config.redis_endpoint
 
-print(f"Redis URL: {redis_url}")
 limit = int(config.queue_processing_limit)  # default limit is 5 , -1 means no limit
 
 

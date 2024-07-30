@@ -17,6 +17,4 @@ def generate_routes(app: FastAPI):
 
 if __name__ == "__main__":
     routes = generate_routes(app)
-    with open("api_routes.txt", "w") as file:
-        file.write(routes)
-    print("API routes generated and saved to api_routes.txt")
+    print(routes)

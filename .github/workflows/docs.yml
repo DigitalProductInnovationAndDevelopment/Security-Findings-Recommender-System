@@ -34,3 +34,19 @@ jobs:
           name: docs
           path: .docs
           if-no-files-found: error
+
+      - name: Generate API Endpoints
+        id: generate-api-endpoints
+        run: |
+          echo "ENDPOINTS=$(pipenv run python src/generate-api-endpoints.py)" >> "$GITHUB_OUTPUT"
+
+      - name: Comment PR on Success
+        if: github.event_name == 'pull_request' && steps.generate-api-endpoints.outcome == 'success'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            # 🚀 Generated API Endpoints
+
+            ```
+            ${{ steps.generate-api-endpoints.outputs.ENDPOINTS }}
+            ```
