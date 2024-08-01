@@ -61,12 +61,8 @@ class GetRecommendationRequest(BaseModel):
 class GetRecommendationResponseItem(Finding):
     pass
 
-class GetRecommendationResponseItems(BaseModel):
-    findings: list[GetRecommendationResponseItem]
-    aggregated_solutions: list[GetRecommendationResponseItem]
-
 class GetRecommendationResponse(BaseModel):
-    items: GetRecommendationResponseItems
+    items: list[GetRecommendationResponseItem]
     pagination: Pagination
 
 
