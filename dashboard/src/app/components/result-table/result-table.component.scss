@@ -74,7 +74,6 @@ tr.element-row:not(.expanded-row):active {
   background-color: transparent;
 }
 ::ng-deep .mat-mdc-paginator-container {
-  // justify-content: start !important;
   color: #efefef;
   > * {
     text-align: end;
@@ -82,7 +81,7 @@ tr.element-row:not(.expanded-row):active {
   .mat-mdc-icon-button .mat-mdc-paginator-icon {
     fill: #ffffff;
   }
-    .mat-mdc-icon-button[disabled] .mat-mdc-paginator-icon {
-    fill: rgb(186, 186, 186)
+  .mat-mdc-icon-button[disabled] .mat-mdc-paginator-icon {
+    fill: rgb(186, 186, 186);
   }
 }

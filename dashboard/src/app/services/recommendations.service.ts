@@ -2,6 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { IFinding } from '../interfaces/IFinding';
+import { IAggregatedSolution } from '../interfaces/ISolution';
 import { ReceivedRecommendations } from './../pages/results/results.component';
 
 @Injectable({
@@ -44,14 +46,14 @@ export class RecommendationsService {
 
   public getRecommendations(
     taskId?: number,
-    severity?: number[]
+    severity?: { minValue: number; maxValue: number }
   ): Observable<ReceivedRecommendations> {
     const body: any = {};
     if (taskId !== undefined) {
       body.taskId = taskId;
     }
     if (severity !== undefined) {
-      body.severity = { minValue: severity[0], maxValue: severity[1] };
+      body.severity = severity;
     }
 
     return this.http.post<ReceivedRecommendations>(
@@ -63,6 +65,15 @@ export class RecommendationsService {
   public getUploadStatus(taskId: number): Observable<{ status: string }> {
     return this.http.get<{ status: string }>(
       environment.apiUrl + `/tasks/${taskId}/status`
+    );
+  }
+
+  public getExampleData(exampleName: string): Observable<{
+    findings: IFinding[];
+    aggregated_solutions: IAggregatedSolution[];
+  }> {
+    return this.http.get<any>(
+      `../../assets/vulnerabilityReport-${exampleName}.json`
     );
   }
 }

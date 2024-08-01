@@ -30,7 +30,7 @@ export class loadRecommendations {
 
   constructor(
     public readonly payload: {
-      severity?: number[];
+      severity?: { minValue: number; maxValue: number };
     }
   ) {}
 }
@@ -40,7 +40,7 @@ export class filterRecs {
 
   constructor(
     public readonly payload: {
-      severity: number[];
+      severity: { minValue: number; maxValue: number };
     }
   ) {}
 }
