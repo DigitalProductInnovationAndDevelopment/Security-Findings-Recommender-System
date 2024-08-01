@@ -1,58 +1,33 @@
 from pydantic import (
-    BaseModel,
     Field,
-    RedisDsn,
     ValidationInfo,
-    model_validator,
-    root_validator,
 )
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field, RedisDsn, field_validator
+from pydantic import Field, field_validator
 
 from typing import Optional
-
-
-class SubModel(BaseModel):
-    foo: str = "bar"
-    apple: int = 1
 
 
 class Config(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
-    ollama_url: str = Field(
-        json_schema_extra="OLLAMA_URL", default="http://localhost:11434"
-    )
-    ollama_model: str = Field(json_schema_extra="OLLAMA_MODEL", default="phi3:mini")
+    ollama_url: str = Field(default="http://localhost:11434")
+    ollama_model: str = Field(default="phi3:mini")
 
-    ai_strategy: Optional[str] = Field(
-        json_schema_extra="AI_STRATEGY", default="OLLAMA"
-    )
-    anthropic_api_key: Optional[str] = Field(
-        json_schema_extra="ANTHROPIC_API_KEY", default=None
-    )
-    openai_api_key: Optional[str] = Field(
-        json_schema_extra="OPENAI_API_KEY", default=None
-    )
+    ai_strategy: Optional[str] = Field(default="OLLAMA")
+    anthropic_api_key: Optional[str] = Field(default=None)
+    openai_api_key: Optional[str] = Field(default=None)
 
-    postgres_server: str = Field(
-        json_schema_extra="POSTGRES_SERVER", default="localhost"
-    )
-    postgres_port: int = Field(json_schema_extra="POSTGRES_PORT", default=5432)
-    postgres_db: str = Field(json_schema_extra="POSTGRES_DB", default="app")
-    postgres_user: str = Field(json_schema_extra="POSTGRES_USER", default="postgres")
-    postgres_password: str = Field(
-        json_schema_extra="POSTGRES_PASSWORD", default="postgres"
-    )
-    queue_processing_limit: int = Field(
-        json_schema_extra="QUEUE_PROCESSING_LIMIT", default=10
-    )
-    redis_endpoint: str = Field(
-        json_schema_extra="REDIS_ENDPOINT", default="redis://localhost:6379/0"
-    )
-    environment: str = Field(env="ENVIRONMENT", default="development")
-    db_debug: bool = Field(env="DB_DEBUG", default=False)
+    postgres_server: str = Field(default="localhost")
+    postgres_port: int = Field(default=5432)
+    postgres_db: str = Field(default="app")
+    postgres_user: str = Field(default="postgres")
+    postgres_password: str = Field(default="postgres")
+    queue_processing_limit: int = Field(default=10)
+    redis_endpoint: str = Field(default="redis://localhost:6379/0")
+    environment: str = Field(default="development")
+    db_debug: bool = Field(default=False)
 
     @field_validator(
         "ai_strategy",
@@ -66,7 +41,6 @@ class Config(BaseSettings):
 
     @field_validator("openai_api_key")
     def check_api_key(cls, api_key, info: ValidationInfo):
-        print(info)
         if info.data["ai_strategy"] == "OPENAI" and not api_key:
             raise ValueError("OPENAI_API_KEY is required when ai_strategy is OPENAI")
         return api_key

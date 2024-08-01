@@ -1,7 +1,8 @@
 from typing import Any, Dict, List, Literal, Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field
 
+from data.AggregatedSolution import AggregatedSolution
 from data.Categories import Category
 from data.Finding import Finding
 from data.pagination import Pagination, PaginationInput
@@ -13,16 +14,26 @@ from db.models import TaskStatus
 class SeverityFilter(BaseModel):
     minValue: int
     maxValue: int
+
+
 class FindingInputFilter(BaseModel):
-    severity: Optional[SeverityFilter] = None # ['low', 'high']
-    priority: Optional[SeverityFilter] = None # ['low', 'high']
+    severity: Optional[SeverityFilter] = None  # ['low', 'high']
+    priority: Optional[SeverityFilter] = None  # ['low', 'high']
     cve_ids: Optional[List[str]] = None
     cwe_ids: Optional[List[str]] = None
     source: Optional[List[str]] = None
-    
+
+
+class UploadPreference(BaseModel):
+    long_description: Optional[bool] = Field(default=True)
+    search_terms: Optional[bool] = Field(default=True)
+    aggregated_solutions: Optional[bool] = Field(default=True)
+
+
 class StartRecommendationTaskRequest(BaseModel):
-    user_id: Optional[int] = None
-    strategy: Optional[Literal["OLLAMA", "ANTHROPIC", "OPENAI"]] = "OLLAMA"
+    preferences: Optional[UploadPreference] = UploadPreference(
+        long_description=True, search_terms=True, aggregated_solutions=True
+    )
     data: InputData
     force_update: Optional[bool] = False
     filter: Optional[FindingInputFilter] = None
@@ -36,7 +47,7 @@ class GetRecommendationFilter(BaseModel):
     task_id: Optional[int] = None
     date: Optional[str] = None
     location: Optional[str] = None
-    severity: Optional[SeverityFilter] = None # ['low', 'high']
+    severity: Optional[SeverityFilter] = None  # ['low', 'high']
     cve_id: Optional[str] = None
     source: Optional[str] = None
 
@@ -47,14 +58,7 @@ class GetRecommendationRequest(BaseModel):
     pagination: Optional[PaginationInput] = PaginationInput(offset=0, limit=10)
 
 
-class SolutionItem(BaseModel):
-    short_description: str
-    long_description: str
-    metadata: dict
-    search_terms: str
-
-
-class GetRecommendationResponseItem(Finding):  # TODO adapt needed fields
+class GetRecommendationResponseItem(Finding):
     pass
 
 class GetRecommendationResponseItems(BaseModel):
@@ -70,11 +74,17 @@ class GetRecommendationTaskStatusResponse(BaseModel):
     status: TaskStatus
 
 
-class GetSummarizedRecommendationRequest(BaseModel):
-    user_id: Optional[int]
-    pagination: PaginationInput = PaginationInput(offset=0, limit=10)
+class GetAggregatedRecommendationFilter(BaseModel):
+    task_id: Optional[int] = None
 
 
-# class GetSummarizedRecommendationResponse(BaseModel):
-#     recommendation: list[Recommendation]
-#     pagination: Pagination
+class GetAggregatedRecommendationRequest(BaseModel):
+    filter: Optional[GetAggregatedRecommendationFilter] = None
+
+
+class GetAggregatedRecommendationResponseItem(AggregatedSolution):
+    pass
+
+
+class GetAggregatedRecommendationResponse(BaseModel):
+    items: List[GetAggregatedRecommendationResponseItem]

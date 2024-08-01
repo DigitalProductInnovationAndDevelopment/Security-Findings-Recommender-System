@@ -1,5 +1,5 @@
 import datetime
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import Body, Depends, HTTPException, Response
 from fastapi.routing import APIRouter
@@ -8,10 +8,14 @@ from sqlalchemy.orm import Session
 
 import data.apischema as apischema
 import db.models as db_models
+from data.AggregatedSolution import AggregatedSolution
 from db.my_db import get_db
 from dto.finding import db_finding_to_response_item
 from repository.finding import get_finding_repository
+from repository.recommendation import (RecommendationRepository,
+                                       get_recommendation_repository)
 from repository.task import TaskRepository, get_task_repository
+from repository.types import GetFindingsByFilterInput
 
 router = APIRouter(
     prefix="/recommendations",
@@ -63,26 +67,65 @@ def recommendations(
             status_code=400,
             detail="Recommendation task failed",
         )
-    if severityFilter:
-        findings = finding_repository.get_findings_by_task_id_and_severity(task.id, severityFilter, request.pagination)
-    else:
-        findings = finding_repository.get_findings_by_task_id(task.id, request.pagination)
+    findings, total = finding_repository.get_findings_by_task_id_and_filter(
+        GetFindingsByFilterInput(
+            task_id=task.id,
+            severityFilter=severityFilter if severityFilter else None,
+            pagination=request.pagination,
+        )
+    )
 
-    total_count = finding_repository.get_findings_count_by_task_id(task.id)
-    
     response = apischema.GetRecommendationResponse(
-        items=apischema.GetRecommendationResponseItems(
-            findings= [db_finding_to_response_item(find) for find in findings],
-            aggregated_solutions= []),
+        items=[db_finding_to_response_item(find) for find in findings],
         pagination=apischema.Pagination(
             offset=request.pagination.offset,
             limit=request.pagination.limit,
-            total=total_count,
+            total=total,
             count=len(findings),
         ),
     )
-
-    if not response or len(response.items.findings) == 0:
-        return Response(status_code=204, headers={"Retry-After": "120"})
-
     return response
+
+
+@router.post("/aggregated")
+def aggregated_solutions(
+    request: Annotated[
+        Optional[apischema.GetAggregatedRecommendationRequest], Body(...)
+    ],
+    task_repository: TaskRepository = Depends(get_task_repository),
+    recommendation_repository: RecommendationRepository = (
+        Depends(get_recommendation_repository)
+    ),
+) -> apischema.GetAggregatedRecommendationResponse:
+
+    today = datetime.datetime.now().date()
+    task = None
+    if request.filter and request.filter.task_id:
+        task = task_repository.get_task_by_id(request.filter.task_id)
+    task = task_repository.get_task_by_date(today)
+
+    if not task:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                f"Task with id {request.filter.task_id} not found"
+                if request.filter and request.filter.task_id
+                else "Task for today not found"
+            ),
+        )
+    if task.status != db_models.TaskStatus.COMPLETED:
+        raise HTTPException(
+            status_code=400,
+            detail="Recommendation status:" + task.status.value,
+        )
+    agg_recs = recommendation_repository.get_aggregated_solutions(task.id)
+    return apischema.GetAggregatedRecommendationResponse(
+        items=[
+            apischema.GetAggregatedRecommendationResponseItem(
+                solution=rec.solution,
+                findings=[db_finding_to_response_item(x) for x in rec.findings],
+                metadata=rec.meta,
+            )
+            for rec in agg_recs
+        ]
+    )

@@ -33,7 +33,7 @@ async def upload(
     content_list = get_content_list(data.data)
     if data.filter:
         content_list = filter_findings(content_list, data.filter)
-        
+
     today = datetime.datetime.now().date()
     existing_task = task_repository.get_task_by_date(today)
     if existing_task and not data.force_update:
@@ -59,7 +59,13 @@ async def upload(
     finding_repository.create_findings(findings)
 
     celery_result = worker.send_task(
-        "worker.generate_report", args=[recommendation_task.id]
+        "worker.generate_report",
+        args=[
+            recommendation_task.id,
+            data.preferences.long_description,
+            data.preferences.search_terms,
+            data.preferences.aggregated_solutions,
+        ],
     )
 
     # update the task with the celery task id
