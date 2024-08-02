@@ -30,7 +30,7 @@ curl http://localhost:8000/api/v1/tasks/
 ```
 
 **Response:**
-```bash
+```json
 [
   {
     "id": 1,
@@ -48,7 +48,7 @@ curl -X POST http://localhost:8000/api/v1/recommendations/ -d '{"data": "sample"
 ```
 
 **Response:**
-```bash
+```json
 {
   "id": 1,
   "recommendation": "Sample Recommendation"

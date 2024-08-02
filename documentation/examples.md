@@ -21,7 +21,7 @@
     ```
 
 2. **Interpret Response:**
-    ```bash
+    ```json
     {
     "task_id": 1,
     "status": "completed",
