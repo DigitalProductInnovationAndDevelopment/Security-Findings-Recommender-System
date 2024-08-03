@@ -28,7 +28,7 @@ Once the `VulnerabilityReport` is populated with `Finding` objects, several meth
 
 2. `add_category()`: This method on the `VulnerabilityReport` class categorizes each finding based on the taxonomies defined in the `Category` class, such as `TechnologyStack`, `SecurityAspect`, `SeverityLevel`, etc. It uses an LLM service to determine the appropriate categorization.
 
-3. `add_unsupervised_category()`: This method uses unsupervised clustering (via the `AgglomerativeClusterer` in the [`ai.Clustering`](../ai/Clustering/AgglomerativeClusterer.py) module) to group similar findings together.
+3. `add_unsupervised_category()`: This method uses unsupervised clustering (via the `AgglomerativeClusterer` in the [`ai.Clustering`](../../src/ai/Clustering/AgglomerativeClusterer.py) module) to group similar findings together.
 
 4. `add_solution()`: This method on the `VulnerabilityReport` class generates a `Solution` object for each `Finding`. The solution includes a short description, a long description, and search terms, all generated using an LLM service.
 
