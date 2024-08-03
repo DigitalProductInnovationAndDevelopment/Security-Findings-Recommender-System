@@ -121,13 +121,6 @@ class Finding(BaseModel):
         return f"<Finding {self.finding}>"
 
 
-class User(BaseModel):
-    __tablename__ = "users"
-    external_id = Column(String, nullable=True)
-    name = Column(String, nullable=True)
-    preferences = Column(String, nullable=True)
-
-
 class TaskStatus(PyEnum):
     PENDING = "pending"
     COMPLETED = "completed"

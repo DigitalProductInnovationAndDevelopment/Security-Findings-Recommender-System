@@ -24,7 +24,7 @@ class Config(BaseSettings):
     postgres_db: str = Field(default="app")
     postgres_user: str = Field(default="postgres")
     postgres_password: str = Field(default="postgres")
-    queue_processing_limit: int = Field(default=10)
+    queue_processing_limit: int = Field(default=-1)
     redis_endpoint: str = Field(default="redis://localhost:6379/0")
     environment: str = Field(default="development")
     db_debug: bool = Field(default=False)
