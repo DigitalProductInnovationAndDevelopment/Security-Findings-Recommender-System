@@ -9,7 +9,9 @@ from data.VulnerabilityReport import VulnerabilityReport
 
 
 class FindingGrouper:
-    def __init__(self, vulnerability_report: VulnerabilityReport, llm_service: BaseLLMService):
+    def __init__(
+        self, vulnerability_report: VulnerabilityReport, llm_service: BaseLLMService
+    ):
         self.vulnerability_report = vulnerability_report
         self.llm_service = llm_service
         self.batcher = FindingBatcher(llm_service)
@@ -20,5 +22,7 @@ class FindingGrouper:
         for batch in tqdm(self.batches, desc="Generating Aggregated Solutions"):
             result_list = self.llm_service.generate_aggregated_solution(batch)
             for result in result_list:
-                self.aggregated_solutions.append(AggregatedSolution(result[1], result[0], result[2]))  # Solution, Findings, Metadata
+                self.aggregated_solutions.append(
+                    AggregatedSolution().from_result(result[1], result[0], result[2]) # Solution, Findings, Metadata
+                )
         self.vulnerability_report.set_aggregated_solutions(self.aggregated_solutions)

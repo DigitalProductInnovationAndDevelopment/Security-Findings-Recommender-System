@@ -5,7 +5,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -34,10 +34,11 @@ import { FindingDetailsDialogComponent } from '../finding-details-dialog/finding
   ],
 })
 export class ResultTableComponent implements OnInit {
-  @Select(RecommendationsState.findings)
-  findings$!: Observable<any | null>;
-
-  columnsToDisplay = ['title', 'severity', 'priority', 'category', 'source'];
+  @Select(RecommendationsState.vulnerabilityReport)
+  vulnerabilityReport$!: Observable<any | null>;
+  @Input() findings?: IFinding[];
+  @Input() title: string = '';
+  columnsToDisplay = ['title', 'severity', 'priority', 'source'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement: IFinding | null | undefined;
 
@@ -54,15 +55,24 @@ export class ResultTableComponent implements OnInit {
   }
 
   private initFindings(): void {
-    this.findings$
-      .pipe(
-        tap((findings) => {
-          this.dataSource = new MatTableDataSource(findings);
-          this.totalRecords = this.dataSource.data.length;
-          this.dataSource.paginator = this.paginator;
-        })
-      )
-      .subscribe();
+    console.log(this.findings);
+    if (this.findings) {
+      this.dataSource = new MatTableDataSource(this.findings);
+      this.totalRecords = this.dataSource.data.length;
+      this.dataSource.paginator = this.paginator;
+    } else {
+      this.vulnerabilityReport$
+        .pipe(
+          tap((vulnerabilityReport) => {
+            this.dataSource = new MatTableDataSource(
+              vulnerabilityReport.findings
+            );
+            this.totalRecords = this.dataSource.data.length;
+            this.dataSource.paginator = this.paginator;
+          })
+        )
+        .subscribe();
+    }
   }
 
   public formatColumn(col: string): string {

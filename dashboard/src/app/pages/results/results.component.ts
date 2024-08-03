@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { IFinding } from 'src/app/interfaces/IFinding';
+import { IAggregatedSolution } from 'src/app/interfaces/ISolution';
 import {
   clearFindings,
   filterRecs,
@@ -11,7 +12,7 @@ import {
 import { RecommendationsState } from 'src/app/states/recommendations.state';
 
 export interface ReceivedRecommendations {
-  items: IFinding[];
+  items: { findings: IFinding[]; aggregated_solutions: IAggregatedSolution[] };
   pagination: {
     offset: string;
     limit: string;
@@ -27,7 +28,8 @@ export interface ReceivedRecommendations {
 })
 export class ResultsComponent implements OnInit, OnDestroy {
   @Select(RecommendationsState.fileName) fileName$!: Observable<string>;
-  @Select(RecommendationsState.findings) findings$!: Observable<any | null>;
+  @Select(RecommendationsState.vulnerabilityReport)
+  vulnerabilityReport$!: Observable<any | null>;
   @Select(RecommendationsState.exampleProcess)
   exampleProcess$!: Observable<boolean>;
   public loading: boolean = false;
@@ -59,10 +61,12 @@ export class ResultsComponent implements OnInit, OnDestroy {
   }
 
   public filterRecommendations(): void {
-    console.log(this.severityMinValue, this.severityMaxValue);
     this.store.dispatch(
       new filterRecs({
-        severity: [this.severityMinValue, this.severityMaxValue],
+        severity: {
+          minValue: this.severityMinValue,
+          maxValue: this.severityMaxValue,
+        },
       })
     );
   }
