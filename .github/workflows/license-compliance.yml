@@ -9,35 +9,29 @@ on:
       - main
 
 jobs:
-  license-compliance:
+  license-check:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |
-          python -m venv venv
-          . venv/bin/activate
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Check licenses
-        run: |
-          . venv/bin/activate
           pip install pip-licenses
-          pip-licenses --from=mixed --output-file=dependencies_licenses.txt
 
-      - name: Upload license reports
-        uses: actions/upload-artifact@v3
+      - name: Run license compliance tests
+        run: python -m unittest discover -s test -p 'test_license_compliance.py'
+
+      - name: Upload License Compliance Report
+        if: always()
+        uses: actions/upload-artifact@v2
         with:
-          name: dependencies-license-reports
-          path: dependencies_licenses.txt
-
-      - name: License compliance summary
-        run: echo "License compliance check completed. See artifacts for details."
+          name: license-compliance-report
+          path: license_compliance_report.txt

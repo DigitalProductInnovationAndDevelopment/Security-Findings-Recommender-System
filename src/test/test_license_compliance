@@ -1,0 +1,54 @@
+import unittest
+import subprocess
+import json
+import os
+
+class TestLicenseCompliance(unittest.TestCase):
+    ALLOWED_LICENSES = {
+        'MIT',
+        'BSD',
+        'Apache 2.0',
+        'BSD-2-Clause',
+        'BSD-3-Clause',
+        'ISC',
+    }
+
+    def test_license_compliance(self):
+        result = subprocess.run(['pip-licenses', '--format=json'], capture_output=True, text=True)
+        packages = json.loads(result.stdout)
+
+        non_compliant_packages = []
+
+        for pkg in packages:
+            if pkg['License'] not in self.ALLOWED_LICENSES:
+                non_compliant_packages.append(pkg)
+            with self.subTest(pkg=pkg['Name']):
+                self.assertIn(pkg['License'], self.ALLOWED_LICENSES, f"{pkg['Name']} has a disallowed license: {pkg['License']}")
+
+        # Fail the test if there are any non-compliant packages
+        if non_compliant_packages:
+            self.fail(f"Found non-compliant licenses in packages: {[pkg['Name'] for pkg in non_compliant_packages]}")
+
+    @classmethod
+    def tearDownClass(cls):
+        # Generate report content
+        report = "\nLicense Compliance Report:\n"
+        report += "="*40 + "\n"
+        result = subprocess.run(['pip-licenses', '--format=json'], capture_output=True, text=True)
+        packages = json.loads(result.stdout)
+        for pkg in packages:
+            status = "Compliant" if pkg['License'] in cls.ALLOWED_LICENSES else "Non-compliant"
+            report += f"{pkg['Name']} (Version: {pkg['Version']}) - {pkg['License']} - {status}\n"
+        report += "="*40 + "\n"
+
+        # Write report to a file
+        report_file_path = os.path.join(os.getcwd(), 'license_compliance_report.txt')
+        with open(report_file_path, 'w') as report_file:
+            report_file.write(report)
+
+        # Print path to the report file (for verification)
+        print(f"License Compliance Report saved to: {report_file_path}")
+
+if __name__ == '__main__':
+    unittest.main()
+
