@@ -7,7 +7,7 @@
 
 2. **Submit Data for Processing:**
    ```bash
-   curl -X POST http://localhost:8000/api/v1/recommendations/ -d '{"input": "example data"}' -H "Content-Type: application/json"
+   curl -X POST /api/v1/recommendations/ -d '{"input": "example data"}' -H "Content-Type: application/json"
    ```
 
 3. **View Report:** 
@@ -17,7 +17,7 @@
 
 1. **Check Task Status:**
     ```bash
-    curl http://localhost:8000/api/v1/tasks/1/status
+    curl /api/v1/tasks/1/status
     ```
 
 2. **Interpret Response:**
@@ -36,7 +36,7 @@
 
 2. **Upload Data:**
     ```bash
-    curl -X POST http://localhost:8000/api/v1/upload/ -F 'file=@/path/to/your/file.json'
+    curl -X POST /api/v1/upload/ -F 'file=@/path/to/your/file.json'
     ```
 
 3. **Verify Upload:**
@@ -48,7 +48,7 @@
 1. **Submit Data for Aggregated Recommendations:**
 
     ```bash
-    curl -X POST http://localhost:8000/api/v1/recommendations/aggregated -d '{"input": "example aggregated data"}' -H "Content-Type: application/json"
+    curl -X POST /api/v1/recommendations/aggregated -d '{"input": "example aggregated data"}' -H "Content-Type: application/json"
     ```
 
 
