@@ -1,4 +1,5 @@
-import { ISolution, ISolutionCategory } from './ISolution';
+import { ICategory } from './ICategory';
+import { ISolution } from './ISolution';
 export interface IFinding {
   title: string;
   source: string[];
@@ -7,6 +8,6 @@ export interface IFinding {
   cve_ids: string[];
   severity: number;
   priority: number;
-  category: ISolutionCategory;
+  category: ICategory;
   solution: ISolution;
 }

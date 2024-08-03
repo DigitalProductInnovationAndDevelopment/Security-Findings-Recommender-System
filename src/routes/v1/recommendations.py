@@ -6,16 +6,14 @@ from fastapi.routing import APIRouter
 from sqlalchemy import Date, cast
 from sqlalchemy.orm import Session
 
-from data.AggregatedSolution import AggregatedSolution
 import data.apischema as apischema
 import db.models as db_models
+from data.AggregatedSolution import AggregatedSolution
 from db.my_db import get_db
 from dto.finding import db_finding_to_response_item
 from repository.finding import get_finding_repository
-from repository.recommendation import (
-    RecommendationRepository,
-    get_recommendation_repository,
-)
+from repository.recommendation import (RecommendationRepository,
+                                       get_recommendation_repository)
 from repository.task import TaskRepository, get_task_repository
 from repository.types import GetFindingsByFilterInput
 
@@ -86,7 +84,6 @@ def recommendations(
             count=len(findings),
         ),
     )
-
     return response
 
 
