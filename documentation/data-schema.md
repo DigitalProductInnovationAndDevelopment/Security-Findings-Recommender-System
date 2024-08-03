@@ -14,12 +14,13 @@ The `VulnerabilityReport` object represents the entire vulnerability report.
 {
   "findings": [
     {
-      "title": "List of titles",
+      "title": ["List of titles",]
       "source": "Set of sources",
-      "description": "List of descriptions",
-      "location_list": "List of locations",
-      "cwe_ids": "List of CWE IDs",
-      "cve_ids": "List of CVE IDs",
+      "description": "Description, may be generated from multiple sources",
+      "descriptions": ["List of descriptions",]
+      "location_list": ["List of locations",]
+      "cwe_ids": ["List of CWE IDs",]
+      "cve_ids": ["List of CVE IDs",]
       "severity": "Severity level (integer)",
       "priority": "Priority level (integer)",
       "category": "Category (optional)",
@@ -36,11 +37,12 @@ The `Finding object` represents a single security finding.
 
 ```json
 {
-  "title": "List of titles",
+  "title": ["List of titles"],
   "source": "Set of sources",
-  "description": "List of descriptions",
-  "cwe_ids": "List of CWE IDs",
-  "cve_ids": "List of CVE IDs",
+  "description": "Description, may be generated from multiple sources",
+  "descriptions": ["List of descriptions"],
+  "cwe_ids": ["List of CWE IDs"],
+  "cve_ids": ["List of CVE IDs"],
   "severity": "Severity level (integer)",
   "priority": "Priority level (integer)",
   "category": "Category (optional)",
@@ -51,7 +53,8 @@ The `Finding object` represents a single security finding.
 ### Fields
 - title: A list of titles for the finding.
 - source: A set of sources where the finding was identified.
-- description: A list of descriptions providing details about the finding.
+- description: A description of the finding. If the list of description only has one element, this will be this element. Otherwise, this will be a summarized concatenation of all descriptions.
+- descriptions: A list of descriptions providing details about the finding.
 - cwe_ids: A list of Common Weakness Enumeration (CWE) IDs associated with the finding.
 - cve_ids: A list of Common Vulnerabilities and Exposures (CVE) IDs associated with the finding.
 - severity: An integer representing the severity level of the finding.
@@ -68,7 +71,7 @@ The Solution object represents a solution for a security finding.
 {
   "short_description": "Short description of the solution",
   "long_description": "Detailed description of the solution",
-  "search_terms": "List of search terms"
+  "search_terms": ["List of search terms"]
 }
 ```
 
@@ -97,18 +100,105 @@ The AggregatedSolution object represents a solution that has been aggregated for
 - solution: A description of the aggregated solution.
 - metadata: A dictionary containing additional metadata about the aggregated solution.
 
-## FindingKind Enum
+# Categories.py Documentation
 
-The `FindingKind` enum represents the different categories of security findings.
+## Categories
+The Categories module defines a set of enumerations and a Category class for classifying security-related issues and solutions in software development and deployment. It provides a structured way to categorize various aspects of security concerns, including technology stacks, security aspects, severity levels, remediation types, affected components, compliance standards, and deployment environments. This class can easily be extended to include additional categories as needed.
 
-### Categories
+### Enum Classes
 
-- **SYSTEM**: System-related findings.
-- **USER**: User-related findings.
-- **CODE**: Code-related findings.
-- **DEFAULT**: Default category for uncategorized findings.
+#### TechnologyStack
+
+| Enum Value | String Value |
+|------------|--------------|
+| JAVASCRIPT | "JavaScript" |
+| PYTHON     | "Python"     |
+| JAVA       | "Java"       |
+| DOTNET     | "DotNet"     |
+| SQL        | "SQL"        |
+| NOSQL      | "NoSQL"      |
+| CLOUD      | "Cloud"      |
+| RUST       | "Rust"       |
+| GO         | "Go"         |
+| C_DIALECT  | "CDialect"   |
+| RUBY       | "Ruby"       |
+| PHP        | "PHP"        |
+| ON_PREMISE | "OnPremise"  |
+
+#### SecurityAspect
+
+| Enum Value        | String Value        |
+|-------------------|----------------------|
+| AUTHENTICATION    | "Authentication"     |
+| AUTHORIZATION     | "Authorization"      |
+| DATA_ENCRYPTION   | "DataEncryption"     |
+| INPUT_VALIDATION  | "InputValidation"    |
+| XSS               | "CrossSiteScripting" |
+| SQL_INJECTION     | "SQLInjection"       |
+| CommandInjection  | "CommandInjection"   |
+| CRYPTOGRAPHY      | "Cryptography"       |
+| LOGGING           | "Logging"            |
+| CONFIGURATION     | "Configuration"      |
+
+#### SeverityLevel
+
+| Enum Value     | String Value    |
+|----------------|-----------------|
+| CRITICAL       | "Critical"      |
+| HIGH           | "High"          |
+| MEDIUM         | "Medium"        |
+| LOW            | "Low"           |
+| INFORMATIONAL  | "Informational" |
+
+#### RemediationType
+
+| Enum Value           | String Value          |
+|----------------------|------------------------|
+| CODE_FIX             | "CodeFix"              |
+| CONFIGURATION_CHANGE | "ConfigurationChange"  |
+| DEPENDENCY_UPDATE    | "DependencyUpdate"     |
+| ARCHITECTURE_CHANGE  | "ArchitectureChange"   |
+| SECURITY_TRAINING    | "SecurityTraining"     |
+| PROCESS_IMPROVEMENT  | "ProcessImprovement"   |
+
+#### AffectedComponent
+
+| Enum Value              | String Value            |
+|-------------------------|--------------------------|
+| USER_INTERFACE          | "UserInterface"          |
+| API                     | "API"                    |
+| DATABASE                | "Database"               |
+| NETWORK                 | "Network"                |
+| THIRD_PARTY_INTEGRATION | "ThirdPartyIntegration"  |
+| AUTHENTICATION_SERVICE  | "AuthenticationService"  |
+| LOGGING_SYSTEM          | "LoggingSystem"          |
+| CACHING_LAYER           | "CachingLayer"           |
+| ORCHESTRATION           | "Orchestration"          |
+
+#### Compliance
+
+| Enum Value | String Value |
+|------------|--------------|
+| GDPR       | "GDPR"       |
+| PCI_DSS    | "PCI_DSS"    |
+| HIPAA      | "HIPAA"      |
+| ISO27001   | "ISO27001"   |
+| SOC2       | "SOC2"       |
+| NIST       | "NIST"       |
+
+#### Environment
+
+| Enum Value      | String Value    |
+|-----------------|-----------------|
+| DOCKER          | "Docker"        |
+| KUBERNETES      | "Kubernetes"    |
+| SERVERLESS      | "Serverless"    |
+| VIRTUAL_MACHINE | "VirtualMachine"|
+| BARE_METAL      | "BareMetal"     |
 
 ## Data Conversion Methods
+
+### to_dict() Methods
 
 - **VulnerabilityReport.to_dict()**  
   Returns a list of dictionaries, where each dictionary represents a `Finding` object.
@@ -218,3 +308,9 @@ The `FindingKind` enum represents the different categories of security findings.
   }
 }
 ```
+
+### str() Methods
+All data classes have a `__str__` method that returns a string representation of the object. This method is useful for debugging and logging purposes and is used to get a class representation for the LLMs.
+
+### to_html() Methods
+All main data classes have a `to_html()` method that returns an HTML representation of the object. This method is useful for generating HTML reports and visualizations of the data. VulnerabilityReport and Findings accept the param `table: boolean` to return the data in a table format.
