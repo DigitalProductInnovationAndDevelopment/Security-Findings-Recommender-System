@@ -6,11 +6,11 @@ This document provides a comprehensive guide to understanding the data model and
 
 The key classes that form the backbone of this data model are:
 
-1. [`Finding`](../data/Finding.py): Represents a security finding or vulnerability.
-2. [`Solution`](../data/Solution.py): Represents a potential solution or recommendation for a `Finding`.
-3. [`Category`](../data/Categories.py): Represents a categorization of a `Finding` based on various taxonomies.
-4. [`AggregatedSolution`](../data/AggregatedSolution.py): Represents an aggregated solution that groups multiple related `Finding` objects.
-5. [`VulnerabilityReport`](../data/VulnerabilityReport.py): Represents a complete vulnerability report containing `Finding` and `AggregatedSolution` objects.
+1. [`Finding`](../../src/data/Finding.py): Represents a security finding or vulnerability.
+2. [`Solution`](../../src/data/Solution.py): Represents a potential solution or recommendation for a `Finding`.
+3. [`Category`](../../src/data/Categories.py): Represents a categorization of a `Finding` based on various taxonomies.
+4. [`AggregatedSolution`](../../src/data/AggregatedSolution.py): Represents an aggregated solution that groups multiple related `Finding` objects.
+5. [`VulnerabilityReport`](../../src/data/VulnerabilityReport.py): Represents a complete vulnerability report containing `Finding` and `AggregatedSolution` objects.
 
 ## Data Flow and Interactions
 
