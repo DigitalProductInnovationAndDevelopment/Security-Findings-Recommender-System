@@ -80,8 +80,6 @@ class Environment(Enum):
 
 # class Location # TODO: Add Location class
 
-# TODO: add kmeans clustering for categories based on solution
-
 
 class Category(BaseModel):
     technology_stack: Optional[TechnologyStack] = None
