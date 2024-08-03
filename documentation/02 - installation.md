@@ -26,7 +26,7 @@
     ```
 
 2. **Set Up Environment Variables:**
-    - Ensure .env file is configured as per [Prerequisites](prerequisites.md).
+    - Ensure .env file is configured as per [Prerequisites](01 - prerequisites).
 
 3. **Install Dependencies:**
     ```bash
@@ -48,5 +48,5 @@
 
 - Ensure all services are running.
 - Verify installation by accessing the API and Dashboard.
-- For more detailed setup instructions, please refer to the [Usage](usage.md) guide.
+- For more detailed setup instructions, please refer to the [Usage](04 - usage) guide.
 

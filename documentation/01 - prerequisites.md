@@ -90,4 +90,4 @@ Ensure the following prerequisites are met before running the project:
 - Project dependencies installed via Pipenv
 - **Ollama** installed and configured
 
-With these prerequisites in place, you can proceed to the [Installation](installation.md) guide for detailed instructions on setting up and running the project.
+With these prerequisites in place, you can proceed to the [Installation](02 - installation) guide for detailed instructions on setting up and running the project.
