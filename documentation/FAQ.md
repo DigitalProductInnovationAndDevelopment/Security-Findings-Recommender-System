@@ -49,3 +49,4 @@ llm_service = LLMServiceStrategy(my_strategy)
 We have a predefined structure that input must adhere to called `Content`. You can always adjust this to satisfy your input and convert it to a database model.
 
 Inside the db model called `Findings`, there is a method `from_data` which can be modified to adapt the changes.
+`VulnerablityReport` also has `create_from_flama_json` that must be adjusted accordingly to make sure the Generation side also works.
