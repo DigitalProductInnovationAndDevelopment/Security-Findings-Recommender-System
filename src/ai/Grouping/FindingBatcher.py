@@ -5,7 +5,14 @@ from utils.token_utils import fits_in_context
 
 
 class FindingBatcher:
+    """
+    Class to batch findings based on the LLM's context size.
+    """
     def __init__(self, llm_service):
+        """
+        Initialize the FindingBatcher with the LLM service and category attributes.
+        :param llm_service:  The LLM service.
+        """
         self.llm_service = llm_service
         self.category_attributes = [
             'security_aspect', 'affected_component', 'technology_stack',
