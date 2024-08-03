@@ -54,6 +54,12 @@ For detailed setup instructions, refer to the [Prerequisites Documentation](docu
 docker compose up -d --build
 ```
 
+ollama will not build on default , if you want to add ollama.
+
+```
+docker compose --profile ollama  up -d --build
+```
+
 ### Local Development (details in [Local Development Guide](documentation/02%20-%20installation.md#local-development-installation))
 
 2. **Set Up Environment Variables**:

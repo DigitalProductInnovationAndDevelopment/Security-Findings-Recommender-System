@@ -1,4 +1,3 @@
-from datetime import _Date
 from sqlalchemy import Date, cast
 import db.models as db_models
 
@@ -55,7 +54,7 @@ class TaskRepository:
 
         return task
 
-    def get_task_by_date(self, date: _Date) -> db_models.RecommendationTask | None:
+    def get_task_by_date(self, date) -> db_models.RecommendationTask | None:
 
         task = (
             self.session.query(db_models.RecommendationTask)

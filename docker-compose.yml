@@ -28,6 +28,7 @@ services:
     volumes:
       - .:/app
     depends_on:
+      - api
       - db
       - redis
     restart: on-failure:10
@@ -46,6 +47,7 @@ services:
       - "5432:5432"
 
   ollama:
+  
     container_name: ollama
     build:
       context: .
@@ -64,6 +66,8 @@ services:
     pull_policy: always
     tty: true
     restart: unless-stopped
+    profiles: [ollama]
+
   #    deploy:
   #      resources:
   #        reservations:
