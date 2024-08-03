@@ -121,6 +121,8 @@ To run the code without Docker, follow these steps:
     cd src && python app.py
     ```
 
+## Guides 
+This repository contains several detailed guides to help you get started and understand the system better. Have a look at the [Guides Directory](documentation/Guides).
 
 ## FAQs
 
