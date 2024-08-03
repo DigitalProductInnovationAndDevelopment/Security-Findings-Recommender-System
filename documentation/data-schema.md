@@ -14,13 +14,13 @@ The `VulnerabilityReport` object represents the entire vulnerability report.
 {
   "findings": [
     {
-      "title": ["List of titles",]
+      "title": ["List of titles"],
       "source": "Set of sources",
       "description": "Description, may be generated from multiple sources",
-      "descriptions": ["List of descriptions",]
-      "location_list": ["List of locations",]
-      "cwe_ids": ["List of CWE IDs",]
-      "cve_ids": ["List of CVE IDs",]
+      "descriptions": ["List of descriptions"],
+      "location_list": ["List of locations"],
+      "cwe_ids": ["List of CWE IDs"],
+      "cve_ids": ["List of CVE IDs"],
       "severity": "Severity level (integer)",
       "priority": "Priority level (integer)",
       "category": "Category (optional)",
