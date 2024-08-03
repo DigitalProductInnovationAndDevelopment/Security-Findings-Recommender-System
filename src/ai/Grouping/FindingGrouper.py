@@ -23,6 +23,6 @@ class FindingGrouper:
             result_list = self.llm_service.generate_aggregated_solution(batch)
             for result in result_list:
                 self.aggregated_solutions.append(
-                    AggregatedSolution().from_result(result[1], result[0], result[2])
-                )  # Solution, Findings, Metadata
+                    AggregatedSolution().from_result(result[1], result[0], result[2]) # Solution, Findings, Metadata
+                )
         self.vulnerability_report.set_aggregated_solutions(self.aggregated_solutions)

@@ -1,0 +1,14 @@
+<h4>Aggregated Recommendations</h4>
+<div class="aggregatedRecommendations__container" *ngIf="vulnerabilityReport$ | async as vulnerabilityReport">
+    <div class="aggregatedRecommendations__innerContainer">
+    @for(aggregatedSolution of vulnerabilityReport?.aggregated_solutions; track aggregatedSolution) {
+        <div class="aggregatedRecommendations__card" (click)="openAggregatedSolutionDetails(aggregatedSolution)">
+            <div class="numberFindings">
+                <span class="numberFindings__number">{{aggregatedSolution?.findings.length}}</span>
+                Findings
+            </div>
+            {{aggregatedSolution?.metadata.reason}}
+        </div>
+    }
+    </div>
+</div>

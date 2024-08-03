@@ -4,13 +4,13 @@
   <span>Recommendations</span>
 </div>
 
-<div class="content" *ngIf="findings$ | async as findings">
+<div class="content" *ngIf="vulnerabilityReport$ | async as vulnerabilityReport">
   <div class="info-container">
     <div class="info-container__selectedFile">
       <h2>Recommendations</h2>
       <div
         class="info-container__selectedFile__title"
-        *ngIf="!!findings.length"
+        *ngIf="!!vulnerabilityReport?.findings?.length"
       >
         <i
           class="bi bi-filetype-json info-container__selectedFile__title__icon"
@@ -20,15 +20,18 @@
     </div>
     <div class="info-container__right">
       <div class="slider">
-        <span>{{ severityMinValue }}</span>
+        <span>Severity</span>
+        <div class="slide">
+          <span>{{ severityMinValue }}</span>
         <mat-slider min="0" max="100" step="1" (input)="filterRecommendations()">
           <input matSliderStartThumb [(ngModel)]="severityMinValue" />
           <input matSliderEndThumb [(ngModel)]="severityMaxValue" />
         </mat-slider>
         <span>{{ severityMaxValue }}</span>
+        </div>
       </div>
       <div class="info-container__numberFindings">
-        <span>{{ findings?.length }}</span>
+        <span>{{ vulnerabilityReport?.findings?.length }}</span>
         <p>Vulnerabilities</p>
         <i class="bi bi-shield-exclamation"></i>
       </div>
@@ -37,8 +40,9 @@
 
   <div class="selectedFile">
     <div class="selectedFile__content">
-      @if (!!findings.length) {
-      <app-result-table></app-result-table>
+      @if (!!vulnerabilityReport?.findings?.length) {
+      <app-result-aggregated-solutions-cards></app-result-aggregated-solutions-cards>
+      <app-result-table title="Individual Recommendations"></app-result-table>
       } @else {
       <app-loading-spinner></app-loading-spinner>
       }
