@@ -2,6 +2,17 @@
 
 ## Docker Installation
 
+**Short-Hand Command**
+Build (if needed) and run the Docker containers in the background:
+
+```bash
+docker compose up -d
+```
+
+For more control, follow the:
+
+**Step-by-Step Guide**
+
 1. **Build Docker Images:**
     ```bash
     docker compose build
@@ -44,9 +55,6 @@
     python src/app.py
     ```
 
-## Post-Installatio
-
-- Ensure all services are running.
-- Verify installation by accessing the API and Dashboard.
-- For more detailed setup instructions, please refer to the [Usage](04 - usage) guide.
+## Next Steps
+ Now, that you have  [Prerequisites](01 - prerequisites) and [Installation](02 - installation) completed, you can proceed to the [Usage](04 - usage) guide to access the application and available routes.
 

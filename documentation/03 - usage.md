@@ -6,6 +6,7 @@
 - **Dashboard:** Available at [http://localhost:3000](http://localhost:3000)
 
 ## Available Routes
+For a complete list of available routes, refer to the [Swagger UI](http://localhost:8000/docs) or [ReDoc](http://localhost:8000/redoc) documentation.
 
 - **HEAD, GET /openapi.json**: Access the OpenAPI specification.
 - **HEAD, GET /docs**: Access the Swagger UI documentation.

@@ -57,4 +57,4 @@
     - Access the aggregated recommendations via the API or Dashboard.
 
 
-For more detailed usage scenarios and troubleshooting, please refer to the [Usage](04 - usage) guide.
+For more detailed usage scenarios and troubleshooting, please refer to the [Usage](03 - usage) guide.
