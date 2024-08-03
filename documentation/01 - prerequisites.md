@@ -4,7 +4,7 @@
 
 ### .env File
 
-The project uses environment variables to manage configuration settings. Ensure you have a `.env` file in your project directory. You can create this file by copying the provided `.env.docker.example` file:
+The project uses environment variables to manage configuration settings. Ensure you have a `.env` file in your project directory. You can create this file by copying **and adapting** the provided `.env.docker.example` file:
 
 ```bash
 cp .env.docker.example .env.docker
@@ -12,7 +12,7 @@ cp .env.docker.example .env.docker
 
 # Project Setup Guide
 
-After copying the file, open it and fill in the required values.
+After copying and adapting the file, open it and add your desired values for configuration.
 
 ## Docker
 
@@ -66,9 +66,9 @@ If you prefer to run the project without Docker, ensure you have Python and Pipe
       ```
 
 
-## Ollama
+### Ollama
 
-The project relies on the Ollama API for generating AI-powered recommendations. Follow these steps to set up Ollama:
+The project relies on the Ollama API for generating AI-powered recommendations. Follow these steps to set up Ollama when running without Docker:
 
 1. **Install Ollama:**
    - Download and install Ollama from the [official website](https://www.ollama.com/).
@@ -78,16 +78,24 @@ The project relies on the Ollama API for generating AI-powered recommendations. 
      ```env
      OLLAMA_URL=http://localhost:11434
      ```
+3. **Download Ollama Models:**
+   - Download the required Ollama models by running the following command:
+     ```bash
+     ollama pull <model-name>
+     ```
+    - Replace `<model-name>` with the name of the model you want to download. You can find available models on [OLLAMA's Library page](https://ollama.com/library).
 
 
-## Summary
+## Summary | TLDR
 
-Ensure the following prerequisites are met before running the project:
+Depending on your preference, you can choose to run the project using Docker or locally. 
 
-- **Docker** installed (if running within Docker)
-- **Python 3.11** or higher installed
-- **Pipenv** installed
-- Project dependencies installed via Pipenv
-- **Ollama** installed and configured
+### Docker
+- **Prerequisites:** Docker installed on your system.
+- **Setup:** Copy and adapt the `.env.docker.example` file.
+- **Installation:** Follow the [Docker Installation](02 - installation#docker-installation) guide for further setup.
 
-With these prerequisites in place, you can proceed to the [Installation](02 - installation) guide for detailed instructions on setting up and running the project.
+### Local Development
+- **Prerequisites:** Python and Pipenv installed on your system.
+- **Environment Setup:** Copy and adapt the `.env.docker.example` file.
+- **Installation:** Follow the [Local Development Installation](02 - installation#local-development-installation) guide for further setup.
