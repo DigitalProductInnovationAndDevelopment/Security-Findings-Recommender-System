@@ -33,7 +33,7 @@ For a complete list of available routes, refer to the [Swagger UI](http://localh
 2. **Submit Data for Processing:**
 
    ```bash
-   curl -X POST /api/v1/upload/ -d INPUT_DATA -H "Content-Type: application/json"
+   curl -X POST http://localhost:8000/api/v1/upload/ -d INPUT_DATA -H "Content-Type: application/json"
 
    ```
 
@@ -63,7 +63,7 @@ For a complete list of available routes, refer to the [Swagger UI](http://localh
 1. **Check Task Status:**
 
    ```bash
-   curl /api/v1/tasks/1/status
+   curl http://localhost:8000/api/v1/tasks/1/status
    ```
 
 2. **Interpret Response:**
@@ -80,7 +80,7 @@ For a complete list of available routes, refer to the [Swagger UI](http://localh
 1. **Retrive Aggregated Recommendations:**
 
    ```bash
-   curl -X POST /api/v1/recommendations/aggregated -d '{}' -H "Content-Type: application/json"
+   curl -X POST http://localhost:8000/api/v1/recommendations/aggregated -d '{}' -H "Content-Type: application/json"
    ```
 
 2. **View Aggregated Recommendations:**
