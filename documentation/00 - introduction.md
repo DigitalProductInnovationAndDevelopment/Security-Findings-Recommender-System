@@ -21,6 +21,7 @@ The architecture of the Security Findings Recommender System is designed to be m
 ### Key Components
 
 #### 1. VulnerabilityReport Class
+
 - **Purpose:** Represents the entire vulnerability report.
 - **Features:**
   - Contains a list of `Finding` objects.
@@ -29,6 +30,7 @@ The architecture of the Security Findings Recommender System is designed to be m
   - Supports conversion to dictionary, string, and HTML representations.
 
 #### 2. Finding Class
+
 - **Purpose:** Represents a single security finding.
 - **Features:**
   - Includes details like title, source, description, CWE IDs, CVE IDs, severity, and priority.
@@ -36,17 +38,18 @@ The architecture of the Security Findings Recommender System is designed to be m
   - Supports conversion to dictionary, string, and HTML representations.
 
 #### 3. Solution Class
+
 - **Purpose:** Represents a solution for a security finding.
 - **Features:**
   - Includes a short description, a long description, and search terms.
   - Supports conversion to dictionary, string, and HTML representations.
 
 #### 4. LLMService Class
+
 - **Purpose:** Interacts with the OLLAMA API to generate AI-powered recommendations.
 - **Features:**
   - Provides methods to classify the type of finding, generate recommendations, and generate search terms.
   - Uses JSON prompts to format the input and output data.
-
 
 ### Benefits of Using This System
 
@@ -56,19 +59,15 @@ The architecture of the Security Findings Recommender System is designed to be m
 
 ### Getting Started
 
-To start using the Security Findings Recommender System, follow the installation and usage instructions provided in the [README](../README.md) file. Detailed setup and configuration instructions are available in the [Prerequisites](01 - prerequisites) and [Installation](02 - installation) documents.
+To start using the Security Findings Recommender System, follow the installation and usage instructions provided in the [README](../README.md) file. Detailed setup and configuration instructions are available in the [Prerequisites](01 - prerequisites) and [Installation](02%20-%20installation) documents.
 
 For more detailed information about the API routes, refer to the [API Routes](api_routes.md) documentation. To understand the database schema and how to perform migrations, see the [Database](database.md) documentation.
 
 ### Additional Resources
 
-- **[Prerequisites](01 - prerequisites):** Environment setup and dependencies.
-- **[Installation](02 - installation):** Step-by-step installation guide.
-- **[Usage](04 - usage):** Instructions on how to use the system.
-- **[API Routes](api_routes.md):** Documentation of available API routes.
-- **[Database](database.md):** Information on database models and migrations.
-- **[Local Development](local_development.md):** Guide for setting up and running the project locally.
-- **[Examples](examples/how_to_use.md):** Use case scenarios and examples.
+- **[Prerequisites](01%20-%20prerequisites):** Environment setup and dependencies.
+- **[Installation](02%20-%20installation):** Step-by-step installation guide.
+- **[Usage](04%20-%20usage):** Instructions on how to use the system.
 
 ---
 

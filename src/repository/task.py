@@ -54,7 +54,7 @@ class TaskRepository:
 
         return task
 
-    def get_task_by_date(self, date: Date) -> db_models.RecommendationTask | None:
+    def get_task_by_date(self, date) -> db_models.RecommendationTask | None:
 
         task = (
             self.session.query(db_models.RecommendationTask)

@@ -39,34 +39,43 @@ For more details, see the [System Overview](documentation/SystemOverview.md).
 For detailed setup instructions, refer to the [Prerequisites Documentation](documentation/01%20-%20prerequisites.md).
 
 ## Installation
+
 1. **Clone the Repository**:
-    ```bash
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
 
 ### Docker (details in [Docker Installation Guide](documentation/02%20-%20installation.md#docker-installation))
 
 2. **Build and run the application using Docker:**
+
 ```
 docker compose up -d --build
 ```
 
-### Local Development (details in [Local Development Guide](documentation/02%20-%20installation.md#local-development-installation)) 
+ollama will not build on default , if you want to add ollama.
+
+```
+docker compose --profile ollama  up -d --build
+```
+
+### Local Development (details in [Local Development Guide](documentation/02%20-%20installation.md#local-development-installation))
 
 2. **Set Up Environment Variables**:
-    Ensure `.env` file is configured as per prerequisites.
+   Ensure `.env` file is configured as per prerequisites.
 
 3. **Install Dependencies**:
-    ```bash
-    pipenv install
-    ```
+
+   ```bash
+   pipenv install
+   ```
 
 4. **Run the Application**:
-    ```bash
-    cd src && pipenv shell
-    python app.py
-    ```
+   ```bash
+   cd src && pipenv shell
+   python app.py
+   ```
 
 ## Usage
 
@@ -79,26 +88,28 @@ docker compose up -d --build
 
 - **GET /api/v1/tasks/**: Retrieve all tasks.
 - **DELETE /api/v1/tasks/{task_id}**: Delete a specific task by ID.
-- **POST /api/v1/recommendations/**: Create a new recommendation.
-- **POST /api/v1/recommendations/aggregated**: Create aggregated recommendations.
-- **POST /api/v1/upload/**: Upload data.
+- **POST /api/v1/recommendations/**: Retrive recommendations.
+- **POST /api/v1/recommendations/aggregated**: Retrive aggregated recommendations.
+- **POST /api/v1/upload/**: Upload data for Processing.
 - **GET /**: Root endpoint.
 
 For a complete list of available routes, refer to the [API Routes Documentation](documentation/03%20-%20usage.md#available-routes).
 
 ### Example Requests
 
-#### Generate Recommendations
+#### Get Available Recommendations
+
 ```bash
-curl -X POST http://localhost:8000/api/v1/recommendations/ -d '{"data": "sample"}' -H "Content-Type: application/json"
+curl -X POST http://localhost:8000/api/v1/recommendations/ -d '{}' -H "Content-Type: application/json"
 ```
 
 #### Check Task Status
+
 ```bash
 curl http://localhost:8000/api/v1/tasks/1/status
 ```
 
-For more usage examples, refer to the [Examples Documentation](documentation/examples.md).
+For more usage examples, refer to the [Usage Documentation](documentation/03%20-%20usage.mds).
 
 ## Development
 
@@ -107,21 +118,24 @@ For more usage examples, refer to the [Examples Documentation](documentation/exa
 To run the code without Docker, follow these steps:
 
 1. **Install Dependencies**:
-    ```bash
-    pipenv install
-    ```
+
+   ```bash
+   pipenv install
+   ```
 
 2. **Activate Virtual Environment**:
-    ```bash
-    pipenv shell
-    ```
+
+   ```bash
+   pipenv shell
+   ```
 
 3. **Run the Application**:
-    ```bash
-    cd src && python app.py
-    ```
+   ```bash
+   cd src && python app.py
+   ```
 
-## Guides 
+## Guides
+
 This repository contains several detailed guides to help you get started and understand the system better. Have a look at the [Guides Directory](documentation/Guides).
 
 ## FAQs
@@ -133,13 +147,16 @@ For common questions and troubleshooting, refer to the [FAQs Documentation](docu
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Project Information
+
 This Project was created in the context of TUMs practical course [Digital Product Innovation and Development](https://www.fortiss.org/karriere/digital-product-innovation-and-development) by fortiss in the summer semester 2024.
 The task was suggested by Siemens, who also supervised the project.
 
 ## Contact
+
 To contact fortiss or Siemens, please refer to their official websites.
 
 ### Team Members
+
 - [Ishwor Giri](mailto:i.giri@tum.de)
 - [Niklas Minth](mailto:niklas.minth@tum.de)
 - [Ruben Kaiser](mailto:ruben.kaiser@tum.de)
