@@ -69,9 +69,7 @@ For a complete list of available routes, refer to the [Swagger UI](http://localh
 2. **Interpret Response:**
    ```json
    {
-     "task_id": 1,
-     "status": "completed",
-     "details": "Task completed successfully."
+     "status": "completed"
    }
    ```
 
