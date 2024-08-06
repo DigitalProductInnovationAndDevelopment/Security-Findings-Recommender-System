@@ -76,9 +76,9 @@ class FindingRepository:
         )
 
         total = query.count()
-        findings = query.all()
         if pagination:
             query = query.offset(pagination.offset).limit(pagination.limit)
+        findings = query.all()
 
         return findings, total
 
@@ -95,10 +95,9 @@ class FindingRepository:
 
         return count
 
-    def create_findings(
-        self, findings: list[db_models.Finding]
-    ) -> list[db_models.Finding]:
-        self.session.bulk_save_objects(findings)
+    def create_findings(self, findings: list[db_models.Finding]):
+        self.session.add_all(findings)
+
         self.session.commit()
 
 

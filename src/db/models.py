@@ -102,23 +102,25 @@ class Finding(BaseModel):
 
     def from_data(self, data: Content):
         self.cve_id_list = (
-            [x.dict() for x in data.cve_id_list] if data.cve_id_list else []
+            [x.model_dump() for x in data.cve_id_list] if data.cve_id_list else []
         )
         self.description_list = (
-            [x.dict() for x in data.description_list] if data.description_list else []
+            [x.model_dump() for x in data.description_list]
+            if data.description_list
+            else []
         )
-        self.title_list = [x.dict() for x in data.title_list]
+        self.title_list = [x.model_dump() for x in data.title_list]
         self.locations_list = (
-            [x.dict() for x in data.location_list] if data.location_list else []
+            [x.model_dump() for x in data.location_list] if data.location_list else []
         )
-        self.raw_data = data.dict()
+        self.raw_data = data.model_dump()
         self.severity = data.severity
         self.priority = data.priority
         self.report_amount = data.report_amount
         return self
 
     def __repr__(self):
-        return f"<Finding {self.finding}>"
+        return f"<Finding {self.title_list}>"
 
 
 class TaskStatus(PyEnum):

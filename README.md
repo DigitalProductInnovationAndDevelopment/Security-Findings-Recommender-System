@@ -151,6 +151,10 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 This Project was created in the context of TUMs practical course [Digital Product Innovation and Development](https://www.fortiss.org/karriere/digital-product-innovation-and-development) by fortiss in the summer semester 2024.
 The task was suggested by Siemens, who also supervised the project.
 
+## FAQ
+
+Please refer to [FAQ](documentation/FAQ.md)
+
 ## Contact
 
 To contact fortiss or Siemens, please refer to their official websites.

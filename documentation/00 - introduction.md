@@ -67,7 +67,9 @@ For more detailed information about the API routes, refer to the [API Routes](ap
 
 - **[Prerequisites](01%20-%20prerequisites):** Environment setup and dependencies.
 - **[Installation](02%20-%20installation):** Step-by-step installation guide.
-- **[Usage](04%20-%20usage):** Instructions on how to use the system.
+- **[Usage](03%20-%20usage):** Instructions on how to use the system.
+
+- **[Testing](04-testing):** Provides an explanation of the testing strategy and rules.
 
 ---
 
