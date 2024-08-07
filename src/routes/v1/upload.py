@@ -13,6 +13,7 @@ from data.helper import filter_findings, get_content_list
 from db.my_db import get_db
 from repository.finding import get_finding_repository
 from repository.task import TaskRepository, get_task_repository
+from worker.types import GenerateReportInput
 from worker.worker import worker
 
 router = APIRouter(prefix="/upload")
@@ -57,15 +58,16 @@ async def upload(
         find.recommendation_task_id = recommendation_task.id
         findings.append(find)
     finding_repository.create_findings(findings)
+    worker_input = GenerateReportInput(
+        recommendation_task_id=recommendation_task.id,
+        generate_long_solution=data.preferences.long_description or True,
+        generate_search_terms=data.preferences.search_terms or True,
+        generate_aggregate_solutions=data.preferences.aggregated_solutions or True,
+    )
 
     celery_result = worker.send_task(
         "worker.generate_report",
-        args=[
-            recommendation_task.id,
-            data.preferences.long_description,
-            data.preferences.search_terms,
-            data.preferences.aggregated_solutions,
-        ],
+        args=[worker_input.model_dump()],
     )
 
     # update the task with the celery task id

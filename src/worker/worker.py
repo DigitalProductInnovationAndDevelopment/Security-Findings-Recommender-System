@@ -19,6 +19,7 @@ from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
 from ai.LLM.Strategies.OLLAMAService import OLLAMAService
 from data.VulnerabilityReport import create_from_flama_json
 from ai.Grouping.FindingGrouper import FindingGrouper
+from worker.types import GenerateReportInput
 
 
 logger = logging.getLogger(__name__)
@@ -41,16 +42,18 @@ def error(self, exc, task_id, args, kwargs, einfo):
 
 @worker.task(name="worker.generate_report", on_failure=error)
 def generate_report(
-    recommendation_task_id: int,
-    generate_long_solution: bool = True,
-    generate_search_terms: bool = True,
-    generate_aggregate_solutions: bool = True,
+    input: dict,
 ):
+    try:
+        input = GenerateReportInput.model_validate(input)
+    except Exception as e:
+        logger.error(f"Error validating input: {e}")
+        return
 
-    # importing here so importing worker does not import all the dependencies
-    # from ai.LLM.LLMServiceStrategy import LLMServiceStrategy
-    # from ai.LLM.Strategies.OLLAMAService import OLLAMAService
-    # from data.VulnerabilityReport import create_from_flama_json
+    recommendation_task_id = input.recommendation_task_id
+    generate_long_solution = input.generate_long_solution
+    generate_search_terms = input.generate_search_terms
+    generate_aggregate_solutions = input.generate_aggregate_solutions
 
     ollama_strategy = OLLAMAService()
     llm_service = LLMServiceStrategy(ollama_strategy)

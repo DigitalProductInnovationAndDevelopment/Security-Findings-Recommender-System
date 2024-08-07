@@ -63,7 +63,7 @@ class RecommendationRepository:
                     else "No long description available"
                 ),
                 meta=f.solution.metadata if f.solution.metadata else {},
-                search_terms=f.solution.search_terms if f.solution.search_terms else [],
+                search_terms=f.solution.search_terms if f.solution.search_terms else "",
                 finding_id=finding_id,
                 recommendation_task_id=recommendation_task_id,
                 category=(f.category.model_dump_json() if f.category else None),

@@ -25,6 +25,8 @@ jobs:
         run: |
           python -m venv venv
           . venv/bin/activate
+          pip install pipenv
+          pipenv requirements > requirements.txt
           pip install -r requirements.txt
 
       - name: Check licenses
