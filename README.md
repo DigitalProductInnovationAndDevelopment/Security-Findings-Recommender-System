@@ -109,7 +109,7 @@ curl -X POST http://localhost:8000/api/v1/recommendations/ -d '{}' -H "Content-T
 curl http://localhost:8000/api/v1/tasks/1/status
 ```
 
-For more usage examples, refer to the [Usage Documentation](documentation/03-usage.mds).
+For more usage examples, refer to the [Usage Documentation](documentation/03-usage.md).
 
 ## Development
 
