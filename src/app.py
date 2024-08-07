@@ -48,8 +48,11 @@ def health():
         "uptime": round(time.time() - start_time, 2),
         "external_modules": {"ollama": ollama_health},
         "urls": {
-            # "llm": llm_service.get_url(),
-            "redis": config.redis_endpoint,
+            "redis": (
+                config.redis_endpoint
+                if config.environment == "development"
+                else "retracted"
+            ),
             # this leaks the db user and password in dev mode
             "postgres": (
                 config.get_db_url()
