@@ -42,7 +42,7 @@ For more control, follow the:
 
 2. **Set Up Environment Variables:**
 
-   - Ensure .env file is configured as per [Prerequisites](01-prerequisites).
+   - Ensure .env file is configured as per [Prerequisites](01-prerequisites.md).
 
 3. **Install Dependencies:**
 
@@ -66,4 +66,4 @@ For more control, follow the:
 
 ## Next Steps
 
-Now, that you have [Prerequisites](01-prerequisites) and [Installation](02-installation) completed, you can proceed to the [Usage](04-usage) guide to access the application and available routes.
+Now, that you have [Prerequisites](01-prerequisites.md) and [Installation](02-installation.md) completed, you can proceed to the [Usage](03-usage.md) guide to access the application and available routes.
