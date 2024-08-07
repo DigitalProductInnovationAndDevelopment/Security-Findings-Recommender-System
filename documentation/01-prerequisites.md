@@ -96,10 +96,10 @@ Depending on your preference, you can choose to run the project using Docker or 
 
 - **Prerequisites:** Docker installed on your system.
 - **Setup:** Copy and adapt the `.env.docker.example` file.
-- **Installation:** Follow the [Docker Installation](02%20-%20installation#docker-installation) guide for further setup.
+- **Installation:** Follow the [Docker Installation](02-installation#docker-installation) guide for further setup.
 
 ### Local Development
 
 - **Prerequisites:** Python and Pipenv installed on your system.
 - **Environment Setup:** Copy and adapt the `.env.docker.example` file.
-- **Installation:** Follow the [Local Development Installation](02%20-%20installation#local-development-installation) guide for further setup.
+- **Installation:** Follow the [Local Development Installation](02-installation#local-development-installation) guide for further setup.

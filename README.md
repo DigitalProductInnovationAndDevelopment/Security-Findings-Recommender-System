@@ -36,7 +36,7 @@ For more details, see the [System Overview](documentation/SystemOverview.md).
 - Copy the `.env.docker.example` file to `.env.docker` and fill in the required values.
 - For running without Docker, ensure the correct URL for the Ollama API is set in your `.env` file: `OLLAMA_URL=http://localhost:11434`.
 
-For detailed setup instructions, refer to the [Prerequisites Documentation](documentation/01%20-%20prerequisites.md).
+For detailed setup instructions, refer to the [Prerequisites Documentation](documentation/01-prerequisites.md).
 
 ## Installation
 
@@ -46,7 +46,7 @@ For detailed setup instructions, refer to the [Prerequisites Documentation](docu
    cd <repository-directory>
    ```
 
-### Docker (details in [Docker Installation Guide](documentation/02%20-%20installation.md#docker-installation))
+### Docker (details in [Docker Installation Guide](documentation/02-installation.md#docker-installation))
 
 2. **Build and run the application using Docker:**
 
@@ -60,7 +60,7 @@ ollama will not build on default , if you want to add ollama.
 docker compose --profile ollama  up -d --build
 ```
 
-### Local Development (details in [Local Development Guide](documentation/02%20-%20installation.md#local-development-installation))
+### Local Development (details in [Local Development Guide](documentation/02-installation.md#local-development-installation))
 
 2. **Set Up Environment Variables**:
    Ensure `.env` file is configured as per prerequisites.
@@ -93,7 +93,7 @@ docker compose --profile ollama  up -d --build
 - **POST /api/v1/upload/**: Upload data for Processing.
 - **GET /**: Root endpoint.
 
-For a complete list of available routes, refer to the [API Routes Documentation](documentation/03%20-%20usage.md#available-routes).
+For a complete list of available routes, refer to the [API Routes Documentation](documentation/03-usage.md#available-routes).
 
 ### Example Requests
 
@@ -109,7 +109,7 @@ curl -X POST http://localhost:8000/api/v1/recommendations/ -d '{}' -H "Content-T
 curl http://localhost:8000/api/v1/tasks/1/status
 ```
 
-For more usage examples, refer to the [Usage Documentation](documentation/03%20-%20usage.mds).
+For more usage examples, refer to the [Usage Documentation](documentation/03-usage.mds).
 
 ## Development
 
