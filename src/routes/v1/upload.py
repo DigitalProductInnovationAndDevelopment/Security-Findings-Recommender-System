@@ -60,9 +60,9 @@ async def upload(
     finding_repository.create_findings(findings)
     worker_input = GenerateReportInput(
         recommendation_task_id=recommendation_task.id,
-        generate_long_solution=data.preferences.long_description or True,
-        generate_search_terms=data.preferences.search_terms or True,
-        generate_aggregate_solutions=data.preferences.aggregated_solutions or True,
+        generate_long_solution=data.preferences.long_description,
+        generate_search_terms=data.preferences.search_terms,
+        generate_aggregate_solutions=data.preferences.aggregated_solutions,
     )
 
     celery_result = worker.send_task(
