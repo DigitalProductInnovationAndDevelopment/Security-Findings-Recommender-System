@@ -58,7 +58,7 @@ class MockLLMService(BaseLLMService, LLMServiceMixin):
         return self.generate_url
 
     def _generate(self, prompt: str, json=True) -> Dict[str, str]:
-        print(prompt)
+        # TODO: Mock Aggregated Solution Responses and Subdivision Responses
         print(f"{answer_in_json_prompt('recommendation')}".format())
         if f"{answer_in_json_prompt('combined_description').format()}" in prompt:
             return {"combined_description": "combined_description"}
