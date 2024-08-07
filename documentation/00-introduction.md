@@ -59,17 +59,16 @@ The architecture of the Security Findings Recommender System is designed to be m
 
 ### Getting Started
 
-To start using the Security Findings Recommender System, follow the installation and usage instructions provided in the [README](../README.md) file. Detailed setup and configuration instructions are available in the [Prerequisites](01 - prerequisites) and [Installation](02%20-%20installation) documents.
+To start using the Security Findings Recommender System, follow the installation and usage instructions provided in the [README](../README.md) file. Detailed setup and configuration instructions are available in the [Prerequisites](01-prerequisites.md) and [Installation](02-installation.md) documents.
 
-For more detailed information about the API routes, refer to the [API Routes](api_routes.md) documentation. To understand the database schema and how to perform migrations, see the [Database](database.md) documentation.
 
 ### Additional Resources
 
-- **[Prerequisites](01%20-%20prerequisites):** Environment setup and dependencies.
-- **[Installation](02%20-%20installation):** Step-by-step installation guide.
-- **[Usage](03%20-%20usage):** Instructions on how to use the system.
+- **[Prerequisites](01-prerequisites.md):** Environment setup and dependencies.
+- **[Installation](02-installation.md):** Step-by-step installation guide.
+- **[Usage](03-usage.md):** Instructions on how to use the system.
 
-- **[Testing](04-testing):** Provides an explanation of the testing strategy and rules.
+- **[Testing](04-testing.md):** Provides an explanation of the testing strategy and rules.
 
 ---
 
