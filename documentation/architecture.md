@@ -24,7 +24,7 @@ The system is composed of three main layers:
 
 Here's a high-level overview of the system:
 
-<img src="./UML/top-level.svg" alt="Top-level architecture diagram" />
+<img src="./UML/Top-Level.svg" alt="Top-level architecture diagram" />
 
 ## 3. Component Details
 
