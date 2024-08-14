@@ -23,6 +23,15 @@ from config import config
 
 logger = logging.getLogger(__name__)
 
+def is_up() -> bool:
+    # res = requests.post(os.getenv('OLLAMA_URL') + '/api/show', json={'name': os.getenv('OLLAMA_MODEL', 'llama3')})
+    res = httpx.post(
+        config.ollama_url + "/api/show",
+        json={"name": config.ollama_model},
+    )
+    if res.status_code == 200:
+        return True
+
 
 class OLLAMAService(BaseLLMService, LLMServiceMixin):
     def __init__(
